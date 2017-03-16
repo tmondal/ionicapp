@@ -1,0 +1,44 @@
+
+page-clubprofile{
+
+	.card-background-page {
+
+		background: #f4f4f4;
+		ion-card {
+			position: relative;
+			text-align: center;
+			margin: 0px;
+			margin-top:5px; 
+			padding: 0px;
+			width: 100%;
+		}
+		
+		#profilepic {
+			position: absolute;
+			top: 50%;
+			width: 60px;
+			height:60px;
+			border-radius: 2px;
+			border:2px solid white;
+		}
+
+		.card-title {
+			position: absolute;
+			top: 36%;
+			font-size: 2.0em;
+			width: 100%;
+			font-weight: bold;
+			color: #fff;
+		}
+
+		.card-subtitle {
+			font-size: 1.0em;
+			position: absolute;
+			top: 52%;
+			width: 100%;
+			color: #fff;
+		}
+
+	}
+
+}

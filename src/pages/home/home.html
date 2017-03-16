@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="home">
+  <ion-card class="home-card">
+      <ion-list>
+        <ion-item>
+          <ion-avatar item-left>
+            <img src="../../assets/img/img1.jpg">
+          </ion-avatar>
+          <ion-input type="text" placeholder="Organize an Event.."></ion-input>
+        </ion-item>
+      </ion-list>
+  </ion-card>
+
+
+  <!-- Advaced card contains a post -->
+  <ion-card class="post">
+
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="../../assets/img/img3.jpg">
+      </ion-avatar>
+      <ion-icon name="more" item-right></ion-icon>
+      <h2>Mohun Bagan</h2>
+
+      <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
+    </ion-item>
+    <ion-item>
+      <p>Organising a football tournament on 10.10.17</p>
+    </ion-item>
+    <img src="../../assets/img/img2.jpg">
+
+    <ion-card-content>
+      <p>Description...</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col col-4>
+        <button ion-button icon-left clear small>
+          <ion-icon name="person"></ion-icon>
+          <div>12 Going</div>
+        </button>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button icon-left clear small>
+          <ion-icon name="car"></ion-icon>
+          <div>1.4km</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center col-4>
+        <button ion-button outline id="rulearrow" (click)="onRulesClick()">
+          <div>Rules</div>
+          <ion-icon name="arrow-round-forward"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+
+</ion-content>
