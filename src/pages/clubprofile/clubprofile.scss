@@ -16,6 +16,7 @@ page-clubprofile{
 			margin-top:5px; 
 			padding: 0px;
 			width: 100%;
+			box-shadow: none;
 		}
 		
 		.profilepic {
@@ -62,6 +63,9 @@ page-clubprofile{
 		.followfont:hover{
 			background-color: blue;
 			color: white;
+		}
+		.middlenavbar{
+			text-transform: none;
 		}
 
 	}

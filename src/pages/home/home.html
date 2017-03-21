@@ -13,7 +13,7 @@
           <ion-avatar item-left>
             <img src="../../assets/img/img1.jpg">
           </ion-avatar>
-          <ion-input type="text" placeholder="Organize an Event.."></ion-input>
+          <ion-input type="text" (click)="onCreatePostClick()" placeholder="Organize an Event.."></ion-input>
         </ion-item>
       </ion-list>
   </ion-card>
@@ -27,7 +27,7 @@
         <img src="../../assets/img/img3.jpg">
       </ion-avatar>
       <ion-icon name="more" item-right></ion-icon>
-      <h2 (click)="onclick()">Mohun Bagan</h2>
+      <h2 (click)="onClubClick()">Mohun Bagan</h2>
 
       <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
     </ion-item>
@@ -62,5 +62,7 @@
     </ion-row>
 
   </ion-card>
+
+  <ion-card (click)="onPlayerClick()">Goto Player Profile</ion-card>
 
 </ion-content>

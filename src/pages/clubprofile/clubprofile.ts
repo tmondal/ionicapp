@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { AllpostsPage } from '../allposts/allposts';
-import { MomentsPage } from '../moments/moments';
-import { AchievePage } from '../achieve/achieve';
+
 
 
 @Component({
@@ -11,7 +9,7 @@ import { AchievePage } from '../achieve/achieve';
 })
 export class ClubprofilePage {
 
-
+	clubprofile: String = "allposts";
 	constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
 	ionViewDidLoad() {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { PostPage } from '../post/post'
+import { PostPage } from '../post/post';
+import { ClubprofilePage } from '../clubprofile/clubprofile';
 
 
 
@@ -20,5 +21,7 @@ export class AllpostsPage {
   onRulesClick(){
   	this.navCtrl.push(PostPage);
   }
-
+  onClubClick(){
+  	this.navCtrl.push(ClubprofilePage);
+  }
 }

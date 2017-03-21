@@ -7,6 +7,8 @@ import { ClubprofilePage } from '../pages/clubprofile/clubprofile';
 import { AllpostsPage } from '../pages/allposts/allposts';
 import { MomentsPage } from '../pages/moments/moments';
 import { AchievePage } from '../pages/achieve/achieve';
+import { PlayerprofilePage } from '../pages/playerprofile/playerprofile';
+import { PostmodalPage } from '../pages/postmodal/postmodal';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { AchievePage } from '../pages/achieve/achieve';
     ClubprofilePage,
     AllpostsPage,
     MomentsPage,
-    AchievePage
+    AchievePage,
+    PlayerprofilePage,
+    PostmodalPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -29,7 +33,9 @@ import { AchievePage } from '../pages/achieve/achieve';
     ClubprofilePage,
     AllpostsPage,
     MomentsPage,
-    AchievePage
+    AchievePage,
+    PlayerprofilePage,
+    PostmodalPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })

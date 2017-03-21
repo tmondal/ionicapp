@@ -1,22 +1,23 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { ClubprofilePage} from '../clubprofile/clubprofile';
 
-/*
-  Generated class for the Playerprofile page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+
 @Component({
   selector: 'page-playerprofile',
   templateUrl: 'playerprofile.html'
 })
 export class PlayerprofilePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+	clubprofile: String = "allposts";
+	constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PlayerprofilePage');
-  }
+	ionViewDidLoad() {
+		console.log('ionViewDidLoad PlayerprofilePage');
+	}
+	onClubClick(){
+  		this.navCtrl.push(ClubprofilePage);
+  	}
 
 }

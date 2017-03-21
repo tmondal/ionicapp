@@ -38,17 +38,20 @@
 	    </ion-row>
  	</ion-card>
 
- 	<ion-card>
+ 	<ion-card >
 	  <ion-toolbar no-border-top>
 	    <ion-segment [(ngModel)]="clubprofile" style="background-color: #fff">
-	      <ion-segment-button value="allposts">
+	      <ion-segment-button value="allposts" class="middlenavbar">
 	        Posts
 	      </ion-segment-button>
-	      <ion-segment-button value="moments">
+	      <ion-segment-button value="moments"  class="middlenavbar">
 	        Moments
 	      </ion-segment-button>
-	      <ion-segment-button value="achievements">
+	      <ion-segment-button value="achievements"  class="middlenavbar">
 	        Memories
+	      </ion-segment-button>
+	      <ion-segment-button value="players"  class="middlenavbar">
+	        Players
 	      </ion-segment-button>
 	    </ion-segment>
 	  </ion-toolbar>
@@ -67,6 +70,9 @@
 
     <div *ngSwitchCase="'achievements'">
     	<page-achieve></page-achieve>
+    </div>
+    <div *ngSwitchCase="'players'">
+    	<p>Our players</p>
     </div>
 
   </div>

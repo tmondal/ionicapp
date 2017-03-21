@@ -1,0 +1,84 @@
+<!--
+  Generated template for the Postmodal page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button color="primary" (click)="onDismiss()">Cancel</button>
+    </ion-buttons>
+    <ion-title>
+      Add an Event
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content padding class="container">
+	<ion-list>
+		<ion-card>
+			<ion-item>
+				<ion-label> Event Type: </ion-label>
+				<ion-select [(ngModel)]="event">
+			      <ion-option value="hiring">Hiring</ion-option>
+			      <ion-option value="normal">Normal</ion-option>
+			    </ion-select>
+			</ion-item>
+		</ion-card>
+		<ion-card>
+			<ion-item>
+				<ion-label> Sports Type: </ion-label>
+				<ion-select [(ngModel)]="sport">
+			      <ion-option value="cricket">Cricket</ion-option>
+			      <ion-option value="football">Football</ion-option>
+			      <ion-option value="hokey">Hokey</ion-option>
+			      <ion-option value="badminton">Badminton</ion-option>
+			      <ion-option value="temis">Tenis</ion-option>
+			      <ion-option value="tabletenis">Table Tenis</ion-option>
+			    </ion-select>
+			</ion-item>
+		</ion-card>
+		<ion-card>
+			<ion-item>
+	  			<ion-label>Event Date </ion-label>
+	  			<ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="myDate"></ion-datetime>
+			</ion-item>
+		</ion-card>
+		<ion-card>
+			<ion-item>Rules:</ion-item>
+			<ol>
+				<li *ngFor= "let rule of rules,let i = index">
+					<ion-card>
+					<ion-row>
+						<ion-col col-10>
+							{{rule}} 
+						</ion-col>
+						<ion-col col-2>
+							<ion-icon name="trash"  (click)="onDelClick(i)"></ion-icon>
+						</ion-col>
+					</ion-row>
+				</ion-card>
+				</li>
+			</ol>
+			<ion-item>
+				<ion-input value="addrule" [(ngModel)] = "addrule" placeholder="Write a rule.."></ion-input>
+			</ion-item>
+			<div style="float: right">
+				<button ion-button (click)="onAddClick()">
+					<ion-icon name="add-circle"></ion-icon>
+					<span style="width: 5px"></span>Add			 
+				</button>
+			</div>
+		</ion-card>
+		<br><br>
+		<ion-card>
+			<button ion-button full>Post</button>
+		</ion-card>
+		<ion-card>
+			<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
+		</ion-card>
+	</ion-list>
+</ion-content>
