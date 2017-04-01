@@ -17,7 +17,7 @@
 	      <ion-col>
 	        <button ion-button icon-left clear small>
 	          <ion-icon name="people"></ion-icon>
-	          <div style="text-transform: none">12 Teams Participating</div>
+	          <div style="text-transform: none">{{participating}} Teams Participating</div>
 	        </button>
 	      </ion-col>
 	    </ion-row>
@@ -28,14 +28,23 @@
 	 			<h2>The Event Rules:</h2>
 	 		</ion-item>
 	 		<ion-item>
-		 		<ul>
-		 			<li><p>Maximum 5 players allowed.</p></li>
-		 			<li><p>Minimum 5 players allowed.</p></li>
-		 		</ul>
+		 		<ol>
+		 			<li *ngFor="let rule of rules">
+		 				{{rule}}
+		 			</li>
+		 		</ol>
 	 		</ion-item>
  		</ion-list>
  	</ion-card>
- 	<ion-card>
-	 	<button ion-button color="primary" style="text-transform: none">Accept Challenge</button>
-	</ion-card>
+ 	
+ 	<button *ngIf="!participated" ion-button color="primary" full style="text-transform: none" (click)="onAccept()" >
+ 		Accept Challenge <span style="width: 5px" ></span>
+ 		<ion-icon name="happy"></ion-icon>
+ 	</button>
+ 	<button *ngIf="participated" ion-button color="danger" full style="text-transform: none" (click)="onDecline()" >
+ 		Reject Challenge <span style="width: 5px"></span>
+ 		<ion-icon name="sad"></ion-icon>
+ 	</button>
+ 	<button ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()">I'm Afried</button>
+	
 </ion-content>

@@ -22,7 +22,7 @@
 		<ion-card>
 			<ion-item>
 				<ion-label> Event Type: </ion-label>
-				<ion-select [(ngModel)]="event">
+				<ion-select [(ngModel)]="eventtype">
 			      <ion-option value="hiring">Hiring</ion-option>
 			      <ion-option value="normal">Normal</ion-option>
 			    </ion-select>
@@ -30,8 +30,8 @@
 		</ion-card>
 		<ion-card>
 			<ion-item>
-				<ion-label> Sports Type: </ion-label>
-				<ion-select [(ngModel)]="sport">
+				<ion-label> Sport Type: </ion-label>
+				<ion-select [(ngModel)]="sporttype">
 			      <ion-option value="cricket">Cricket</ion-option>
 			      <ion-option value="football">Football</ion-option>
 			      <ion-option value="hokey">Hokey</ion-option>
@@ -44,7 +44,13 @@
 		<ion-card>
 			<ion-item>
 	  			<ion-label>Event Date </ion-label>
-	  			<ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="myDate"></ion-datetime>
+	  			<ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="eventdate"></ion-datetime>
+			</ion-item>
+		</ion-card>
+		<ion-card>
+			<ion-item>
+	  			<ion-label>Event Time </ion-label>
+	  			<ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="eventtime"></ion-datetime>
 			</ion-item>
 		</ion-card>
 		<ion-card>
@@ -54,7 +60,7 @@
 					<ion-card>
 					<ion-row>
 						<ion-col col-10>
-							{{rule}} 
+							{{rule}}
 						</ion-col>
 						<ion-col col-2>
 							<ion-icon name="trash"  (click)="onDelClick(i)"></ion-icon>
@@ -64,18 +70,18 @@
 				</li>
 			</ol>
 			<ion-item>
-				<ion-input value="addrule" [(ngModel)] = "addrule" placeholder="Write a rule.."></ion-input>
+				<ion-input value="addrule" [(ngModel)] = "rule" placeholder="Write a rule.."></ion-input>
 			</ion-item>
 			<div style="float: right">
 				<button ion-button (click)="onAddClick()">
 					<ion-icon name="add-circle"></ion-icon>
-					<span style="width: 5px"></span>Add			 
+					<span style="width: 5px"></span>Add
 				</button>
 			</div>
 		</ion-card>
 		<br><br>
 		<ion-card>
-			<button ion-button full>Post</button>
+			<button (click)="onPostSubmit()" ion-button full>Post</button>
 		</ion-card>
 		<ion-card>
 			<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
