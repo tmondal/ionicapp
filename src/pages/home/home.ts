@@ -8,7 +8,8 @@ import { PlayerprofilePage } from '../playerprofile/playerprofile';
 import { PostmodalPage } from '../postmodal/postmodal';
 import { PostmoreoptPage } from '../postmoreopt/postmoreopt';
 
-import { Authdata } from '../../providers/authdata';
+import { PostService } from '../../providers/post-service';
+import { AngularFire } from 'angularfire2';
 
 @Component({
   selector: 'page-home',
@@ -19,28 +20,32 @@ export class HomePage implements OnInit{
 
   posts: any;
   user: any;
-  subscription: any;
+  currentuserId: any;
+  postsubscription: any;
+  usersubscription: any;
   constructor(
   	public navCtrl: NavController,
   	public modalCtrl: ModalController,
   	public popoverCtrl: PopoverController,
-    private authdata: Authdata
+    private postservice: PostService,
+    private af: AngularFire
   ) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
-    this.subscription = this.authdata.getPosts().subscribe(posts =>{
+  }
+  ngOnInit(){
+    this.postsubscription = this.postservice.getPosts().subscribe(posts =>{
       this.posts = posts;
     });
   }
-  ngOnInit(){}
   ngOnDestroy(){
     /*Took a day to figure it out . when i logout firebase showing permission denied at '/post'
     because even after loggout subscription to /post in firebase was there,so firebase 
     authentiaction rule showing permission-denied . So i had to unsubscribe the /post link
     when home component destroys.
     */
-    this.subscription.unsubscribe(); 
+    this.postsubscription.unsubscribe(); 
   }
 
   onCreatePostClick(){
@@ -68,5 +73,4 @@ export class HomePage implements OnInit{
       ev: myEvent
     });
   }
-  
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Authdata } from '../../providers/authdata';
+import { AuthService } from '../../providers/auth-service';
 import { HomePage } from '../../pages/home/home';
 
 
@@ -17,14 +17,14 @@ export class SignupPage {
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
-		public authdata: Authdata
+		public authservice: AuthService
 	) {}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad SignupPage');
 	}
 	oncreateUser(){
-		this.authdata.signupUser(this.email, this.password).then(userdata =>{
+		this.authservice.signupUser(this.email, this.password).then(() =>{
 			this.navCtrl.setRoot(HomePage);
 		},error =>{
 			console.log(error);

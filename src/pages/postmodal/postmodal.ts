@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component , OnInit} from '@angular/core';
 import { NavController, NavParams, ViewController} from 'ionic-angular';
 
-import { Authdata } from '../../providers/authdata';
+import { PostService } from '../../providers/post-service';
+import { AngularFire } from 'angularfire2';
 
 
 
@@ -9,7 +10,7 @@ import { Authdata } from '../../providers/authdata';
   selector: 'page-postmodal',
   templateUrl: 'postmodal.html'
 })
-export class PostmodalPage {
+export class PostmodalPage implements OnInit{
 
 	eventtype: any;
 	sporttype: any;
@@ -18,14 +19,23 @@ export class PostmodalPage {
 	participating: Number = 0;
 	rules: String[] = [];
 	rule: String;
+	currentuserId: any;
 
 	constructor(
 		public navCtrl: NavController,
 		public navParams: NavParams,
 		public viewCtrl: ViewController,
-		private authdata: Authdata
+		public af: AngularFire,
+		private postservice: PostService
 	) {}
-
+	ngOnInit(){
+		/* Initially i was trying to get current user inside constructor and 
+		it got f***ed up when i logout
+		*/
+		this.af.auth.subscribe(user =>{
+			this.currentuserId = user.uid;
+		});
+	}
 
 	onDismiss(){
 		this.viewCtrl.dismiss();
@@ -38,7 +48,8 @@ export class PostmodalPage {
 		this.rules.splice(i,1); // splice modifies the array
 	}
 	onPostSubmit(){
-		let post = {
+		let post = { 
+			userId: this.currentuserId,
 			eventtype: this.eventtype,
 			sporttype: this.sporttype,
 			eventdate: this.eventdate,
@@ -46,7 +57,7 @@ export class PostmodalPage {
 			participating: this.participating,
 			rules: this.rules
 		}
-		this.authdata.addPost(post);
+		this.postservice.addPost(post,this.currentuserId);
 		this.viewCtrl.dismiss();
 	}
 }

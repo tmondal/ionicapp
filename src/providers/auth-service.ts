@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
-//import { AuthProviders, AuthMethods} from 'angularfire2';
+import { AngularFire } from 'angularfire2';
 import firebase from 'firebase';
 
 
 @Injectable()
-export class Authdata {
+export class AuthService {
 
-  	posts: FirebaseListObservable<any[]>;
-    post: FirebaseObjectObservable<any>;
-    allposts: any;
     fireAuth: any;
 
     constructor(private af: AngularFire) {
@@ -22,28 +18,15 @@ export class Authdata {
         }
       });
     }
-    
-    addPost(post){
-      this.posts.push(post);
-    }
-    getPost(id){
-      return this.af.database.object('/posts/' + id);
-    }
-    getPosts(){     
-      this.posts = this.af.database.list('/posts');
-      return this.posts;
-    }
-    updateParticipating(id,participating){
-      console.log(id);
-      const items = this.af.database.list('/posts');
-      items.update(id,{participating: participating});
-    }
 
     // For Authentication
     signupUser(email: string, password: string) : firebase.Promise<any> {
       return this.af.auth.createUser({
         email: email,
         password: password
+      }).then(newuser =>{
+        console.log(newuser.uid);
+        this.af.database.object('/users/' + newuser.uid).set({email: email}); 
       });
     }
     loginUser(email: string ,password: string) : firebase.Promise<any> {

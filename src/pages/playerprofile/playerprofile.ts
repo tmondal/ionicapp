@@ -3,7 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { ClubprofilePage} from '../clubprofile/clubprofile';
 import { LoginPage } from '../login/login';
 
-import { Authdata } from '../../providers/authdata';
+import { AuthService } from '../../providers/auth-service';
 
 @Component({
   selector: 'page-playerprofile',
@@ -14,7 +14,7 @@ export class PlayerprofilePage {
 	clubprofile: String = "allposts";
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams, 
-		public authdata: Authdata
+		public authservice: AuthService
 	) {}
 
 	ionViewDidLoad() {
@@ -24,7 +24,7 @@ export class PlayerprofilePage {
   		this.navCtrl.push(ClubprofilePage);
   	}
   	onLogout(){
-    	this.authdata.logoutUser().then(()=>{
+    	this.authservice.logoutUser().then(()=>{
     		this.navCtrl.setRoot(LoginPage);
     	});
   	}

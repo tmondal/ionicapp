@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Authdata } from '../../providers/authdata';
+import { AuthService } from '../../providers/auth-service';
 import { HomePage } from '../home/home';
 import { SignupPage } from '../signup/signup';
 
@@ -17,7 +17,7 @@ export class LoginPage {
 	constructor(
 		public navCtrl: NavController,
 		public navParams: NavParams,
-		public authdata: Authdata
+		public authservice: AuthService
 	) {}
 
 	ionViewDidLoad() {
@@ -25,7 +25,7 @@ export class LoginPage {
 	}
 
 	onloginClick(){
-		this.authdata.loginUser(this.email,this.password).then(userdata => {
+		this.authservice.loginUser(this.email,this.password).then(userdata => {
 			this.navCtrl.setRoot(HomePage);
 		},error =>{
 			console.log(error);

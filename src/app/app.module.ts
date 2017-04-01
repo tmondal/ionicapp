@@ -15,7 +15,8 @@ import { PlayerprofilePage } from '../pages/playerprofile/playerprofile';
 import { PostmodalPage } from '../pages/postmodal/postmodal';
 import { PostmoreoptPage } from '../pages/postmoreopt/postmoreopt';
 
-import { Authdata } from '../providers/authdata';
+import { AuthService } from '../providers/auth-service';
+import { PostService } from '../providers/post-service';
 
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 
@@ -69,6 +70,6 @@ const AuthConfig = {
     PostmodalPage,
     PostmoreoptPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Authdata]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},AuthService,PostService]
 })
 export class AppModule {}

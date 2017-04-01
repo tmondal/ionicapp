@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController} from 'ionic-angular';
-import { Authdata } from '../../providers/authdata';
+import { PostService } from '../../providers/post-service';
+
 
 
 @Component({
@@ -13,11 +14,12 @@ export class PostPage {
 	participating: any;
 	postid: String;
 	participated: boolean = false;
+	user: any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams, 
 		public viewCtrl: ViewController,
-		private authdata: Authdata
+		private postservice: PostService
 	) {
 		this.rules = navParams.get("paramRules");
 		this.participating = navParams.get("participating");
@@ -33,12 +35,12 @@ export class PostPage {
 	onAccept(){
 		this.participating += 1;
 		this.participated = true;
-		this.authdata.updateParticipating(this.postid,this.participating);
+		this.postservice.updateParticipating(this.postid,this.participating);
 	}
 	onDecline(){
 		this.participating -= 1;
 		this.participated = false;
-		this.authdata.updateParticipating(this.postid,this.participating);
+		this.postservice.updateParticipating(this.postid,this.participating);
 	}
 
 }
