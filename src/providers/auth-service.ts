@@ -20,13 +20,14 @@ export class AuthService {
     }
 
     // For Authentication
-    signupUser(email: string, password: string) : firebase.Promise<any> {
+    signupUser(email: string, password: string, usertype: string) : firebase.Promise<any> {
       return this.af.auth.createUser({
         email: email,
         password: password
       }).then(newuser =>{
         console.log(newuser.uid);
-        this.af.database.object('/users/' + newuser.uid).set({email: email}); 
+        this.af.database.object('/users/' + newuser.uid)
+          .set({email: email,usertype: usertype}); 
       });
     }
     loginUser(email: string ,password: string) : firebase.Promise<any> {
@@ -37,5 +38,11 @@ export class AuthService {
     }
     logoutUser(): firebase.Promise<any> {
       return this.af.auth.logout();
+    }
+    getuserprofile(){
+      return this.af.database.object('/users/' + this.fireAuth.uid);
+    }
+    getuserbyId(userId){
+      return this.af.database.object('/users/' + userId); 
     }
 }

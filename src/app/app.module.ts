@@ -7,11 +7,12 @@ import { SignupPage } from '../pages/signup/signup';
 import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
 import { HomePage } from '../pages/home/home';
 import { PostPage } from '../pages/post/post';
-import { ClubprofilePage } from '../pages/clubprofile/clubprofile';
 import { AllpostsPage } from '../pages/allposts/allposts';
 import { MomentsPage } from '../pages/moments/moments';
 import { AchievePage } from '../pages/achieve/achieve';
+import { ClubprofilePage } from '../pages/clubprofile/clubprofile';
 import { PlayerprofilePage } from '../pages/playerprofile/playerprofile';
+import { UserprofilePage } from '../pages/userprofile/userprofile';
 import { PostmodalPage } from '../pages/postmodal/postmodal';
 import { PostmoreoptPage } from '../pages/postmoreopt/postmoreopt';
 
@@ -42,11 +43,12 @@ const AuthConfig = {
     ResetpasswordPage,
     HomePage,
     PostPage,
-    ClubprofilePage,
     AllpostsPage,
     MomentsPage,
     AchievePage,
+    ClubprofilePage,
     PlayerprofilePage,
+    UserprofilePage,
     PostmodalPage,
     PostmoreoptPage
   ],
@@ -62,11 +64,12 @@ const AuthConfig = {
     ResetpasswordPage,
     HomePage,
     PostPage,
-    ClubprofilePage,
     AllpostsPage,
     MomentsPage,
     AchievePage,
+    ClubprofilePage,
     PlayerprofilePage,
+    UserprofilePage,
     PostmodalPage,
     PostmoreoptPage
   ],

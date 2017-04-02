@@ -47,6 +47,7 @@ export class PostmodalPage implements OnInit{
 	onDelClick(i){
 		this.rules.splice(i,1); // splice modifies the array
 	}
+	
 	onPostSubmit(){
 		let post = { 
 			userId: this.currentuserId,

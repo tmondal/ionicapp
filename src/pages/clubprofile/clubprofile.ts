@@ -10,7 +10,13 @@ import { NavController, NavParams } from 'ionic-angular';
 export class ClubprofilePage {
 
 	clubprofile: String = "allposts";
-	constructor(public navCtrl: NavController, public navParams: NavParams) {}
+	userId: any;
+	constructor(
+		public navCtrl: NavController, 
+		public navParams: NavParams
+	) { 
+		this.userId = this.navParams.get("userId");
+	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad ClubprofilePage');

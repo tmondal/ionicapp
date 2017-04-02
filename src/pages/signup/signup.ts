@@ -14,6 +14,7 @@ export class SignupPage {
 
 	email: any;
 	password: any;
+	usertype: any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -24,7 +25,7 @@ export class SignupPage {
 		console.log('ionViewDidLoad SignupPage');
 	}
 	oncreateUser(){
-		this.authservice.signupUser(this.email, this.password).then(() =>{
+		this.authservice.signupUser(this.email, this.password,this.usertype).then(() =>{
 			this.navCtrl.setRoot(HomePage);
 		},error =>{
 			console.log(error);

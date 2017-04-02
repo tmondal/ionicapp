@@ -3,6 +3,11 @@
     <ion-title>
       Connect Club
     </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="calluserdetails()">
+      <ion-icon name="person"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -12,7 +17,7 @@
       <ion-list>
         <ion-item>
           <ion-avatar item-left>
-            <img src="../../assets/img/img1.jpg">
+            
           </ion-avatar>
           <ion-input type="text" (click)="onCreatePostClick()" placeholder="Organize an Event.."></ion-input>
         </ion-item>
@@ -25,17 +30,16 @@
 
       <ion-item>
         <ion-avatar item-left>
-          <img src="../../assets/img/img3.jpg">
+          
         </ion-avatar>
         <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-        <h2 (click)="onClubClick()">Mohun Bagan</h2>
+        <h2 (click)="onUsernameClick(post.userId)">{{post.userId}}</h2>
 
         <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
       </ion-item>
       <ion-item>
         <p>Organising a {{post.sporttype}} tournament on {{post.eventdate}}</p>
       </ion-item>
-      <img src="../../assets/img/img2.jpg">
       <ion-row>          
         <ion-card>Our club is organising this {{post.sporttype}} tournament for finding best talents..</ion-card>
       </ion-row>

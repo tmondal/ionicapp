@@ -2,13 +2,15 @@ import { Component ,OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ModalController ,PopoverController} from 'ionic-angular';
 
-import { PostPage} from '../post/post';
+import { PostPage } from '../post/post';
 import { ClubprofilePage } from	'../clubprofile/clubprofile';
 import { PlayerprofilePage } from '../playerprofile/playerprofile';
+import { UserprofilePage } from '../userprofile/userprofile';
 import { PostmodalPage } from '../postmodal/postmodal';
 import { PostmoreoptPage } from '../postmoreopt/postmoreopt';
 
 import { PostService } from '../../providers/post-service';
+import { AuthService } from '../../providers/auth-service';
 import { AngularFire } from 'angularfire2';
 
 @Component({
@@ -23,11 +25,15 @@ export class HomePage implements OnInit{
   currentuserId: any;
   postsubscription: any;
   usersubscription: any;
+  currentusersubscription: any;
+  usertype: any;
+
   constructor(
   	public navCtrl: NavController,
   	public modalCtrl: ModalController,
   	public popoverCtrl: PopoverController,
     private postservice: PostService,
+    public authservice: AuthService,
     private af: AngularFire
   ) {}
 
@@ -45,7 +51,8 @@ export class HomePage implements OnInit{
     authentiaction rule showing permission-denied . So i had to unsubscribe the /post link
     when home component destroys.
     */
-    this.postsubscription.unsubscribe(); 
+    this.postsubscription.unsubscribe();
+
   }
 
   onCreatePostClick(){
@@ -61,16 +68,43 @@ export class HomePage implements OnInit{
     modal.present();
   }
 
-  onClubClick(){
-    this.navCtrl.push(ClubprofilePage);
+  onUsernameClick(userId){
+    this.usersubscription = this.authservice.getuserbyId(userId).subscribe(user=>{
+        this.usertype = user.usertype;
+        console.log("here");
+        console.log(this.usertype);
+        if(this.usertype === "player") {
+          this.navCtrl.push(PlayerprofilePage,{userId: userId});
+          this.usersubscription.unsubscribe();
+        }else if(this.usertype == "club"){
+          this.navCtrl.push(ClubprofilePage,{userId: userId});
+          this.usersubscription.unsubscribe();      
+        }
+    });
   }
+
   onPlayerClick(){
     this.navCtrl.push(PlayerprofilePage);
   }
+
   onMoreClick(myEvent){
     let popover = this.popoverCtrl.create(PostmoreoptPage);
     popover.present({
       ev: myEvent
     });
   }
+
+  calluserdetails(){
+    this.currentusersubscription = this.authservice.getuserprofile().subscribe(user=>{
+      this.usertype = user.usertype;
+      if(this.usertype === "player") {
+          this.navCtrl.push(PlayerprofilePage);
+          this.currentusersubscription.unsubscribe();
+        }else if(this.usertype == "club"){
+          this.navCtrl.push(ClubprofilePage);
+          this.currentusersubscription.unsubscribe();      
+        }
+    });
+  }
 }
+
