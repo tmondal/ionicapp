@@ -1,4 +1,5 @@
 
+
 <ion-header>
 	<ion-navbar>
 		<ion-title>post</ion-title>
@@ -45,6 +46,6 @@
  		Reject Challenge <span style="width: 5px"></span>
  		<ion-icon name="sad"></ion-icon>
  	</button>
- 	<button ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()">I'm Afried</button>
-	
+ 	<button *ngIf="!participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()">I'm Afried</button>
+	<button *ngIf="participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()">I'm fine</button>
 </ion-content>

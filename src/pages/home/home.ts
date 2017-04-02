@@ -5,7 +5,7 @@ import { ModalController ,PopoverController} from 'ionic-angular';
 import { PostPage } from '../post/post';
 import { ClubprofilePage } from	'../clubprofile/clubprofile';
 import { PlayerprofilePage } from '../playerprofile/playerprofile';
-import { UserprofilePage } from '../userprofile/userprofile';
+//import { UserprofilePage } from '../userprofile/userprofile';
 import { PostmodalPage } from '../postmodal/postmodal';
 import { PostmoreoptPage } from '../postmoreopt/postmoreopt';
 

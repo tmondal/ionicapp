@@ -11,8 +11,15 @@ export class PostService {
   post: FirebaseObjectObservable<any>;
   postnode: any;
   currentuser: any;
+  fireAuth: any;
 
   constructor(public af: AngularFire) {
+    af.auth.subscribe(user=>{
+        if(user) {
+          this.fireAuth = user.auth;
+          console.log(user);
+        }
+    });
     this.postnode = this.af.database.list('/posts');
   }
   addPost(post,userId){
@@ -32,10 +39,21 @@ export class PostService {
     this.posts = this.af.database.list('/posts');
     return this.posts;
   }
-  updateParticipating(postid,participating){
-    console.log(postid);
-    const items = this.af.database.list('/posts');
-    items.update(postid,{participating: participating});
+  getParticipated(postid: any){
+    return this.af.database.object('/posts-participator/' + postid + "/" + this.fireAuth.uid);
   }
-
+  updateParticipated(postid: any,participated: boolean){
+    console.log(postid);
+    const item = this.af.database.object('/posts-participator/' + postid + "/" + this.fireAuth.uid);
+    item.update({participated: participated});
+  }
+  removeParticipated(postid: any,participated: boolean){
+    console.log(postid);
+    const item = this.af.database.object('/posts-participator/' + postid + "/" + this.fireAuth.uid);
+    item.remove();
+  }
+  updateParticipating(postid: any,participating: number){
+    const item = this.af.database.object('/posts/' + postid);
+    item.update({participating: participating});
+  }
 }

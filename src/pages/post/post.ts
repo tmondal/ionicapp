@@ -11,10 +11,12 @@ import { PostService } from '../../providers/post-service';
 export class PostPage {
 
 	rules: String[];
-	participating: any;
 	postid: String;
-	participated: boolean = false;
+	participating: any;
+	participated: boolean;
 	user: any;
+	test: any;
+
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams, 
@@ -22,8 +24,16 @@ export class PostPage {
 		private postservice: PostService
 	) {
 		this.rules = navParams.get("paramRules");
+		console.log("here");
 		this.participating = navParams.get("participating");
+		console.log("participating:" + this.participating);
 		this.postid = navParams.get("postid");
+		console.log("postid: "+this.postid);
+		this.postservice.getParticipated(this.postid).subscribe(user=>{
+			this.participated = user.participated;
+			console.log("participated: "+ this.participated);
+		});
+		
 	}
 
 	ionViewDidLoad() {
@@ -33,13 +43,15 @@ export class PostPage {
 		this.viewCtrl.dismiss();
 	}
 	onAccept(){
-		this.participating += 1;
 		this.participated = true;
+		this.participating += 1;
+		this.postservice.updateParticipated(this.postid,this.participated);
 		this.postservice.updateParticipating(this.postid,this.participating);
 	}
 	onDecline(){
 		this.participating -= 1;
 		this.participated = false;
+		this.postservice.updateParticipated(this.postid,this.participated);
 		this.postservice.updateParticipating(this.postid,this.participating);
 	}
 
