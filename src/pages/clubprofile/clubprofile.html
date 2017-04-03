@@ -2,6 +2,9 @@
 <ion-header>
 	<ion-navbar>
 		<ion-title>Clubprofile</ion-title>
+		<ion-buttons end>
+	      <button *ngIf="compareUser()" ion-button (click)="onLogout()">Logout</button>
+	    </ion-buttons>
 	</ion-navbar>
 </ion-header>
 
@@ -16,7 +19,7 @@
 	    </ion-card>
 	</ion-card>
  	<ion-card>
-	 	<ion-row >
+	 	<ion-row *ngIf="!sameuser()">
 	      <ion-col col-4>
 	        <button ion-button icon-left clear small class="followerfont">
 	          <ion-icon name="people"></ion-icon>
@@ -30,18 +33,36 @@
 	        </button>
 	      </ion-col>
 	      <ion-col col-4>
-	        <button ion-button icon-left small outline class="followfont">
+	        <button *ngIf="!following" ion-button icon-left small outline class="followfont" (click)=follow() >
 	          <ion-icon name="person"></ion-icon>
 	          Follow
 	        </button>
+	        <button *ngIf="following" ion-button icon-left small outline color="danger" class="unfollowfont" (click)=unfollow() >
+	          <ion-icon name="person"></ion-icon>
+	          Unfollow
+	        </button>
 	      </ion-col>
+	    </ion-row>
+	    <ion-row *ngIf="sameuser()">
+		    <ion-col col-6>
+		        <button ion-button icon-left clear small class="followerfont">
+		          <ion-icon name="people"></ion-icon>
+		          <ion-note>1k Followers</ion-note>
+		        </button>
+		      </ion-col>
+		      <ion-col col-6>
+		        <button ion-button icon-left clear small class="followingfont">
+		          <ion-icon name="people"></ion-icon>
+		          <ion-note>50 Following</ion-note>
+		        </button>
+		      </ion-col>
 	    </ion-row>
  	</ion-card>
 
  	<ion-card >
 	  <ion-toolbar no-border-top>
 	    <ion-segment [(ngModel)]="clubprofile" style="background-color: #fff">
-	      <ion-segment-button value="allposts" class="middlenavbar">
+	      <ion-segment-button value="relatedposts" class="middlenavbar">
 	        Posts
 	      </ion-segment-button>
 	      <ion-segment-button value="moments"  class="middlenavbar">
@@ -60,8 +81,8 @@
 
   <div [ngSwitch]="clubprofile">
 
-    <div *ngSwitchCase="'allposts'">
-    	<page-allposts></page-allposts>
+    <div *ngSwitchCase="'relatedposts'">
+    	<page-allposts [userId]="userId"></page-allposts>
     </div>
 
     <div *ngSwitchCase="'moments'">      

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { PostPage } from '../post/post';
 import { ClubprofilePage } from '../clubprofile/clubprofile';
@@ -12,16 +12,10 @@ import { ClubprofilePage } from '../clubprofile/clubprofile';
 })
 export class AllpostsPage {
 
+  @Input() userId: any;
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AllpostsPage');
-  }
-
-  onRulesClick(){
-  	this.navCtrl.push(PostPage);
-  }
-  onClubClick(){
-  	this.navCtrl.push(ClubprofilePage);
   }
 }

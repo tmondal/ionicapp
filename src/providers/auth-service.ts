@@ -39,10 +39,26 @@ export class AuthService {
     logoutUser(): firebase.Promise<any> {
       return this.af.auth.logout();
     }
-    getuserprofile(){
+    getmyprofile(){
       return this.af.database.object('/users/' + this.fireAuth.uid);
     }
     getuserbyId(userId){
       return this.af.database.object('/users/' + userId); 
+    }
+    followuser(targetuserId: any){
+      var followuserdata = {};
+
+      followuserdata["users-followers/" + targetuserId + "/" + this.fireAuth.uid] = {following: true};
+      followuserdata["users-following/" + this.fireAuth.uid + "/" + targetuserId] = {following: true};
+      this.af.database.object('/').update(followuserdata);
+    }
+    unfollowuser(targetuserId: any){
+      const follower = this.af.database.object("/users-followers/" + targetuserId + "/" + this.fireAuth.uid);
+      follower.remove();
+      const following = this.af.database.object("/users-following/" + this.fireAuth.uid + "/" + targetuserId);
+      following.remove();
+    }
+    checkiffollowing(targetuserId: any){
+      return this.af.database.object("/users-following/" + this.fireAuth.uid + "/" + targetuserId);
     }
 }

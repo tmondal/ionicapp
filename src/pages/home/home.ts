@@ -95,7 +95,7 @@ export class HomePage implements OnInit{
   }
 
   calluserdetails(){
-    this.currentusersubscription = this.authservice.getuserprofile().subscribe(user=>{
+    this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
       this.usertype = user.usertype;
       if(this.usertype === "player") {
           this.navCtrl.push(PlayerprofilePage);

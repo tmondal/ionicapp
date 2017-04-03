@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , OnInit} from '@angular/core';
 import { NavController, NavParams, ViewController} from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
 
@@ -8,14 +8,14 @@ import { PostService } from '../../providers/post-service';
   selector: 'page-post',
   templateUrl: 'post.html'
 })
-export class PostPage {
+export class PostPage implements OnInit{
 
 	rules: String[];
 	postid: String;
 	participating: any;
 	participated: boolean;
+	participateservice: any;
 	user: any;
-	test: any;
 
 	constructor(
 		public navCtrl: NavController, 
@@ -24,16 +24,16 @@ export class PostPage {
 		private postservice: PostService
 	) {
 		this.rules = navParams.get("paramRules");
-		console.log("here");
 		this.participating = navParams.get("participating");
-		console.log("participating:" + this.participating);
 		this.postid = navParams.get("postid");
-		console.log("postid: "+this.postid);
-		this.postservice.getParticipated(this.postid).subscribe(user=>{
+		this.participateservice = this.postservice.getParticipated(this.postid).subscribe(user=>{
 			this.participated = user.participated;
-			console.log("participated: "+ this.participated);
 		});
 		
+	}
+	ngOnInit(){}
+	ngOnDestroy(){
+		this.participateservice.unsubscribe();
 	}
 
 	ionViewDidLoad() {
@@ -51,7 +51,7 @@ export class PostPage {
 	onDecline(){
 		this.participating -= 1;
 		this.participated = false;
-		this.postservice.updateParticipated(this.postid,this.participated);
+		this.postservice.removeParticipated(this.postid,this.participated);
 		this.postservice.updateParticipating(this.postid,this.participating);
 	}
 

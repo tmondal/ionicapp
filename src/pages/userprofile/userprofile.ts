@@ -11,6 +11,7 @@ import { AuthService } from '../../providers/auth-service';
 export class UserprofilePage implements OnInit{
 
 	useremail: any;
+	userservice: any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -18,10 +19,13 @@ export class UserprofilePage implements OnInit{
 	) {}
 
 	ngOnInit(){
-		this.authservice.getuserprofile().subscribe(user =>{
+		this.userservice = this.authservice.getmyprofile().subscribe(user =>{
 			this.useremail = user.email;
 			console.log(user);
 		});
+	}
+	ngOnDestroy(){
+		this.userservice.unsubscribe();
 	}
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad UserprofilePage');

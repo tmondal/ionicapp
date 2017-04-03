@@ -3,7 +3,7 @@
 	<ion-navbar>
 		<ion-title>Playerprofile</ion-title>
 		 <ion-buttons end>
-	      <button ion-button (click)="onLogout()">Logout</button>
+	      <button *ngIf="compareUser()" ion-button (click)="onLogout()">Logout</button>
 	    </ion-buttons>
 	</ion-navbar>
 </ion-header>
@@ -12,7 +12,7 @@
 <ion-content class="card-background-page">
 	<ion-card>
 	    <img src="../../assets/img/img7.jpg"/>
-	    <div class="card-title">Sony</div>
+	    <div class="card-title">{{useremail}}</div>
 	    <p class="card-subtitle">Want to play for my country..</p>
 	    <ion-card class="profilepic">
 	    	<img src="../../assets/img/img6.jpg">
@@ -74,8 +74,8 @@
 
  	<ion-card>
 	  <ion-toolbar no-border-top>
-	    <ion-segment [(ngModel)]="clubprofile" style="background-color: #fff">
-			<ion-segment-button value="allposts"  class="middlenavbar">
+	    <ion-segment [(ngModel)]="playerprofile" style="background-color: #fff">
+			<ion-segment-button value="relatedposts"  class="middlenavbar">
 				Attempted
 			</ion-segment-button>
 			<ion-segment-button value="moments"  class="middlenavbar">
@@ -92,10 +92,10 @@
  	</ion-card>
 
 
-  <div [ngSwitch]="clubprofile">
+  <div [ngSwitch]="playerprofile">
 
-    <div *ngSwitchCase="'allposts'">
-    	<page-allposts></page-allposts>
+    <div *ngSwitchCase="'relatedposts'">
+    	<page-allposts [userId]="userId"></page-allposts>
     </div>
 
     <div *ngSwitchCase="'moments'">      
