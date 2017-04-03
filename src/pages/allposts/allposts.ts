@@ -1,7 +1,5 @@
 import { Component,Input } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { PostPage } from '../post/post';
-import { ClubprofilePage } from '../clubprofile/clubprofile';
 
 
 

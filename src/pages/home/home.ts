@@ -3,9 +3,7 @@ import { NavController } from 'ionic-angular';
 import { ModalController ,PopoverController} from 'ionic-angular';
 
 import { PostPage } from '../post/post';
-import { ClubprofilePage } from	'../clubprofile/clubprofile';
-import { PlayerprofilePage } from '../playerprofile/playerprofile';
-//import { UserprofilePage } from '../userprofile/userprofile';
+import { UserprofilePage } from '../userprofile/userprofile';
 import { PostmodalPage } from '../postmodal/postmodal';
 import { PostmoreoptPage } from '../postmoreopt/postmoreopt';
 
@@ -71,20 +69,9 @@ export class HomePage implements OnInit{
   onUsernameClick(userId){
     this.usersubscription = this.authservice.getuserbyId(userId).subscribe(user=>{
         this.usertype = user.usertype;
-        console.log("here");
-        console.log(this.usertype);
-        if(this.usertype === "player") {
-          this.navCtrl.push(PlayerprofilePage,{userId: userId});
-          this.usersubscription.unsubscribe();
-        }else if(this.usertype == "club"){
-          this.navCtrl.push(ClubprofilePage,{userId: userId});
-          this.usersubscription.unsubscribe();      
-        }
+        this.navCtrl.push(UserprofilePage,{userId: userId, usertype: this.usertype});
+        this.usersubscription.unsubscribe();
     });
-  }
-
-  onPlayerClick(){
-    this.navCtrl.push(PlayerprofilePage);
   }
 
   onMoreClick(myEvent){
@@ -97,13 +84,8 @@ export class HomePage implements OnInit{
   calluserdetails(){
     this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
       this.usertype = user.usertype;
-      if(this.usertype === "player") {
-          this.navCtrl.push(PlayerprofilePage);
-          this.currentusersubscription.unsubscribe();
-        }else if(this.usertype == "club"){
-          this.navCtrl.push(ClubprofilePage);
-          this.currentusersubscription.unsubscribe();      
-        }
+      this.navCtrl.push(UserprofilePage,{usertype: this.usertype});
+      this.currentusersubscription.unsubscribe();
     });
   }
 }
