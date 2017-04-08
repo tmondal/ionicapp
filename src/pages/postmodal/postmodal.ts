@@ -1,33 +1,65 @@
 import { Component , OnInit} from '@angular/core';
-import { NavController, NavParams, ViewController} from 'ionic-angular';
-
+import { Camera ,CameraOptions} from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from '@ionic-native/file-path';
+import { NavController, NavParams, ViewController, ToastController} from 'ionic-angular';
+import { StorageService } from '../../providers/storage-service';
 import { PostService } from '../../providers/post-service';
 import { AngularFire } from 'angularfire2';
+import * as firebase from 'firebase';
 
 
 
 @Component({
   selector: 'page-postmodal',
-  templateUrl: 'postmodal.html'
+  templateUrl: 'postmodal.html',
+  providers: [File,FileChooser,FilePath]
 })
 export class PostmodalPage implements OnInit{
 
-	eventtype: any;
+	currentuserId: any;
+	posttype: any = "tournament";
 	sporttype: any;
 	eventdate: any;
 	eventtime: any;
 	participating: Number = 0;
+	entryfee: any;
+	prize: any;
 	rules: String[] = [];
 	rule: String;
-	currentuserId: any;
+
+	criteria: String[] = [];
+	criterion: any;
+
+	phototaken: boolean;
+	image: any;
+	imagesrc: any;
+	nativepath: any;
+	imageurl: any = null;
+	imagetitle: any;
+	likes: any = 0;
+	dislikes: any = 0;
+	comments: any = 0;
+
+	cricket: any;
+	cricketarray: any;
+	
 
 	constructor(
 		public navCtrl: NavController,
 		public navParams: NavParams,
 		public viewCtrl: ViewController,
+		public toastCtrl: ToastController,
 		public af: AngularFire,
-		private postservice: PostService
-	) {}
+		public camera: Camera,
+		private fileChooser: FileChooser,
+		private filePath: FilePath,
+		public postservice: PostService,
+		public storageservice: StorageService
+	) {
+		this.phototaken = false;
+	}
 	ngOnInit(){
 		/* Initially i was trying to get current user inside constructor and 
 		it got f***ed up when i logout
@@ -40,25 +72,116 @@ export class PostmodalPage implements OnInit{
 	onDismiss(){
 		this.viewCtrl.dismiss();
 	}
-	onAddClick(){
+	onRuleAdd(){
 		this.rules.push(this.rule);
 		this.rule = '';
 	}
-	onDelClick(i){
+	onRuleDel(i){
 		this.rules.splice(i,1); // splice modifies the array
 	}
+	onCriteriaAdd(){
+		this.criteria.push(this.criterion);
+		this.criterion = '';
+	}
+	onCriteriaDel(i){
+		this.criteria.splice(i,1);
+	}
 	
-	onPostSubmit(){
+	tournamentSubmit(){
 		let post = { 
 			userId: this.currentuserId,
-			eventtype: this.eventtype,
+			posttype: this.posttype,
 			sporttype: this.sporttype,
 			eventdate: this.eventdate,
 			eventtime: this.eventtime,
+			entryfee: this.entryfee,
+			prize: this.prize,
 			participating: this.participating,
 			rules: this.rules
 		}
 		this.postservice.addPost(post,this.currentuserId);
 		this.viewCtrl.dismiss();
 	}
+	hiringSubmit(){
+		let post = {
+			userId: this.currentuserId,
+			posttype: this.posttype,
+			sporttype: this.sporttype,
+			eventdate: this.eventdate,
+			eventtime: this.eventtime,
+			criteria: this.criteria,
+			participating: this.participating
+		}
+		this.postservice.addPost(post,this.currentuserId);
+		this.viewCtrl.dismiss();
+	}
+	takePicture(){
+		const options: CameraOptions = {
+			quality: 100,
+			sourceType: this.camera.PictureSourceType.CAMERA,
+			destinationType: this.camera.DestinationType.DATA_URL,
+			encodingType: this.camera.EncodingType.JPEG,
+			mediaType: this.camera.MediaType.PICTURE,
+			correctOrientation: true
+		}
+
+		this.camera.getPicture(options).then((imageSrc) => {
+			
+      		this.imagesrc = 'data:image/jpeg;base64,' + imageSrc;
+			this.phototaken  =true;
+			let toast = this.toastCtrl.create({
+				message: 'Success: picture taken :)',
+				duration: 3000
+			});
+			toast.present();
+		}, (err) => {
+			
+			let toast = this.toastCtrl.create({
+				message: 'Error: during getting picture :(',
+				duration: 3000
+			});
+			toast.present();
+		});
+	}
+	
+	uploadFile(){
+		this.fileChooser.open().then((uri) =>{
+			this.filePath.resolveNativePath(uri).then( (filepath) =>{
+				this.nativepath = filepath;
+				let toast = this.toastCtrl.create({
+					message: 'Success: File choosen :)',
+					duration: 3000
+				});
+				toast.present();
+			}).catch((err)=>{
+				let toast = this.toastCtrl.create({
+					message: 'Failed: could not get native path',
+					duration: 3000
+				});
+				toast.present();
+			})
+		}).catch((err)=>{
+			let toast = this.toastCtrl.create({
+				message: 'Failed to choose file :( ' + err,
+				duration: 10000
+			});
+			toast.present();
+		})
+	}
+
+	imageSubmit(){
+			
+		let post = {
+			userId: this.currentuserId,
+			posttype: this.posttype,
+			title: this.imagetitle,
+			imageurl: this.imageurl,
+			likes: this.likes,
+			dislikes: this.dislikes,
+			comments: this.comments
+		}
+		this.postservice.uploadFile(post,this.currentuserId,this.nativepath);
+		this.viewCtrl.dismiss();
+	}
+	
 }

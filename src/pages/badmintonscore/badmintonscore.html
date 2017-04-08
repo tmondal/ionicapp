@@ -1,0 +1,54 @@
+<ion-card>
+	<ion-row>
+		<ion-col col-4>
+			<ion-label>Player 1:</ion-label>
+		</ion-col>
+		<ion-col col-8>
+			<ion-input value="playerone" [(ngModel)] = "playerone" placeholder="Enter player 1 name..."></ion-input>
+		</ion-col>
+	</ion-row>
+</ion-card>
+<ion-card>
+	<ion-row>
+		<ion-col col-4>
+			<ion-label>Player 2:</ion-label>
+		</ion-col>
+		<ion-col col-8>
+			<ion-input value="playertwo" [(ngModel)] = "playertwo" placeholder="Enter player 2 name..."></ion-input>
+		</ion-col>
+	</ion-row>
+</ion-card>
+<ion-card>
+	<ion-row>
+		<ion-col col-4>
+			<ion-label>Set No: </ion-label>
+		</ion-col>
+		<ion-col col-8>
+			<ion-input placeholder="Enter set no..."></ion-input>
+		</ion-col>
+	</ion-row>
+</ion-card>
+<ion-card>
+	<ion-row>
+		<ion-col col-4>
+			<ion-label>{{playerone}}'s score: </ion-label>
+		</ion-col>
+		<ion-col col-8>
+			<ion-input value="scoreone" [(ngModel)]="scoreone" placeholder="Enter score..."></ion-input>
+		</ion-col>
+	</ion-row>
+	<ion-row>
+		<ion-col col-4>
+			<ion-label>{{playertwo}}'s score: </ion-label>
+		</ion-col>
+		<ion-col col-8>
+			<ion-input value="scoretwo" [(ngModel)]="scoretwo" placeholder="Enter score..."></ion-input>
+		</ion-col>
+	</ion-row>
+</ion-card>
+<ion-card>
+	<button (click)="badmintonScore()" ion-button full>Post</button>
+</ion-card>
+<ion-card>
+	<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
+</ion-card>

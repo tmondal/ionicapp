@@ -11,7 +11,8 @@ import { PostService } from '../../providers/post-service';
 export class PostPage implements OnInit{
 
 	rules: String[];
-	postid: String;
+	posttype: any;
+	postid: any;
 	participating: any;
 	participated: boolean;
 	participateservice: any;
@@ -24,6 +25,7 @@ export class PostPage implements OnInit{
 		private postservice: PostService
 	) {
 		this.rules = navParams.get("paramRules");
+		this.posttype = navParams.get("posttype");
 		this.participating = navParams.get("participating");
 		this.postid = navParams.get("postid");
 		this.participateservice = this.postservice.getParticipated(this.postid).subscribe(user=>{
@@ -35,10 +37,6 @@ export class PostPage implements OnInit{
 	ngOnDestroy(){
 		this.participateservice.unsubscribe();
 	}
-
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad PostPage');
-	}
 	onCancel(){
 		this.viewCtrl.dismiss();
 	}
@@ -47,6 +45,7 @@ export class PostPage implements OnInit{
 		this.participating += 1;
 		this.postservice.updateParticipated(this.postid,this.participated);
 		this.postservice.updateParticipating(this.postid,this.participating);
+		this.viewCtrl.dismiss();
 	}
 	onDecline(){
 		this.participating -= 1;

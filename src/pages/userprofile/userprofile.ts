@@ -1,8 +1,9 @@
 import { Component , OnInit} from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams ,PopoverController} from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 import { AuthService } from '../../providers/auth-service';
-import { LoginPage } from '../login/login'; 
+import { LoginPage } from '../login/login';
+import { UsereditoptsPage } from '../usereditopts/usereditopts'; 
 
 
 @Component({
@@ -23,34 +24,35 @@ export class UserprofilePage implements OnInit{
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
+		public popoverCtrl: PopoverController,
 		public af: AngularFire,
 		public authservice: AuthService
 	) { 
 		this.af.auth.subscribe(user=>{
 			if(user) {
-				this.authuid = user.auth.uid;
-				console.log("Current userid: " + user.auth.uid);				
+				this.authuid = user.auth.uid;				
 			}
 		});
-		this.userId = this.navParams.get("userId") || this.authuid;
+		this.userId = this.navParams.get("userId") || this.authuid; // Default current user
 		this.usertype = this.navParams.get("usertype");
-		console.log("Pararmeter userId : " + this.userId);
 	}
 	ngOnInit(){
-		this.userservice = this.authservice.getuserbyId(this.userId).subscribe(user =>{
-			this.useremail = user.email;
-			console.log(user);
-		});
 		this.followingservice = this.authservice.checkiffollowing(this.userId).subscribe(user=>{
 			this.following = user.following;
+		});
+		this.userservice = this.authservice.getuserbyId(this.userId).subscribe(user =>{
+			this.useremail = user.email;
 		});
 	}
 	ngOnDestroy(){
 		this.userservice.unsubscribe();
 		this.followingservice.unsubscribe();
 	}
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad ClubprofilePage');
+	onusereditopts(myEvent){
+	    let popover = this.popoverCtrl.create(UsereditoptsPage);
+	    popover.present({
+	      ev: myEvent
+	    });
 	}
 	compareusertype(){
 		if(this.usertype == "player") {

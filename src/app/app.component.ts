@@ -6,6 +6,7 @@ import { LoginPage } from '../pages/login/login';
 import { AngularFire } from 'angularfire2';
 
 
+
 @Component({
   templateUrl: 'app.html'
 })

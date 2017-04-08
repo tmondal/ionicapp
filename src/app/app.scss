@@ -14,3 +14,24 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+ion-label {
+	font-weight: 100;
+	white-space: normal;
+}
+.toolbar-title-md {
+	font-weight: 100;
+	color: #000;
+}
+ion-app.md {
+	font-family: "Roboto", "Helvetica Neue", sans-serif;
+}
+.button-md {
+	margin: 0px;	
+}
+ion-app.md [padding], ion-app.md [padding] .scroll-content{
+	padding: 10px;
+}
+.list-md {
+	margin: 2px 0px 10px 0px;
+}

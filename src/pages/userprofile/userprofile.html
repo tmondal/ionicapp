@@ -3,17 +3,21 @@
 	<ion-navbar>
 		<ion-title>UserProfile</ion-title>
 		<ion-buttons end>
-	      <button *ngIf="sameuser()" ion-button (click)="onLogout()">Logout</button>
+	      <button *ngIf="sameuser()" ion-button (click)="onusereditopts($event)">
+	      	<ion-icon name="person"></ion-icon>
+	      </button>
 	    </ion-buttons>
 	</ion-navbar>
 </ion-header>
+
+<!-- For clubs profile -->
 <ion-content *ngIf="!compareusertype()" class="card-background-page">
 	<ion-card>
-	    <img src="../../assets/img/img4.jpg"/>
+	    <!-- cover photo -->
 	    <div class="card-title">{{userId}}</div>
 	    <p class="card-subtitle">We care our players..</p>
 	    <ion-card class="profilepic">
-	    	<img src="../../assets/img/img5.jpg">
+	    	<!-- profile photo -->
 	    </ion-card>
 	</ion-card>
  	<ion-card>
@@ -76,7 +80,7 @@
  	</ion-card>
   <div [ngSwitch]="clubprofile">
     <div *ngSwitchCase="'relatedposts'">
-    	<page-allposts [userId]="userId"></page-allposts>
+    	<page-allposts [userId]="userId"></page-allposts> <!-- sending userId to allposts page -->
     </div>
     <div *ngSwitchCase="'moments'">      
     	<page-moments></page-moments>
@@ -90,13 +94,14 @@
   </div>
 </ion-content>
 
+<!-- For players profile -->
 <ion-content *ngIf="compareusertype()" class="card-background-page">
 	<ion-card>
-	    <img src="../../assets/img/img7.jpg"/>
+	    <!-- cover photo -->
 	    <div class="card-title">{{useremail}}</div>
 	    <p class="card-subtitle">Want to play for my country..</p>
 	    <ion-card class="profilepic">
-	    	<img src="../../assets/img/img6.jpg">
+	    	<!-- profile photo -->
 	    </ion-card>
 	</ion-card>
 	<ion-card>

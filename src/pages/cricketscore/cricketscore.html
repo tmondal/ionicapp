@@ -1,0 +1,200 @@
+<div [ngSwitch] = "cricketarray[2]">
+	<div *ngSwitchCase = "'odi'">
+		<ion-card>
+			<ion-row>
+				<ion-col col-4>
+					<ion-label>Team 1:</ion-label>
+				</ion-col>
+				<ion-col col-8>
+					<ion-input value="teamone" [(ngModel)] = "teamone" placeholder="Enter team 1 name..."></ion-input>
+				</ion-col>
+			</ion-row>
+			<ion-row>
+				<ion-col col-4>
+					<ion-label>Team 2:</ion-label>
+				</ion-col>
+				<ion-col col-8>
+					<ion-input value="teamtwo" [(ngModel)] = "teamtwo" placeholder="Enter team 2 name..."></ion-input>
+				</ion-col>
+			</ion-row>
+		</ion-card>
+		<ion-card>
+			<ion-row>
+				<ion-col>
+					<ion-label>Who won toss ?</ion-label>
+					<ion-select [(ngModel)] = "tosswon" >
+						<ion-option value = "teamone">{{teamone}}</ion-option>
+						<ion-option value="teamtwo">{{teamtwo}}</ion-option>
+					</ion-select>
+				</ion-col>
+				<ion-col>
+					<ion-label>Elected what ?</ion-label>
+					<ion-select [(ngModel)] = "elected" >
+						<ion-option value="batting">Bat First</ion-option>
+						<ion-option value="bowling">Ball First</ion-option>
+					</ion-select>
+				</ion-col>
+			</ion-row>
+		</ion-card>
+		<div *ngIf="(tosswon == 'teamone' && elected == 'batting') || (tosswon == 'teamtwo' && elected == 'bowling')">					
+			<ion-card>
+				<ion-row>
+					<ion-col col-4>
+						<ion-label>Runs scored:</ion-label>
+					</ion-col>
+					<ion-col col-8>
+						<ion-input value="runsscored" [(ngModel)] = "runsscored" placeholder="{{teamone}} runs scored..."></ion-input>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col col-4>
+						<ion-label>Wicket Fallen:</ion-label>
+					</ion-col>
+					<ion-col col-8>
+						<ion-input value="wickets" [(ngModel)] = "wickets" placeholder="{{teamone}} wicket loss..."></ion-input>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col col-4>
+						<ion-label>Over bowled:</ion-label>
+					</ion-col>
+					<ion-col col-8>
+						<ion-input value="overs" [(ngModel)] = "overs" placeholder="{{teamtwo}} over bowled..."></ion-input>
+					</ion-col>
+				</ion-row>
+			</ion-card>
+		</div>
+		<div *ngIf="(tosswon == 'teamtwo' && elected == 'batting') || (tosswon == 'teamone' && elected == 'bowling')">						
+			<ion-card>
+				<ion-row>
+					<ion-col col-4>
+						<ion-label>Runs scored:</ion-label>
+					</ion-col>
+					<ion-col col-8>
+						<ion-input value="runsscored" [(ngModel)] = "runsscored" placeholder="{{teamtwo}} runs scored..."></ion-input>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col col-4>
+						<ion-label>Wicket Fallen:</ion-label>
+					</ion-col>
+					<ion-col col-8>
+						<ion-input value="wickets" [(ngModel)] = "wickets" placeholder="{{teamtwo}} wicket loss..."></ion-input>
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col col-4>
+						<ion-label>Over bowled:</ion-label>
+					</ion-col>
+					<ion-col col-8>
+						<ion-input value="overs" [(ngModel)] = "overs" placeholder="{{teamone}} over bowled..."></ion-input>
+					</ion-col>
+				</ion-row>
+			</ion-card>
+		</div>	
+		
+		<ion-card>
+			<button (click)="odiScore()" ion-button full>Post</button>
+		</ion-card>
+		<ion-card>
+			<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
+		</ion-card>
+	</div>
+
+
+	<div *ngSwitchCase = "'test'">	<!-- Test cricket score post -->				
+		<p>Disabled.Only format ready.Will be enabled soon :)</p>
+		<ion-card>
+			<ion-row>
+				<ion-col col-4>
+					<ion-label>Team 1:</ion-label>
+				</ion-col>
+				<ion-col col-8>
+					<ion-input value="teamone" [(ngModel)] = "teamone" placeholder="Enter team 1 name..."></ion-input>
+				</ion-col>
+			</ion-row>
+		</ion-card>
+		<ion-card>
+			<ion-row>
+				<ion-col col-4>
+					<ion-label>Team 2:</ion-label>
+				</ion-col>
+				<ion-col col-8>
+					<ion-input value="teamtwo" [(ngModel)] = "teamtwo" placeholder="Enter team 2 name..."></ion-input>
+				</ion-col>
+			</ion-row>
+		</ion-card>
+		<ion-card>
+			<ion-item>
+				<ion-label>Test No:</ion-label>
+				<ion-select [(ngModel)] = "testno" >
+					<ion-option value = "test1">Test No 1</ion-option>
+					<ion-option value = "test2">Test No 2</ion-option>
+					<ion-option value = "test3">Test No 3</ion-option>
+					<ion-option value = "test4">Test No 4</ion-option>
+					<ion-option value = "test5">Test No 5</ion-option>
+				</ion-select>
+			</ion-item>
+		</ion-card>
+		<ion-card *ngIf = "testno != null">
+			<ion-item> <!-- ion-item is needed to restrict clickable area otherwise entire page getting selected which made pain in the a*s for some time -->
+				<ion-label>Batting Team:</ion-label>
+				<ion-select [(ngModel)] = "battingteam" >
+					<ion-option value = "teamone">{{teamone}}</ion-option>
+					<ion-option value = "teamtwo">{{teamtwo}}</ion-option>
+				</ion-select>
+			</ion-item>
+		</ion-card>
+		<ion-card *ngIf="testno != null">
+			<ion-item>
+				<ion-label>Innings No:</ion-label>
+				<ion-select [(ngModel)] = "inningsno" >
+					<ion-option value = "innings1">Innings No 1</ion-option>
+					<ion-option value = "innings2">innings No 2</ion-option>
+				</ion-select>
+			</ion-item>
+		</ion-card>
+		<ion-card *ngIf = "battingteam == 'teamone'">
+			<ion-row>
+				<ion-col col-4>
+					<ion-label>Runs scored:</ion-label>
+				</ion-col>
+				<ion-col col-8>
+					<ion-input value="runsone" [(ngModel)] = "runsone" placeholder="{{teamone}} runs scored..."></ion-input>
+				</ion-col>
+			</ion-row>
+			<ion-row>
+				<ion-col col-4>
+					<ion-label>Wicket Fallen:</ion-label>
+				</ion-col>
+				<ion-col col-8>
+					<ion-input value="wickestone" [(ngModel)] = "wickestone" placeholder="{{teamone}} wicket loss..."></ion-input>
+				</ion-col>
+			</ion-row>
+		</ion-card>
+		<ion-card *ngIf = "battingteam == 'teamtwo'">
+			<ion-row>
+				<ion-col col-4>
+					<ion-label>Runs scored:</ion-label>
+				</ion-col>
+				<ion-col col-8>
+					<ion-input value="runstwo" [(ngModel)] = "runstwo" placeholder="{{teamtwo}} runs scored..."></ion-input>
+				</ion-col>
+			</ion-row>
+			<ion-row>
+				<ion-col col-4>
+					<ion-label>Wicket Fallen:</ion-label>
+				</ion-col>
+				<ion-col col-8>
+					<ion-input value="wickesttwo" [(ngModel)] = "wickesttwo" placeholder="{{teamtwo}} wicket lose..."></ion-input>
+				</ion-col>
+			</ion-row>
+		</ion-card>
+		<!-- <ion-card>
+			<button (click)="testScore()" ion-button full>Post</button>
+		</ion-card> -->
+		<ion-card>
+			<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
+		</ion-card>
+	</div>
+</div>

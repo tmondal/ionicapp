@@ -1,6 +1,5 @@
 import { Component ,OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { ModalController ,PopoverController} from 'ionic-angular';
+import { NavController,ModalController ,PopoverController} from 'ionic-angular';
 
 import { PostPage } from '../post/post';
 import { UserprofilePage } from '../userprofile/userprofile';
@@ -41,6 +40,7 @@ export class HomePage implements OnInit{
   ngOnInit(){
     this.postsubscription = this.postservice.getPosts().subscribe(posts =>{
       this.posts = posts;
+      console.log(posts);
     });
   }
   ngOnDestroy(){
@@ -65,7 +65,15 @@ export class HomePage implements OnInit{
     });
     modal.present();
   }
-
+  onCriteriaClick(criteria,posttype,participating,postid){
+    let modal = this.modalCtrl.create(PostPage,{
+      paramRules: criteria,
+      posttype: posttype,
+      participating: participating,
+      postid: postid
+    });
+    modal.present();
+  }
   onUsernameClick(userId){
     this.usersubscription = this.authservice.getuserbyId(userId).subscribe(user=>{
         this.usertype = user.usertype;
