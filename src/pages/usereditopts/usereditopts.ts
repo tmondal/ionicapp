@@ -1,22 +1,33 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { LoginPage } from '../login/login';
+import { EditProfilePage } from '../edit-profile/edit-profile';
+import { AuthService } from '../../providers/auth-service';
 
-/*
-  Generated class for the Usereditopts page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-usereditopts',
   templateUrl: 'usereditopts.html'
 })
 export class UsereditoptsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+	constructor(
+		public navCtrl: NavController, 
+		public navParams: NavParams,
+		public viewCtrl: ViewController,
+		public authservice: AuthService
+	) {}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad UsereditoptsPage');
-  }
+	onEditProfile(){
+		this.viewCtrl.dismiss();
+		this.navCtrl.push(EditProfilePage);
+	}
+
+	onLogout(){
+		this.viewCtrl.dismiss();
+		this.authservice.logoutUser().then(()=>{
+			this.navCtrl.setRoot(LoginPage);
+		});
+	}
 
 }

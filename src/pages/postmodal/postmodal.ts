@@ -1,20 +1,19 @@
 import { Component , OnInit} from '@angular/core';
 import { Camera ,CameraOptions} from '@ionic-native/camera';
-import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { NavController, NavParams, ViewController, ToastController} from 'ionic-angular';
 import { StorageService } from '../../providers/storage-service';
 import { PostService } from '../../providers/post-service';
 import { AngularFire } from 'angularfire2';
-import * as firebase from 'firebase';
+
 
 
 
 @Component({
   selector: 'page-postmodal',
   templateUrl: 'postmodal.html',
-  providers: [File,FileChooser,FilePath]
+  providers: [FileChooser,FilePath]
 })
 export class PostmodalPage implements OnInit{
 
@@ -144,29 +143,24 @@ export class PostmodalPage implements OnInit{
 		});
 	}
 	
-	uploadFile(){
+	chooseFile(){
 		this.fileChooser.open().then((uri) =>{
 			this.filePath.resolveNativePath(uri).then( (filepath) =>{
 				this.nativepath = filepath;
-				let toast = this.toastCtrl.create({
-					message: 'Success: File choosen :)',
-					duration: 3000
-				});
-				toast.present();
+				this.showToast('Success: File choosen :)');
 			}).catch((err)=>{
-				let toast = this.toastCtrl.create({
-					message: 'Failed: could not get native path',
-					duration: 3000
-				});
-				toast.present();
+				this.showToast('Failed: could not get native path');
 			})
 		}).catch((err)=>{
-			let toast = this.toastCtrl.create({
-				message: 'Failed to choose file :( ' + err,
-				duration: 10000
-			});
-			toast.present();
+			this.showToast('Failed to choose file :( ');
 		})
+	}
+	showToast(message){
+	    let toast = this.toastCtrl.create({
+	      message: message,
+	      duration: 3000
+	    });
+	    toast.present();
 	}
 
 	imageSubmit(){

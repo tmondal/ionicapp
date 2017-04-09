@@ -16,7 +16,18 @@
 <ion-content padding>
 	<ion-list>
 	    <ion-item>
+			<ion-label> SignUp As: </ion-label>
+			<ion-select [(ngModel)]="usertype">
+		      <ion-option value="club">Club</ion-option>
+		      <ion-option value="player">Player</ion-option>
+		    </ion-select>
+		</ion-item>
+	    <ion-item *ngIf="usertype == 'player'">
 			<ion-label floating>Email</ion-label>
+			<ion-input type="email" name="email" [(ngModel)] = "email" ></ion-input>
+	    </ion-item>
+	    <ion-item *ngIf="usertype == 'club'">
+			<ion-label floating>Club Email</ion-label>
 			<ion-input type="email" name="email" [(ngModel)] = "email" ></ion-input>
 	    </ion-item>
 	 
@@ -24,13 +35,6 @@
 			<ion-label floating>Password</ion-label>
 			<ion-input type="password" name="password" [(ngModel)] = "password" ></ion-input>
 	    </ion-item>
-	    <ion-item>
-			<ion-label> SignUp As: </ion-label>
-			<ion-select [(ngModel)]="usertype">
-		      <ion-option value="club">Club</ion-option>
-		      <ion-option value="player">Player</ion-option>
-		    </ion-select>
-		</ion-item>
 	</ion-list>
 	<div>	 	
 		<button ion-button (click)="oncreateUser()">Create User</button>

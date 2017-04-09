@@ -2,10 +2,9 @@ import { Component , OnInit} from '@angular/core';
 import { NavController, NavParams ,PopoverController} from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 import { AuthService } from '../../providers/auth-service';
+import { EditProfilePage } from '../edit-profile/edit-profile'; 
+
 import { LoginPage } from '../login/login';
-import { UsereditoptsPage } from '../usereditopts/usereditopts'; 
-
-
 @Component({
   selector: 'page-userprofile',
   templateUrl: 'userprofile.html'
@@ -13,10 +12,17 @@ import { UsereditoptsPage } from '../usereditopts/usereditopts';
 export class UserprofilePage implements OnInit{
 
 	userId: any;
-	usertype: any;
+
+	usertype: any = null;
+	name: any = null;
+	contactno: any = null;
+	currentclub: any = null;
+	useremail: any = null;
+	coverimage: any = null;
+	profileimage: any = null;
+
 	authuid: any;
 	following: boolean;
-	useremail: any;
 	followingservice: any;
 	userservice: any;
 	clubprofile: String = "relatedposts";
@@ -28,6 +34,8 @@ export class UserprofilePage implements OnInit{
 		public af: AngularFire,
 		public authservice: AuthService
 	) { 
+	}
+	ngOnInit(){
 		this.af.auth.subscribe(user=>{
 			if(user) {
 				this.authuid = user.auth.uid;				
@@ -35,25 +43,23 @@ export class UserprofilePage implements OnInit{
 		});
 		this.userId = this.navParams.get("userId") || this.authuid; // Default current user
 		this.usertype = this.navParams.get("usertype");
-	}
-	ngOnInit(){
+
 		this.followingservice = this.authservice.checkiffollowing(this.userId).subscribe(user=>{
 			this.following = user.following;
 		});
 		this.userservice = this.authservice.getuserbyId(this.userId).subscribe(user =>{
+			this.usertype = user.usertype;
+			this.name = user.name;
+			this.contactno = user.contactno;
+			this.currentclub = user.currentclub;
 			this.useremail = user.email;
+			this.coverimage = user.coverimage;
+			this.profileimage = user.profileimage;
 		});
 	}
 	ngOnDestroy(){
-		this.userservice.unsubscribe();
-		this.followingservice.unsubscribe();
 	}
-	onusereditopts(myEvent){
-	    let popover = this.popoverCtrl.create(UsereditoptsPage);
-	    popover.present({
-	      ev: myEvent
-	    });
-	}
+	
 	compareusertype(){
 		if(this.usertype == "player") {
 			return true;
@@ -61,11 +67,7 @@ export class UserprofilePage implements OnInit{
 			return false;
 		}
 	}
-	onLogout(){
-    	this.authservice.logoutUser().then(()=>{
-    		this.navCtrl.setRoot(LoginPage);
-    	});
-  	}
+	
   	sameuser(){
   		if(this.userId == this.authuid) {
   			return true;
@@ -79,4 +81,14 @@ export class UserprofilePage implements OnInit{
   	unfollow(){
   		this.authservice.unfollowuser(this.userId);
   	}
+  	onEditProfile(){
+		this.navCtrl.push(EditProfilePage);
+	}
+  	onLogout(){
+		this.userservice.unsubscribe();
+		this.followingservice.unsubscribe();
+		this.authservice.logoutUser().then(()=>{
+			this.navCtrl.setRoot(LoginPage);
+		});
+	}
 }

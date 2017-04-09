@@ -3,9 +3,12 @@
 	<ion-navbar>
 		<ion-title>UserProfile</ion-title>
 		<ion-buttons end>
-	      <button *ngIf="sameuser()" ion-button (click)="onusereditopts($event)">
-	      	<ion-icon name="person"></ion-icon>
-	      </button>
+			<button ion-button *ngIf="sameuser()" (click)="onEditProfile()" style="margin-right: 20px">
+	      	 <ion-icon name="create"></ion-icon>
+	      	</button>
+			<button ion-button *ngIf="sameuser()" (click)="onLogout()" style="margin-right: 10px">
+				 <ion-icon name="log-out"></ion-icon>
+			</button>
 	    </ion-buttons>
 	</ion-navbar>
 </ion-header>
@@ -61,7 +64,7 @@
 	    </ion-row>
  	</ion-card>
  	<ion-card >
-	  <ion-toolbar no-border-top>
+	  <ion-toolbar no-border-top style="margin-top: 5px">
 	    <ion-segment [(ngModel)]="clubprofile" style="background-color: #fff">
 	      <ion-segment-button value="relatedposts" class="middlenavbar">
 	        Posts
@@ -98,10 +101,12 @@
 <ion-content *ngIf="compareusertype()" class="card-background-page">
 	<ion-card>
 	    <!-- cover photo -->
-	    <div class="card-title">{{useremail}}</div>
+	    <img id="coverimage" [src]="coverimage" *ngIf="coverimage != null">
+	    <div class="card-title">{{name}}</div>
 	    <p class="card-subtitle">Want to play for my country..</p>
 	    <ion-card class="profilepic">
 	    	<!-- profile photo -->
+	    	<img [src]="profileimage" *ngIf="profileimage != null">
 	    </ion-card>
 	</ion-card>
 	<ion-card>
@@ -109,27 +114,36 @@
 			<ion-col>
 				<ion-item>Current Club:</ion-item>
 			</ion-col>
-			<ion-col>
-				<button ion-button clear>Mohun bagan</button>
+			<ion-col>				
+			<button ion-button clear style="text-transform: none">{{currentclub}}</button>
 			</ion-col>
 		</ion-row>
 	</ion-card>
 	<ion-card>
-		<ion-item>Contact:</ion-item>
-		
+		<ion-item>					
+			Contact:
+		</ion-item>
 		<ion-row>
-			<ion-col col-4>
+			<ion-col col-3>
+				<ion-label>
 				<ion-icon name="call"></ion-icon>
-				<span></span> Phone:
+				<!-- <span style="width: 2px"></span> Phone: -->
+				</ion-label>
 			</ion-col>
-			<ion-col col-8>1236547890</ion-col>
+			<ion-col col-9>
+				<ion-label> {{contactno}} </ion-label> 
+			</ion-col>
 		</ion-row>
 		<ion-row>
-			<ion-col col-4>
+			<ion-col col-3>
+				<ion-item>
 				<ion-icon name="mail"></ion-icon>
-				<span></span> Email:
+				<!-- <span style="width: 2px"></span>Email: -->
+				</ion-item>
 			</ion-col>
-			<ion-col col-8>tanmoy94m@gmail.com</ion-col>
+			<ion-col col-9>
+				<ion-item> {{useremail}} </ion-item>
+			 </ion-col>
 		</ion-row>
 	</ion-card>
  	<ion-card>
@@ -172,8 +186,8 @@
 		      </ion-col>
 	    </ion-row>
  	</ion-card>
- 	<ion-card>
-	  <ion-toolbar no-border-top>
+ 	<div>
+	  <ion-toolbar no-border-top style="margin-top: 5px">
 	    <ion-segment [(ngModel)]="playerprofile" style="background-color: #fff">
 			<ion-segment-button value="relatedposts"  class="middlenavbar">
 				Attempted
@@ -189,20 +203,20 @@
 			</ion-segment-button>
 	    </ion-segment>
 	  </ion-toolbar>
- 	</ion-card>
-  <div [ngSwitch]="playerprofile">
-    <div *ngSwitchCase="'relatedposts'">
-    	<page-allposts [userId]="userId"></page-allposts>
-    </div>
-    <div *ngSwitchCase="'moments'">      
-    	<page-moments></page-moments>
-    </div>
-    <div *ngSwitchCase="'achievements'">
-    	<page-achieve></page-achieve>
-    </div>
-    <div *ngSwitchCase="'friends'">
-    	<p>My friends</p>
-    </div>
-  </div>
+ 	</div>
+	<div [ngSwitch]="playerprofile">
+		<div *ngSwitchCase="'relatedposts'">
+			<page-allposts [userId]="userId"></page-allposts>
+		</div>
+		<div *ngSwitchCase="'moments'">      
+			<page-moments></page-moments>
+		</div>
+		<div *ngSwitchCase="'achievements'">
+			<page-achieve></page-achieve>
+		</div>
+		<div *ngSwitchCase="'friends'">
+			<p>My friends</p>
+		</div>
+	</div>
 </ion-content>
 

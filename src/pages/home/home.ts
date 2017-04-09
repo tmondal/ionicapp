@@ -19,10 +19,13 @@ export class HomePage implements OnInit{
 
   posts: any;
   user: any;
+  profileimage: any = null;
   currentuserId: any;
   postsubscription: any;
   usersubscription: any;
   currentusersubscription: any;
+  imagesubscription: any;
+  userimage: any = null;
   usertype: any;
 
   constructor(
@@ -34,13 +37,14 @@ export class HomePage implements OnInit{
     private af: AngularFire
   ) {}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad HomePage');
-  }
   ngOnInit(){
     this.postsubscription = this.postservice.getPosts().subscribe(posts =>{
       this.posts = posts;
       console.log(posts);
+    });
+    this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
+      this.usertype = user.usertype;
+      this.profileimage = user.profileimage;
     });
   }
   ngOnDestroy(){
@@ -50,9 +54,9 @@ export class HomePage implements OnInit{
     when home component destroys.
     */
     this.postsubscription.unsubscribe();
-
+    this.currentusersubscription.unsubscribe();
   }
-
+  
   onCreatePostClick(){
     let modal = this.modalCtrl.create(PostmodalPage);
     modal.present();
@@ -78,7 +82,6 @@ export class HomePage implements OnInit{
     this.usersubscription = this.authservice.getuserbyId(userId).subscribe(user=>{
         this.usertype = user.usertype;
         this.navCtrl.push(UserprofilePage,{userId: userId, usertype: this.usertype});
-        this.usersubscription.unsubscribe();
     });
   }
 
@@ -90,11 +93,14 @@ export class HomePage implements OnInit{
   }
 
   calluserdetails(){
-    this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
-      this.usertype = user.usertype;
-      this.navCtrl.push(UserprofilePage,{usertype: this.usertype});
-      this.currentusersubscription.unsubscribe();
+    this.navCtrl.push(UserprofilePage,{usertype: this.usertype});
+  }
+  getuserImage(id){
+    this.imagesubscription = this.authservice.getuserbyId(id).subscribe((user)=>{
+      this.userimage = user.profileimage;
+      return this.userimage;
     });
   }
+
 }
 

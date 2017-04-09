@@ -16,7 +16,6 @@ page-userprofile{
 			margin-top:5px; 
 			padding: 0px;
 			width: 100%;
-			box-shadow: none;
 		}
 		
 		.profilepic {
@@ -32,6 +31,9 @@ page-userprofile{
 			img{
 				height: 60px;
 			}
+		}
+		#coverimage {
+			height: 150px;
 		}
 
 		.card-title {

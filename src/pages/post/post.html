@@ -39,27 +39,31 @@
  	</ion-card>
  	
  	<div *ngIf="posttype != 'hiring'"> 		
-	 	<button *ngIf="!participated" ion-button color="primary" full style="text-transform: none" (click)="onAccept()" >
+	 	<button *ngIf="!participated" ion-button color="primary" full style="text-transform: none" (click)="onAccept()" style="margin: 3px" >
 	 		Accept Challenge <span style="width: 5px" ></span>
 	 		<ion-icon name="happy"></ion-icon>
 	 	</button>
-	 	<button *ngIf="participated" ion-button color="danger" full style="text-transform: none" (click)="onDecline()" >
+	 	<button *ngIf="participated" ion-button color="danger" full style="text-transform: none" (click)="onDecline()" style="margin:3px" >
 	 		Reject Challenge <span style="width: 5px"></span>
 	 		<ion-icon name="sad"></ion-icon>
 	 	</button>
-	 	<button *ngIf="!participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()">I'm Afried</button>
-		<button *ngIf="participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()">I'm fine</button>
+	 	<button *ngIf="!participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()" style="margin: 3px" >
+	 		I'm Afried
+	 	</button>
+		<button *ngIf="participated" ion-button block outline style="text-transform: none" (click)="onCancel()" style="margin: 3px">
+			I'm fine
+		</button>
  	</div>
  	<div *ngIf="posttype == 'hiring'">
- 		<button *ngIf="!participated" ion-button color="primary" full style="text-transform: none" (click)="onAccept()" >
+ 		<button *ngIf="!participated" ion-button color="primary" full style="text-transform: none" (click)="onAccept()" style="margin: 3px" >
 	 		Participating <span style="width: 5px" ></span>
 	 		<ion-icon name="happy"></ion-icon>
 	 	</button>
-	 	<button *ngIf="participated" ion-button color="danger" full style="text-transform: none" (click)="onDecline()" >
+	 	<button *ngIf="participated" ion-button color="danger" full style="text-transform: none" (click)="onDecline()" style="margin: 3px" >
 	 		Withdrawing <span style="width: 5px"></span>
 	 		<ion-icon name="sad"></ion-icon>
 	 	</button>
-	 	<button *ngIf="!participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()">Not Qualified</button>
-		<button *ngIf="participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()">I'm Qualified</button>
+	 	<button *ngIf="!participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()" style="margin: 3px" >Not Qualified</button>
+		<button *ngIf="participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()" style="margin: 3px" >I'm Qualified</button>
  	</div>
 </ion-content>

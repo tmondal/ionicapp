@@ -95,7 +95,7 @@ export class PostService {
   showToast(message){
     let toast = this.toastCtrl.create({
       message: message,
-      duration: 10000
+      duration: 3000
     });
     toast.present();
   }

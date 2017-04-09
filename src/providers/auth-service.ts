@@ -1,15 +1,24 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/take';
 import { AngularFire } from 'angularfire2';
-import firebase from 'firebase';
+import { ToastController} from 'ionic-angular';
+import { File } from 'ionic-native';
+import * as firebase from 'firebase';
 
 
 @Injectable()
 export class AuthService {
 
     fireAuth: any;
+    storageRef: any;
+    imageRef: any;
+    coverimageurl: any;
+    profileimageurl: any;
+    profile: any;
+    following: any;
 
-    constructor(private af: AngularFire) {
+    constructor(private af: AngularFire,public toastCtrl: ToastController) {
 
       af.auth.subscribe(user=>{
         if(user) {
@@ -17,6 +26,7 @@ export class AuthService {
           console.log(user);
         }
       });
+      this.storageRef = firebase.storage().ref().child('images/');
     }
 
     // For Authentication
@@ -40,10 +50,82 @@ export class AuthService {
       return this.af.auth.logout();
     }
     getmyprofile(){
-      return this.af.database.object('/users/' + this.fireAuth.uid);
+      this.profile =  this.af.database.object('/users/' + this.fireAuth.uid);
+      return this.profile.take(1);
+    }
+
+    updateCoverphoto(covernativepath){
+      // See cordova File plugin documentation.Get the file and store to firebase storage 
+
+      (<any>window).resolveLocalFileSystemURL(covernativepath, (res) =>{
+        res.file((resFile)=>{
+          this.showToast("File selected with native path given");
+          let reader = new FileReader();
+          reader.readAsArrayBuffer(resFile);
+          reader.onloadend = (evt: any) =>{
+            let imgBlob = new Blob([evt.target.result],{type: 'image/jpeg'});
+            this.showToast("blob created");
+            // Now store the blob(i.e raw data. One kind of file)
+            this.imageRef = this.storageRef.child(`/${this.fireAuth.uid}/cover.jpg`);
+            this.showToast("image ref created");
+            this.imageRef.put(imgBlob).then((res)=>{
+              this.showToast("blob sent");
+              this.coverimageurl = res.downloadURL;
+              this.showToast('Success: coverphoto updated :)');              
+              // update database accordingly
+              this.af.database.object('/users/' + this.fireAuth.uid).update({coverimage: this.coverimageurl});   
+            }).catch((err)=>{
+              this.showToast('Failed to update cover photo :(');
+            })
+          }
+        })
+      })
+    }
+    updateProfilephoto(profilenativepath){
+
+      (<any>window).resolveLocalFileSystemURL(profilenativepath, (res) =>{
+        res.file((resFile)=>{
+          this.showToast("Profile image with native path given");
+          let reader = new FileReader();
+          reader.readAsArrayBuffer(resFile);
+          reader.onloadend = (evt: any) =>{
+            let imgBlob = new Blob([evt.target.result],{type: 'image/jpeg'});
+            this.showToast("profile blob created");
+            // Now store the blob(i.e raw data. One kind of file)
+            this.imageRef = this.storageRef.child(`/${this.fireAuth.uid}/profile.jpg`);
+            this.showToast("image ref created");
+            this.imageRef.put(imgBlob).then((res)=>{
+              this.showToast("blob sent");
+              this.profileimageurl = res.downloadURL;
+              this.showToast('Success: coverphoto updated :)');
+              // update database accordingly
+              this.af.database.object('/users/' + this.fireAuth.uid).update({profileimage: this.profileimageurl}); 
+            }).catch((err)=>{
+              this.showToast('Failed to update cover photo :(');
+            })
+          }
+        })
+      }) 
+    }
+    showToast(message){
+      let toast = this.toastCtrl.create({
+        message: message,
+        duration: 10000
+      });
+      toast.present();
+    }
+    updateName(name){
+      this.af.database.object('/users/' + this.fireAuth.uid).update({name: name});
+    }
+    updateContactno(contactno){
+      this.af.database.object('/users/' + this.fireAuth.uid).update({contactno: contactno});
+    }
+    updateCurrentClub(club){
+      this.af.database.object('/users/' + this.fireAuth.uid).update({currentclub: club}); 
     }
     getuserbyId(userId){
-      return this.af.database.object('/users/' + userId); 
+      this.profile =  this.af.database.object('/users/' + userId); 
+      return this.profile.take(1);
     }
     followuser(targetuserId: any){
       var followuserdata = {};
@@ -59,6 +141,7 @@ export class AuthService {
       following.remove();
     }
     checkiffollowing(targetuserId: any){
-      return this.af.database.object("/users-following/" + this.fireAuth.uid + "/" + targetuserId);
+      this.following = this.af.database.object("/users-following/" + this.fireAuth.uid + "/" + targetuserId);
+      return this.following.take(1);
     }
 }

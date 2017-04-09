@@ -21,6 +21,8 @@ import { MomentsPage } from '../pages/moments/moments';
 import { AchievePage } from '../pages/achieve/achieve';
 import { UserprofilePage } from '../pages/userprofile/userprofile';
 import { UsereditoptsPage } from '../pages/usereditopts/usereditopts';
+import { EditPostPage } from '../pages/edit-post/edit-post';
+import { EditProfilePage } from '../pages/edit-profile/edit-profile';
 import { PostmoreoptPage } from '../pages/postmoreopt/postmoreopt';
 
 import { AuthService } from '../providers/auth-service';
@@ -63,6 +65,8 @@ const AuthConfig = {
     AchievePage,
     UserprofilePage,
     UsereditoptsPage,
+    EditPostPage,
+    EditProfilePage,
     PostmoreoptPage
   ],
   imports: [
@@ -89,6 +93,8 @@ const AuthConfig = {
     AchievePage,
     UserprofilePage,
     UsereditoptsPage,
+    EditPostPage,
+    EditProfilePage,
     PostmoreoptPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},

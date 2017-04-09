@@ -13,20 +13,28 @@
 
 <ion-content class="home">
 
-    <ion-card class="home-card" >
-        <ion-list>       
-            <ion-item>
-                <ion-avatar item-left></ion-avatar> <!-- place an image here -->
-                <ion-input type="text" (click)="onCreatePostClick()" placeholder="Organize an Event.."></ion-input>
-            </ion-item>
-        </ion-list>
+    <ion-card class="home-card" >      
+        <div>
+            <ion-row>
+            <ion-col col-3>
+            <ion-avatar item-left>
+                <img [src]="profileimage" *ngIf="profileimage != null">
+            </ion-avatar>
+            </ion-col>
+            <ion-col col-9 (click)="onCreatePostClick()"> 
+                <button  ion-button clear style="text-transform: none" >Organize an event..</button>
+            </ion-col>
+            </ion-row>
+        </div>
     </ion-card>
 
     <ion-list *ngFor="let post of posts">
 
         <ion-card *ngIf="post.posttype == 'score' && post.sporttype == 'cricket' && post.crickettype == 'odi'" class="post">
             <ion-item>
-                <ion-avatar item-left></ion-avatar>
+                <ion-avatar item-left>
+                    <!-- <img *ngIf="getuserImage(post.userId) != null" [src]="userimage"> -->
+                </ion-avatar>
                 <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
                 <h2 (click)="onUsernameClick(post.userId)">{{post.userId}}</h2>
 
@@ -193,7 +201,9 @@
             <ion-item>
                 <p>{{post.title}} </p>
             </ion-item>
-            <img [src] ="post.imageurl">
+            <div style="padding: 3px,border: 1px solid gray">                
+                <img [src] ="post.imageurl">
+            </div>
             <ion-row>
                 <ion-col col-4>
                     <button ion-button icon-center clear small class="scorebutton">

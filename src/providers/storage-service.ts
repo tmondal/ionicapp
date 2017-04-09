@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import * as firebase from 'firebase';
+
 
 
 @Injectable()
