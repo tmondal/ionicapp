@@ -14,11 +14,11 @@ import { AuthService } from '../../providers/auth-service';
 export class EditProfilePage implements OnInit{
 
 	authuid: any;
-	user: any;
+	usertype: any = null;
+	name: any = null;
+	contactno: any = null;
+	currentclub: any = null;
 	authsubscription: any;
-	name: any;
-	contactno: any;
-	currentclub: any;
 	profilenativepath: any;
 	covernativepath: any;
 	coverselected: boolean = false;
@@ -45,7 +45,11 @@ export class EditProfilePage implements OnInit{
 			}
 		});
 		this.authsubscription = this.authservice.getuserbyId(this.authuid).subscribe((user)=>{
-			this.user = user;
+			this.usertype = user.usertype;
+			this.name = user.name;
+			this.contactno = user.contactno;
+			this.currentclub = user.currentclub;
+			console.log(user);
 		});
 	}
 	chooseCoverFile(){
@@ -108,7 +112,7 @@ export class EditProfilePage implements OnInit{
 		this.nameselected = true;
 	}
 	onnameSubmit(){
-		this.nameselected = true;
+		this.nameselected = false;
 		if(this.name) {			
 			this.authservice.updateName(this.name);
 		}else{

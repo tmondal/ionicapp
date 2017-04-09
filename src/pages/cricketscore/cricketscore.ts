@@ -58,7 +58,7 @@ export class CricketscorePage implements OnInit{
 			dislikes: this.dislikes,
 			comments: this.comments,
 		}
-		this.postservice.addPost(post,this.currentuserId);
+		this.postservice.scoreAndMatchPost(post,this.currentuserId);
 		this.viewCtrl.dismiss();
 	}
 	onDismiss(){

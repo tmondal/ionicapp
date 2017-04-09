@@ -5,6 +5,7 @@ import { FilePath } from '@ionic-native/file-path';
 import { NavController, NavParams, ViewController, ToastController} from 'ionic-angular';
 import { StorageService } from '../../providers/storage-service';
 import { PostService } from '../../providers/post-service';
+import { AuthService } from '../../providers/auth-service';
 import { AngularFire } from 'angularfire2';
 
 
@@ -17,6 +18,9 @@ import { AngularFire } from 'angularfire2';
 })
 export class PostmodalPage implements OnInit{
 
+	userref: any;
+	userimage: any = null;
+	username: any = null;
 	currentuserId: any;
 	posttype: any = "tournament";
 	sporttype: any;
@@ -55,6 +59,7 @@ export class PostmodalPage implements OnInit{
 		private fileChooser: FileChooser,
 		private filePath: FilePath,
 		public postservice: PostService,
+		public authservice: AuthService,
 		public storageservice: StorageService
 	) {
 		this.phototaken = false;
@@ -66,11 +71,17 @@ export class PostmodalPage implements OnInit{
 		this.af.auth.subscribe(user =>{
 			this.currentuserId = user.uid;
 		});
+		this.authservice.getmyprofile().subscribe((user)=>{
+			this.userimage = user.profileimage;
+			this.username = user.name;
+			console.log("My image: " + this.userimage);
+		});
 	}
 
 	onDismiss(){
 		this.viewCtrl.dismiss();
 	}
+
 	onRuleAdd(){
 		this.rules.push(this.rule);
 		this.rule = '';
@@ -85,10 +96,31 @@ export class PostmodalPage implements OnInit{
 	onCriteriaDel(i){
 		this.criteria.splice(i,1);
 	}
-	
+	chooseFile(){
+		this.fileChooser.open().then((uri) =>{
+			this.filePath.resolveNativePath(uri).then( (filepath) =>{
+				this.nativepath = filepath;
+				this.showToast('Success: File choosen :)');
+			}).catch((err)=>{
+				this.showToast('Failed: could not get native path');
+			})
+		}).catch((err)=>{
+			this.showToast('Failed! Try again :( ');
+		})
+	}
+	showToast(message){
+	    let toast = this.toastCtrl.create({
+	      message: message,
+	      duration: 3000
+	    });
+	    toast.present();
+	}
+
 	tournamentSubmit(){
 		let post = { 
 			userId: this.currentuserId,
+			userimage: this.userimage,
+			username: this.username,
 			posttype: this.posttype,
 			sporttype: this.sporttype,
 			eventdate: this.eventdate,
@@ -98,12 +130,14 @@ export class PostmodalPage implements OnInit{
 			participating: this.participating,
 			rules: this.rules
 		}
-		this.postservice.addPost(post,this.currentuserId);
+		this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
 		this.viewCtrl.dismiss();
 	}
 	hiringSubmit(){
 		let post = {
 			userId: this.currentuserId,
+			userimage: this.userimage,
+			username: this.username,
 			posttype: this.posttype,
 			sporttype: this.sporttype,
 			eventdate: this.eventdate,
@@ -111,7 +145,7 @@ export class PostmodalPage implements OnInit{
 			criteria: this.criteria,
 			participating: this.participating
 		}
-		this.postservice.addPost(post,this.currentuserId);
+		this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
 		this.viewCtrl.dismiss();
 	}
 	takePicture(){
@@ -143,38 +177,20 @@ export class PostmodalPage implements OnInit{
 		});
 	}
 	
-	chooseFile(){
-		this.fileChooser.open().then((uri) =>{
-			this.filePath.resolveNativePath(uri).then( (filepath) =>{
-				this.nativepath = filepath;
-				this.showToast('Success: File choosen :)');
-			}).catch((err)=>{
-				this.showToast('Failed: could not get native path');
-			})
-		}).catch((err)=>{
-			this.showToast('Failed to choose file :( ');
-		})
-	}
-	showToast(message){
-	    let toast = this.toastCtrl.create({
-	      message: message,
-	      duration: 3000
-	    });
-	    toast.present();
-	}
+	
 
-	imageSubmit(){
-			
+	mediaFileSubmit(){
 		let post = {
 			userId: this.currentuserId,
+			userimage: this.userimage,
+			username: this.username,
 			posttype: this.posttype,
 			title: this.imagetitle,
-			imageurl: this.imageurl,
 			likes: this.likes,
 			dislikes: this.dislikes,
 			comments: this.comments
 		}
-		this.postservice.uploadFile(post,this.currentuserId,this.nativepath);
+		this.postservice.imagePost(post,this.currentuserId,this.nativepath);
 		this.viewCtrl.dismiss();
 	}
 	

@@ -17,6 +17,7 @@ import { AngularFire } from 'angularfire2';
 
 export class HomePage implements OnInit{
 
+  authuid: any;
   posts: any;
   user: any;
   profileimage: any = null;
@@ -38,6 +39,11 @@ export class HomePage implements OnInit{
   ) {}
 
   ngOnInit(){
+    this.af.auth.subscribe(user=>{
+      if(user) {
+        this.authuid = user.auth.uid;        
+      }
+    });
     this.postsubscription = this.postservice.getPosts().subscribe(posts =>{
       this.posts = posts;
       console.log(posts);
@@ -45,6 +51,8 @@ export class HomePage implements OnInit{
     this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
       this.usertype = user.usertype;
       this.profileimage = user.profileimage;
+      console.log(user);
+      console.log("profile image: " + this.profileimage);
     });
   }
   ngOnDestroy(){
@@ -61,11 +69,12 @@ export class HomePage implements OnInit{
     let modal = this.modalCtrl.create(PostmodalPage);
     modal.present();
   }
-  onRulesClick(rules,participating,postid){
+  onRulesClick(rules,participating,postid,userId){
     let modal = this.modalCtrl.create(PostPage,{
       paramRules: rules,
       participating: participating,
-      postid: postid
+      postid: postid,
+      userId: userId
     });
     modal.present();
   }
@@ -79,28 +88,16 @@ export class HomePage implements OnInit{
     modal.present();
   }
   onUsernameClick(userId){
-    this.usersubscription = this.authservice.getuserbyId(userId).subscribe(user=>{
-        this.usertype = user.usertype;
-        this.navCtrl.push(UserprofilePage,{userId: userId, usertype: this.usertype});
-    });
+    this.navCtrl.push(UserprofilePage,{userId: userId});
   }
-
+  calluserdetails(){
+   this.navCtrl.push(UserprofilePage,{userId: this.authuid});
+  }
   onMoreClick(myEvent){
     let popover = this.popoverCtrl.create(PostmoreoptPage);
     popover.present({
       ev: myEvent
     });
   }
-
-  calluserdetails(){
-    this.navCtrl.push(UserprofilePage,{usertype: this.usertype});
-  }
-  getuserImage(id){
-    this.imagesubscription = this.authservice.getuserbyId(id).subscribe((user)=>{
-      this.userimage = user.profileimage;
-      return this.userimage;
-    });
-  }
-
 }
 

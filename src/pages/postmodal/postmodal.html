@@ -62,6 +62,18 @@
 					  <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="eventtime"></ion-datetime>
 					</ion-item>
 				</ion-card>
+				<ion-card>
+					<ion-item>
+						<ion-row>
+							<ion-col col-10>Upload from gallery: </ion-col>
+							<ion-col col-2>
+								<button (click)="chooseFile()" style="background-color: white">
+									<ion-icon name="image"></ion-icon>
+								</button>
+							</ion-col>
+						</ion-row>
+					</ion-item>
+				</ion-card>
 				<ion-card>					
 					<ion-row>
 						<ion-col col-4>
@@ -219,7 +231,7 @@
 				</ion-card>
 				
 				<ion-card>
-					<button (click)="imageSubmit()" ion-button full>Post</button>
+					<button (click)="mediaFileSubmit()" ion-button full>Post</button>
 				</ion-card>
 				<ion-card>
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>

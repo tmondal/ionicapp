@@ -41,8 +41,7 @@ export class UserprofilePage implements OnInit{
 				this.authuid = user.auth.uid;				
 			}
 		});
-		this.userId = this.navParams.get("userId") || this.authuid; // Default current user
-		this.usertype = this.navParams.get("usertype");
+		this.userId = this.navParams.get("userId");
 
 		this.followingservice = this.authservice.checkiffollowing(this.userId).subscribe(user=>{
 			this.following = user.following;
@@ -58,6 +57,8 @@ export class UserprofilePage implements OnInit{
 		});
 	}
 	ngOnDestroy(){
+		this.userservice.unsubscribe();
+		this.followingservice.unsubscribe();
 	}
 	
 	compareusertype(){
@@ -85,8 +86,6 @@ export class UserprofilePage implements OnInit{
 		this.navCtrl.push(EditProfilePage);
 	}
   	onLogout(){
-		this.userservice.unsubscribe();
-		this.followingservice.unsubscribe();
 		this.authservice.logoutUser().then(()=>{
 			this.navCtrl.setRoot(LoginPage);
 		});

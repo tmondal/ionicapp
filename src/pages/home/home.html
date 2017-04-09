@@ -18,7 +18,7 @@
             <ion-row>
             <ion-col col-3>
             <ion-avatar item-left>
-                <img [src]="profileimage" *ngIf="profileimage != null">
+                <img [src]="profileimage" *ngIf="profileimage" style="height: 40px; width: 40px">
             </ion-avatar>
             </ion-col>
             <ion-col col-9 (click)="onCreatePostClick()"> 
@@ -30,13 +30,144 @@
 
     <ion-list *ngFor="let post of posts">
 
+        <ion-card *ngIf="post.posttype == 'tournament'" class="post">
+            <ion-item>
+                <ion-avatar item-left>
+                    <img [src]="post.userimage" style="height: 40px; width: 40px">
+                </ion-avatar>
+                <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username}}</h2>
+
+                <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
+            </ion-item>
+            <ion-item>
+                <p>Organising a {{post.sporttype}} tournament on {{post.eventdate}}</p>
+            </ion-item>
+            <ion-row>          
+                <!-- Image Shown here -->
+            </ion-row>
+                
+            <ion-item>
+                <ion-row>
+                    <ion-col> Entry Fee: {{post.entryfee}} </ion-col>
+                    <ion-col> Prize: {{post.prize}} </ion-col>
+                </ion-row>
+            </ion-item>
+            <ion-row>
+                <ion-col col-4>
+                    <button ion-button icon-left clear small class="tournamentbutton">
+                        <ion-icon name="person"></ion-icon>
+                        <div>{{post.participating}} Going</div>
+                    </button>
+                </ion-col>
+                <ion-col col-4>
+                    <button ion-button icon-left clear small class="tournamentbutton">
+                        <ion-icon name="car"></ion-icon>
+                        <div>1.4km</div>
+                    </button>
+                </ion-col>
+                <ion-col center text-center col-4>
+                    <button ion-button outline class="tournamentbutton" (click)="onRulesClick(post.rules,post.participating,post.$key,post.userId)">
+                        Rules <span style="width: 5px"></span>
+                        <ion-icon name="arrow-round-forward"></ion-icon>
+                    </button>
+                </ion-col>
+            </ion-row>
+
+        </ion-card>
+
+        <ion-card *ngIf="post.posttype == 'hiring'" class="post">
+            <ion-item>
+                <ion-avatar item-left>
+                    <img [src]="post.userimage" style="height: 40px; width: 40px">
+                </ion-avatar>
+                <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username}}</h2>
+
+                <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
+            </ion-item>
+            <ion-item>
+                <p>Organising a {{post.sporttype}} <b>Hiring Trial</b> on {{post.eventdate}}</p>
+            </ion-item>
+            <ion-row>          
+                <!-- Image Shown here -->
+            </ion-row>
+   
+            <ion-item>
+                <ion-row>
+                    <ion-col> Trial Date: {{post.eventdate}} </ion-col>
+                    <ion-col> **First come First </ion-col>
+                </ion-row>
+            </ion-item>
+            <ion-row>
+                <ion-col col-4>
+                    <button ion-button icon-left clear small class="hiringbutton">
+                        <ion-icon name="person"></ion-icon>
+                        <div>{{post.participating}} Going</div>
+                    </button>
+                </ion-col>
+                <ion-col col-4>
+                    <button ion-button icon-left clear small class="hiringbutton">
+                        <ion-icon name="car"></ion-icon>
+                        <div>1.4km</div>
+                    </button>
+                </ion-col>
+                <ion-col center text-center col-4>
+                    <button ion-button outline class="hiringbutton" (click)="onCriteriaClick(post.criteria,post.posttype,post.participating,post.$key)">
+                        Criteria <span style="width: 5px"></span>
+                        <ion-icon name="arrow-round-forward"></ion-icon>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+        <ion-card *ngIf="post.posttype == 'image'" class="post"> 
+            <ion-item>
+                <ion-avatar item-left>
+                    <img [src]="post.userimage" style="height: 40px; width: 40px">
+                </ion-avatar>
+                <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username}}</h2>
+
+                <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
+            </ion-item>
+            <ion-item>
+                <p>{{post.title}}</p>
+            </ion-item>
+            <div>                
+                <img [src] ="post.imageurl" style="padding: 5px; height: 250px">
+            </div>
+            <ion-row>
+                <ion-col col-4>
+                    <button ion-button icon-center clear small class="scorebutton">
+                        <ion-icon name="thumbs-up"></ion-icon>
+                        <span style="width: 5px"></span>
+                        <div>{{post.likes}}</div>
+                    </button>
+                </ion-col>
+                <ion-col col-4>
+                    <button ion-button icon-center clear small class="scorebutton">
+                        <ion-icon name="thumbs-down"></ion-icon>
+                        <span style="width: 5px"></span>
+                        <div>{{post.dislikes}}</div>
+                    </button>
+                </ion-col>
+                <ion-col col-4>
+                    <button ion-button icon-center clear small class="scorebutton">
+                        <ion-icon name="chatboxes"></ion-icon>
+                        <span style="width: 5px"></span>
+                        <div>{{post.comments}} </div>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+
         <ion-card *ngIf="post.posttype == 'score' && post.sporttype == 'cricket' && post.crickettype == 'odi'" class="post">
             <ion-item>
                 <ion-avatar item-left>
-                    <!-- <img *ngIf="getuserImage(post.userId) != null" [src]="userimage"> -->
+                   <img [src]="post.userimage" style="height: 40px; width: 40px">
                 </ion-avatar>
                 <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.userId}}</h2>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username}}</h2>
 
                 <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
             </ion-item>
@@ -58,7 +189,7 @@
             </button>
             <button *ngIf="(post.tosswon == 'teamtwo' && post.elected == 'batting') || (post.tosswon == 'teamone' && post.elected == 'bowling')" ion-button clear full style="text-transform: none">
                 {{post.teamtwo}} <span style="width: 5px"></span>
-                <ion-icon name="people"></ion-icon>
+                <ion-icon name="happy"></ion-icon>
             </button>
             <ion-row>
                 <ion-col col-3></ion-col>
@@ -104,130 +235,5 @@
             </ion-row>
         </ion-card>
 
-        <ion-card *ngIf="post.posttype == 'tournament'" class="post">
-            <ion-item>
-                <ion-avatar item-left></ion-avatar>
-                <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.userId}}</h2>
-
-                <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
-            </ion-item>
-            <ion-item>
-                <p>Organising a {{post.sporttype}} tournament on {{post.eventdate}}</p>
-            </ion-item>
-            <ion-row>          
-                <!-- Image Shown here -->
-            </ion-row>
-                
-            <ion-item>
-                <ion-row>
-                    <ion-col> Entry Fee: {{post.entryfee}} </ion-col>
-                    <ion-col> Prize: {{post.prize}} </ion-col>
-                </ion-row>
-            </ion-item>
-            <ion-row>
-                <ion-col col-4>
-                    <button ion-button icon-left clear small class="tournamentbutton">
-                        <ion-icon name="person"></ion-icon>
-                        <div>{{post.participating}} Going</div>
-                    </button>
-                </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-left clear small class="tournamentbutton">
-                        <ion-icon name="car"></ion-icon>
-                        <div>1.4km</div>
-                    </button>
-                </ion-col>
-                <ion-col center text-center col-4>
-                    <button ion-button outline class="tournamentbutton" (click)="onRulesClick(post.rules,post.participating,post.$key)">
-                        Rules <span style="width: 5px"></span>
-                        <ion-icon name="arrow-round-forward"></ion-icon>
-                    </button>
-                </ion-col>
-            </ion-row>
-
-        </ion-card>
-
-        <ion-card *ngIf="post.posttype == 'hiring'" class="post">
-            <ion-item>
-                <ion-avatar item-left></ion-avatar>
-                <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.userId}}</h2>
-
-                <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
-            </ion-item>
-            <ion-item>
-                <p>Organising a {{post.sporttype}} <b>Hiring Trial</b> on {{post.eventdate}}</p>
-            </ion-item>
-            <ion-row>          
-                <!-- Image Shown here -->
-            </ion-row>
-   
-            <ion-item>
-                <ion-row>
-                    <ion-col> Trial Date: {{post.eventdate}} </ion-col>
-                    <ion-col> **First come First </ion-col>
-                </ion-row>
-            </ion-item>
-            <ion-row>
-                <ion-col col-4>
-                    <button ion-button icon-left clear small class="hiringbutton">
-                        <ion-icon name="person"></ion-icon>
-                        <div>{{post.participating}} Going</div>
-                    </button>
-                </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-left clear small class="hiringbutton">
-                        <ion-icon name="car"></ion-icon>
-                        <div>1.4km</div>
-                    </button>
-                </ion-col>
-                <ion-col center text-center col-4>
-                    <button ion-button outline class="hiringbutton" (click)="onCriteriaClick(post.criteria,post.posttype,post.participating,post.$key)">
-                        Criteria <span style="width: 5px"></span>
-                        <ion-icon name="arrow-round-forward"></ion-icon>
-                    </button>
-                </ion-col>
-            </ion-row>
-        </ion-card>
-        <ion-card *ngIf="post.posttype == 'image'" class="post"> 
-            <ion-item>
-                <ion-avatar item-left></ion-avatar>
-                <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.userId}}</h2>
-
-                <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
-            </ion-item>
-            <ion-item>
-                <p>{{post.title}} </p>
-            </ion-item>
-            <div style="padding: 3px,border: 1px solid gray">                
-                <img [src] ="post.imageurl">
-            </div>
-            <ion-row>
-                <ion-col col-4>
-                    <button ion-button icon-center clear small class="scorebutton">
-                        <ion-icon name="thumbs-up"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div>{{post.likes}}</div>
-                    </button>
-                </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-center clear small class="scorebutton">
-                        <ion-icon name="thumbs-down"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div>{{post.dislikes}}</div>
-                    </button>
-                </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-center clear small class="scorebutton">
-                        <ion-icon name="chatboxes"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div>{{post.comments}} </div>
-                    </button>
-                </ion-col>
-            </ion-row>
-        </ion-card>
     </ion-list>
-
 </ion-content>

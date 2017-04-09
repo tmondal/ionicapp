@@ -10,7 +10,7 @@ import * as firebase from 'firebase';
 @Injectable()
 export class AuthService {
 
-    fireAuth: any;
+    auth: any;
     storageRef: any;
     imageRef: any;
     coverimageurl: any;
@@ -22,7 +22,7 @@ export class AuthService {
 
       af.auth.subscribe(user=>{
         if(user) {
-          this.fireAuth = user.auth;
+          this.auth = user.auth;
           console.log(user);
         }
       });
@@ -49,8 +49,12 @@ export class AuthService {
     logoutUser(): firebase.Promise<any> {
       return this.af.auth.logout();
     }
+    getuserbyId(userId){
+      this.profile =  this.af.database.object('/users/' + userId); 
+      return this.profile.take(1);
+    }
     getmyprofile(){
-      this.profile =  this.af.database.object('/users/' + this.fireAuth.uid);
+      this.profile =  this.af.database.object('/users/' + this.auth.uid);
       return this.profile.take(1);
     }
 
@@ -66,14 +70,14 @@ export class AuthService {
             let imgBlob = new Blob([evt.target.result],{type: 'image/jpeg'});
             this.showToast("blob created");
             // Now store the blob(i.e raw data. One kind of file)
-            this.imageRef = this.storageRef.child(`/${this.fireAuth.uid}/cover.jpg`);
+            this.imageRef = this.storageRef.child(`/${this.auth.uid}/cover.jpg`);
             this.showToast("image ref created");
             this.imageRef.put(imgBlob).then((res)=>{
               this.showToast("blob sent");
               this.coverimageurl = res.downloadURL;
               this.showToast('Success: coverphoto updated :)');              
               // update database accordingly
-              this.af.database.object('/users/' + this.fireAuth.uid).update({coverimage: this.coverimageurl});   
+              this.af.database.object('/users/' + this.auth.uid).update({coverimage: this.coverimageurl});   
             }).catch((err)=>{
               this.showToast('Failed to update cover photo :(');
             })
@@ -85,23 +89,19 @@ export class AuthService {
 
       (<any>window).resolveLocalFileSystemURL(profilenativepath, (res) =>{
         res.file((resFile)=>{
-          this.showToast("Profile image with native path given");
           let reader = new FileReader();
           reader.readAsArrayBuffer(resFile);
           reader.onloadend = (evt: any) =>{
             let imgBlob = new Blob([evt.target.result],{type: 'image/jpeg'});
-            this.showToast("profile blob created");
             // Now store the blob(i.e raw data. One kind of file)
-            this.imageRef = this.storageRef.child(`/${this.fireAuth.uid}/profile.jpg`);
-            this.showToast("image ref created");
+            this.imageRef = this.storageRef.child(`/${this.auth.uid}/profile.jpg`);
             this.imageRef.put(imgBlob).then((res)=>{
-              this.showToast("blob sent");
               this.profileimageurl = res.downloadURL;
-              this.showToast('Success: coverphoto updated :)');
+              this.showToast('Success: profilephoto updated :)');
               // update database accordingly
-              this.af.database.object('/users/' + this.fireAuth.uid).update({profileimage: this.profileimageurl}); 
+              this.af.database.object('/users/' + this.auth.uid).update({profileimage: this.profileimageurl}); 
             }).catch((err)=>{
-              this.showToast('Failed to update cover photo :(');
+              this.showToast('Failed to update profile photo :(');
             })
           }
         })
@@ -115,33 +115,30 @@ export class AuthService {
       toast.present();
     }
     updateName(name){
-      this.af.database.object('/users/' + this.fireAuth.uid).update({name: name});
+      this.af.database.object('/users/' + this.auth.uid).update({name: name});
     }
     updateContactno(contactno){
-      this.af.database.object('/users/' + this.fireAuth.uid).update({contactno: contactno});
+      this.af.database.object('/users/' + this.auth.uid).update({contactno: contactno});
     }
     updateCurrentClub(club){
-      this.af.database.object('/users/' + this.fireAuth.uid).update({currentclub: club}); 
+      this.af.database.object('/users/' + this.auth.uid).update({currentclub: club}); 
     }
-    getuserbyId(userId){
-      this.profile =  this.af.database.object('/users/' + userId); 
-      return this.profile.take(1);
-    }
+    
     followuser(targetuserId: any){
-      var followuserdata = {};
+      let followuserdata = {};
 
-      followuserdata["users-followers/" + targetuserId + "/" + this.fireAuth.uid] = {following: true};
-      followuserdata["users-following/" + this.fireAuth.uid + "/" + targetuserId] = {following: true};
+      followuserdata["users-followers/" + targetuserId + "/" + this.auth.uid] = {following: true};
+      followuserdata["users-following/" + this.auth.uid + "/" + targetuserId] = {following: true};
       this.af.database.object('/').update(followuserdata);
     }
     unfollowuser(targetuserId: any){
-      const follower = this.af.database.object("/users-followers/" + targetuserId + "/" + this.fireAuth.uid);
+      const follower = this.af.database.object("/users-followers/" + targetuserId + "/" + this.auth.uid);
       follower.remove();
-      const following = this.af.database.object("/users-following/" + this.fireAuth.uid + "/" + targetuserId);
+      const following = this.af.database.object("/users-following/" + this.auth.uid + "/" + targetuserId);
       following.remove();
     }
     checkiffollowing(targetuserId: any){
-      this.following = this.af.database.object("/users-following/" + this.fireAuth.uid + "/" + targetuserId);
+      this.following = this.af.database.object("/users-following/" + this.auth.uid + "/" + targetuserId);
       return this.following.take(1);
     }
 }

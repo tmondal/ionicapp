@@ -8,7 +8,8 @@
 </ion-header>
 
 
-<ion-content padding *ngIf="user.usertype == 'player'">
+<ion-content padding *ngIf="usertype == 'player'" class="card-background-page">
+
 	<ion-card>
 		<ion-row>
 			<ion-col col-8>
@@ -59,13 +60,13 @@
 			<button style="text-transform: none" ion-button outline color="danger" (click)="onprofileCancel()">Cancel</button>
 		</ion-col>
 	</ion-row>
-	<ion-card *ngIf="user.name == null">
+	<ion-card>
 		<ion-row>
 			<ion-col>
 				<ion-label>Update Name: </ion-label>
 			</ion-col>
 			<ion-col>
-				<ion-input (click)="nameTouched()" value="name" [(ngModel)]="name" style="border-bottom: 1px solid blue">{{user.name}}</ion-input>
+				<ion-input (click)="nameTouched()" value="name" [(ngModel)]="name" style="border-bottom: 1px solid blue">{{name}}</ion-input>
 			</ion-col>
 		</ion-row>
 	</ion-card>
@@ -84,7 +85,7 @@
 				<ion-label>Update Contact No: </ion-label>
 			</ion-col>
 			<ion-col>
-				<ion-input (click)="contactTouched()" value="contactno" [(ngModel)]="contactno" style="border-bottom: 1px solid blue">{{user.contactno}}</ion-input>
+				<ion-input (click)="contactTouched()" value="contactno" [(ngModel)]="contactno" style="border-bottom: 1px solid blue">{{contactno}}</ion-input>
 			</ion-col>
 		</ion-row>
 	</ion-card>
@@ -102,7 +103,7 @@
 				<ion-label>Update Current Club: </ion-label>
 			</ion-col>
 			<ion-col>
-				<ion-input (click)="clubTouched()" value="currentclub" [(ngModel)]="currentclub" style="border-bottom: 1px solid blue">{{user.currentclub}}</ion-input>
+				<ion-input (click)="clubTouched()" value="currentclub" [(ngModel)]="currentclub" style="border-bottom: 1px solid blue">{{currentclub}}</ion-input>
 			</ion-col>
 		</ion-row>
 	</ion-card>
@@ -115,7 +116,7 @@
 		</ion-col>
 	</ion-row>
 	<br>
-	<button ion-button block outline color="danger" (click)="onCancel()" >
+	<button style="bottom: 10px" ion-button block outline color="danger" (click)="onCancel()" >
 		Not now
 	</button>
 
