@@ -14,7 +14,7 @@
 
 
 <ion-content padding>
-	<ion-list>
+	<ion-card>
 	    <ion-item>
 			<ion-label> SignUp As: </ion-label>
 			<ion-select [(ngModel)]="usertype">
@@ -22,21 +22,37 @@
 		      <ion-option value="player">Player</ion-option>
 		    </ion-select>
 		</ion-item>
+	</ion-card>
+	<ion-card>
 	    <ion-item *ngIf="usertype == 'player'">
-			<ion-label floating>Email</ion-label>
+			<ion-label floating>Enter email</ion-label>
 			<ion-input type="email" name="email" [(ngModel)] = "email" ></ion-input>
 	    </ion-item>
+	</ion-card>
+	<ion-card>
 	    <ion-item *ngIf="usertype == 'club'">
-			<ion-label floating>Club Email</ion-label>
+			<ion-label floating>Enter club email</ion-label>
 			<ion-input type="email" name="email" [(ngModel)] = "email" ></ion-input>
 	    </ion-item>
-	 
+	</ion-card>
+	<ion-card *ngIf="usertype"> 
 	    <ion-item>
-			<ion-label floating>Password</ion-label>
+			<ion-label floating>Enter password</ion-label>
 			<ion-input type="password" name="password" [(ngModel)] = "password" ></ion-input>
 	    </ion-item>
-	</ion-list>
-	<div>	 	
-		<button ion-button (click)="oncreateUser()">Create User</button>
-	</div>
+	</ion-card>
+	<ion-card *ngIf="usertype"> 
+	    <ion-item>
+			<ion-label floating>Re-enter password</ion-label>
+			<ion-input type="password" name="repassword" [(ngModel)] = "repassword" ></ion-input>
+	    </ion-item>
+	</ion-card>
+	<ion-row>
+		<ion-col>
+			<button ion-button outline (click)="oncreateUser()" style="float: right; text-transform: none">Be a Member</button>
+		</ion-col>
+		<ion-col>
+			<button ion-button outline (click)="onCancel()" style="text-transform: none">Not Now</button>
+		</ion-col>	 	
+	</ion-row>
 </ion-content>

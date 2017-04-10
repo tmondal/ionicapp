@@ -154,7 +154,7 @@ export class EditProfilePage implements OnInit{
 		this.authsubscription.unsubscribe();
 	}
 	onCancel(){
-		this.viewCtrl.dismiss();
+		this.navCtrl.pop();
 	}
   
 }

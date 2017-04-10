@@ -12,9 +12,10 @@ import { HomePage } from '../../pages/home/home';
 export class SignupPage {
 
 
-	email: any;
-	password: any;
-	usertype: any;
+	email: any = null;
+	password: any = null;
+	repassword: any = null;
+	usertype: any = null;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -25,11 +26,18 @@ export class SignupPage {
 		console.log('ionViewDidLoad SignupPage');
 	}
 	oncreateUser(){
-		this.authservice.signupUser(this.email, this.password,this.usertype).then(() =>{
-			this.navCtrl.setRoot(HomePage);
-		},error =>{
-			console.log(error);
-		});
+		if(this.email && this.password && this.usertype) {
+			this.authservice.signupUser(this.email, this.password,this.usertype).then(() =>{
+				this.navCtrl.setRoot(HomePage);
+			},error =>{
+				console.log(error);
+			});
+		}else{
+			alert("Enter all field kindly :(");
+		}
+	}
+	onCancel(){
+		this.navCtrl.pop();
 	}
 
 }

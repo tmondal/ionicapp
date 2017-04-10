@@ -1,4 +1,8 @@
 import { NgModule, ErrorHandler } from '@angular/core';
+
+// It's for reactive forms . For template driven form use 'FormsModule' 
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { DatePicker } from '@ionic-native/date-picker';
 import { Camera} from '@ionic-native/camera';
@@ -70,6 +74,8 @@ const AuthConfig = {
     PostmoreoptPage
   ],
   imports: [
+    //FormsModule, for template driven form
+    ReactiveFormsModule,
     AngularFireModule.initializeApp(firebaseConfig,AuthConfig),
     IonicModule.forRoot(MyApp)
   ],

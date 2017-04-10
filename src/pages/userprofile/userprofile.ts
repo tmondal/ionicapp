@@ -86,6 +86,7 @@ export class UserprofilePage implements OnInit{
 		this.navCtrl.push(EditProfilePage);
 	}
   	onLogout(){
+  		this.navCtrl.pop();
 		this.authservice.logoutUser().then(()=>{
 			this.navCtrl.setRoot(LoginPage);
 		});

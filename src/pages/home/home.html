@@ -16,14 +16,14 @@
     <ion-card class="home-card" >      
         <div>
             <ion-row>
-            <ion-col col-3>
-            <ion-avatar item-left>
-                <img [src]="profileimage" *ngIf="profileimage" style="height: 40px; width: 40px">
-            </ion-avatar>
-            </ion-col>
-            <ion-col col-9 (click)="onCreatePostClick()"> 
-                <button  ion-button clear style="text-transform: none" >Organize an event..</button>
-            </ion-col>
+                <ion-col col-2>
+                    <ion-avatar item-left>
+                        <img [src]="profileimage" *ngIf="profileimage" style="height: 40px; width: 40px">
+                    </ion-avatar>                                                     
+                </ion-col>
+                <ion-col col-10 (click)="onCreatePostClick()"> 
+                    <button  ion-button clear style="text-transform: none" ><ion-note> Give a challenge to all club and player..</ion-note></button>
+                </ion-col>
             </ion-row>
         </div>
     </ion-card>

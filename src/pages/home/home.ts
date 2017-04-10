@@ -46,13 +46,10 @@ export class HomePage implements OnInit{
     });
     this.postsubscription = this.postservice.getPosts().subscribe(posts =>{
       this.posts = posts;
-      console.log(posts);
     });
     this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
       this.usertype = user.usertype;
       this.profileimage = user.profileimage;
-      console.log(user);
-      console.log("profile image: " + this.profileimage);
     });
   }
   ngOnDestroy(){
@@ -66,8 +63,9 @@ export class HomePage implements OnInit{
   }
   
   onCreatePostClick(){
-    let modal = this.modalCtrl.create(PostmodalPage);
-    modal.present();
+    // let modal = this.modalCtrl.create(PostmodalPage);
+    // modal.present();
+    this.navCtrl.push(PostmodalPage);
   }
   onRulesClick(rules,participating,postid,userId){
     let modal = this.modalCtrl.create(PostPage,{
@@ -88,7 +86,7 @@ export class HomePage implements OnInit{
     modal.present();
   }
   onUsernameClick(userId){
-    this.navCtrl.push(UserprofilePage,{userId: userId});
+    this.navCtrl.push(UserprofilePage,{userId: userId}); // Whoever gets pushed should get poped 
   }
   calluserdetails(){
    this.navCtrl.push(UserprofilePage,{userId: this.authuid});

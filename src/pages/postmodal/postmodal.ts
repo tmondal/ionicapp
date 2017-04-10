@@ -68,18 +68,23 @@ export class PostmodalPage implements OnInit{
 		/* Initially i was trying to get current user inside constructor and 
 		it got f***ed up when i logout
 		*/
-		this.af.auth.subscribe(user =>{
-			this.currentuserId = user.uid;
-		});
+
+		// still causes 'uid' of null Type error. So got rid of it by 'user.$key'
+
+		// this.af.auth.subscribe(user =>{ 
+		// 	this.currentuserId = user.uid;
+		// });
+
 		this.authservice.getmyprofile().subscribe((user)=>{
+			this.currentuserId = user.$key;
 			this.userimage = user.profileimage;
 			this.username = user.name;
-			console.log("My image: " + this.userimage);
+			console.log("My id: " + this.currentuserId);
 		});
 	}
 
 	onDismiss(){
-		this.viewCtrl.dismiss();
+		this.navCtrl.pop();
 	}
 
 	onRuleAdd(){
