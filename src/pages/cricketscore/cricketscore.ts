@@ -2,6 +2,7 @@ import { Component,Input,OnInit } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 import { PostService } from '../../providers/post-service';
+import { AuthService } from '../../providers/auth-service';
 
 
 @Component({
@@ -25,22 +26,26 @@ export class CricketscorePage implements OnInit{
 	likes: any = 0;
 	dislikes: any = 0;
 	comments: any = 0;
+	authsubscription: any;
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
 		public viewCtrl: ViewController,
 		public af: AngularFire,
-		public postservice: PostService
+		public postservice: PostService,
+		public authservice: AuthService
 	) {}
 
 	ngOnInit(){
-		this.af.auth.subscribe(user =>{
-			this.currentuserId = user.uid;
+		
+		this.authsubscription = this.authservice.getmyprofile().subscribe(user =>{
+			this.currentuserId = user.$key;
 		});
 	}
-	ionViewDidLoad() {
-	console.log('ionViewDidLoad CricketscorePage');
+	ngOnDestroy(){
+		this.authsubscription.unsubscribe();
 	}
+	
 	odiScore(){
 		let post = {
 			userId: this.currentuserId,

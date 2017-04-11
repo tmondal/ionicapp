@@ -138,14 +138,14 @@
             </div>
             <ion-row>
                 <ion-col col-4>
-                    <button ion-button icon-center clear small class="scorebutton">
+                    <button (click)="likePost(post.$key)" ion-button icon-center clear small class="scorebutton">
                         <ion-icon name="thumbs-up"></ion-icon>
                         <span style="width: 5px"></span>
                         <div>{{post.likes}}</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
-                    <button ion-button icon-center clear small class="scorebutton">
+                    <button (click)="dislikePost(post.$key)" ion-button icon-center clear small class="scorebutton">
                         <ion-icon name="thumbs-down"></ion-icon>
                         <span style="width: 5px"></span>
                         <div>{{post.dislikes}}</div>
@@ -212,14 +212,14 @@
             <br>
             <ion-row>
                 <ion-col col-4>
-                    <button ion-button icon-center clear small class="scorebutton">
+                    <button (click)="likePost(post.$key)" ion-button icon-center clear small class="scorebutton">
                         <ion-icon name="thumbs-up"></ion-icon>
                         <span style="width: 5px"></span>
                         <div>{{post.likes}}</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
-                    <button ion-button icon-center clear small class="scorebutton">
+                    <button (click)="dislikePost(post.$key)" ion-button icon-center clear small class="scorebutton">
                         <ion-icon name="thumbs-down"></ion-icon>
                         <span style="width: 5px"></span>
                         <div>{{post.dislikes}}</div>

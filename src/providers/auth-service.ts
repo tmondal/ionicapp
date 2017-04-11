@@ -139,6 +139,6 @@ export class AuthService {
     }
     checkiffollowing(targetuserId: any){
       this.following = this.af.database.object("/users-following/" + this.auth.uid + "/" + targetuserId);
-      return this.following.take(1);
+      return this.following.take(1); // take function does unsubscribe at the end which is good
     }
 }

@@ -8,7 +8,7 @@ import { AuthService } from '../../providers/auth-service';
   selector: 'page-post',
   templateUrl: 'post.html'
 })
-export class PostPage implements OnInit{
+export class PostPage implements OnInit {
 
 	rules: String[];
 	userservice: any;
@@ -61,5 +61,4 @@ export class PostPage implements OnInit{
 		this.postservice.removeParticipated(this.postid,this.participated);
 		this.postservice.updateParticipating(this.postid,this.participating);
 	}
-
 }

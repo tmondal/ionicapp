@@ -29,6 +29,12 @@ export class HomePage implements OnInit{
   userimage: any = null;
   usertype: any;
 
+  liked: boolean;
+  disliked: boolean;
+  likes: any;
+  dislikes: any;
+  likedislike: any;
+  countlikedislike: any;
   constructor(
   	public navCtrl: NavController,
   	public modalCtrl: ModalController,
@@ -39,15 +45,12 @@ export class HomePage implements OnInit{
   ) {}
 
   ngOnInit(){
-    this.af.auth.subscribe(user=>{
-      if(user) {
-        this.authuid = user.auth.uid;        
-      }
-    });
+    
     this.postsubscription = this.postservice.getPosts().subscribe(posts =>{
       this.posts = posts;
     });
     this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
+      this.authuid = user.$key;
       this.usertype = user.usertype;
       this.profileimage = user.profileimage;
     });
@@ -95,6 +98,100 @@ export class HomePage implements OnInit{
     let popover = this.popoverCtrl.create(PostmoreoptPage);
     popover.present({
       ev: myEvent
+    });
+  }
+  likePost(postid){
+    
+    // First see if previously liked or disliked .As every post does not have this
+    // function we get explicitly by postid
+    console.log("Like clicked: ");
+    console.log("post id: " + postid);
+    this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
+      if(user.liked === undefined) {
+        this.liked = false;
+      }else{        
+        this.liked = user.liked;
+        console.log("liked: " + this.liked);
+      }
+      if(user.disliked === undefined) {
+        this.disliked = false;
+      }else{        
+        this.disliked = user.disliked;
+        console.log("disliked: " + this.disliked);
+      }
+
+      this.postservice.countLikesDislikes(postid).take(1).subscribe(post =>{
+        this.likes = post.likes;
+        console.log("likes: " + this.likes);
+        this.dislikes = post.dislikes;
+        console.log("dislikes: " + this.dislikes);
+
+        if((!this.liked) && (!this.disliked)) {
+          this.liked = true;
+          this.likes += 1; 
+          this.postservice.likeDislikePost(postid,this.liked,this.disliked);
+          this.postservice.updateLikesDislikes(postid,this.likes,this.dislikes);
+        }else if(!this.liked && this.disliked){
+          this.liked = true;
+          this.disliked = false;
+          this.likes += 1;
+          this.dislikes -= 1;
+          this.postservice.likeDislikePost(postid,this.liked,this.disliked);
+          this.postservice.updateLikesDislikes(postid,this.likes,this.dislikes);
+        }
+        else if(this.liked) {
+          alert("Seems like you like it so much but press once :)");
+        }
+        else{
+          alert("Bad engineer can't handle all cases :(");
+        }
+      });
+    });
+  }
+  dislikePost(postid){
+    console.log("Dislike clicked: ");
+    console.log("post id: " + postid);
+    this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
+      if(user.liked === undefined) {
+        this.liked = false;
+      }else{        
+        this.liked = user.liked;
+        console.log("liked: " + this.liked);
+      }
+      if(user.disliked === undefined) {
+        this.disliked = false;
+      }else{        
+        this.disliked = user.disliked;
+        console.log("disliked: " + this.disliked);
+      }
+
+      this.postservice.countLikesDislikes(postid).take(1).subscribe(post =>{
+        this.likes = post.likes;
+        console.log("likes: " + this.likes);
+        this.dislikes = post.dislikes;
+        console.log("dislikes: " + this.dislikes);
+        
+        if((!this.disliked) && (!this.liked)) {
+          this.disliked = true;
+          this.dislikes += 1;
+          this.postservice.likeDislikePost(postid,this.liked,this.disliked);
+          this.postservice.updateLikesDislikes(postid,this.likes,this.dislikes);
+        }
+        else if(!this.disliked && this.liked) {
+          this.liked = false;
+          this.disliked = true;
+          this.likes -=1;
+          this.dislikes +=1;
+          this.postservice.likeDislikePost(postid,this.liked,this.disliked);
+          this.postservice.updateLikesDislikes(postid,this.likes,this.dislikes);
+        }
+        else if(this.disliked) {
+          alert("No matter how badly you dislike it, you can press one time :)");
+        }
+        else{
+          alert("You seeing this because the worst programmer designed it :)");
+        }
+      });
     });
   }
 }

@@ -146,6 +146,8 @@ export class PostService {
     this.posts = this.af.database.list('/posts');
     return this.posts;
   }
+
+  // participation logics
   getParticipated(postid: any){
     return this.af.database.object('/posts-participator/' + postid + "/" + this.fireAuth.uid);
   }
@@ -159,8 +161,31 @@ export class PostService {
     const item = this.af.database.object('/posts-participator/' + postid + "/" + this.fireAuth.uid);
     item.remove();
   }
+  getParticipating(postid: any){
+     return this.af.database.object('/posts' + postid); 
+  }
   updateParticipating(postid: any,participating: number){
     const item = this.af.database.object('/posts/' + postid);
     item.update({participating: participating});
+  }
+
+  // Like Dislike logics
+  getLikedDisliked(postid){
+    return this.af.database.object('/postwise-likedDisliked/' + postid + "/" + this.fireAuth.uid);
+  }
+  countLikesDislikes(postid){
+    return this.af.database.object('/posts/' + postid);
+  }
+  likeDislikePost(postid,liked,disliked){
+    this.af.database.object('/postwise-likedDisliked/' + postid + "/" + this.fireAuth.uid).update({
+      liked : liked,
+      disliked: disliked
+    });
+  }
+  updateLikesDislikes(postid,likes,dislikes){
+    this.af.database.object('/posts/' + postid).update({
+      likes : likes,
+      dislikes: dislikes
+    });
   }
 }
