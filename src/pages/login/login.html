@@ -18,17 +18,20 @@
 	<form [formGroup]="loginform" (ngSubmit)="onloginClick()" novalidate >		
 		<ion-list>
 		    <ion-item>
-		      <ion-label stacked color="primary">Email</ion-label>
-		      <ion-input type="email" formControlName ="email" placeholder="Can i have your email ?"></ion-input>
+		      <ion-label floating color="primary">Enter email</ion-label>
+		      <ion-input type="email" formControlName ="email"></ion-input>
 		    </ion-item>
 		    <!-- Show errors for Email field-->
 		    <ion-item class="error" *ngIf="loginform.get('email').hasError('required') && loginform.get('email').touched">
 		    	<ion-label color="danger">Email required ..</ion-label>
 		    </ion-item>
+		    <ion-item *ngIf="loginform.get('email').hasError('invalidEmail') && loginform.get('email').touched && !loginform.get('email').hasError('required')">
+		    	<ion-label color="danger">Not a valid formatted email</ion-label>
+		    </ion-item>
 		 
 		    <ion-item>
-		      <ion-label stacked color="primary">Password</ion-label>
-		      <ion-input type="password" formControlName="password" placeholder="Give me your secret.."></ion-input>
+		      <ion-label floating color="primary">Enter Password</ion-label>
+		      <ion-input type="password" formControlName="password"></ion-input>
 		    </ion-item>
 		    <!-- Show error for Password field -->
 		    <ion-item class="error" *ngIf="loginform.get('password').hasError('required') && loginform.get('password').touched" >

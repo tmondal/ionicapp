@@ -16,12 +16,11 @@ export class ResetpasswordPage {
 		public toastCtrl: ToastController
 	) {}
 
-	ionViewDidLoad() {
-	console.log('ionViewDidLoad ResetpasswordPage');
-	}
+	
 	onReset(){
 		firebase.auth().sendPasswordResetEmail(this.email).then(()=>{
-			this.showToast("Reset email sent :)")
+			alert("Reset email sent.Follow the link there");
+			this.navCtrl.pop();
 		},(err)=>{
 			// show error message
 			let errorcode = err.name;

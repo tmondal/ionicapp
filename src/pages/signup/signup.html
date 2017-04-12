@@ -1,9 +1,4 @@
-<!--
-  Generated template for the Signup page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
@@ -23,36 +18,58 @@
 		    </ion-select>
 		</ion-item>
 	</ion-card>
-	<ion-card>
-	    <ion-item *ngIf="usertype == 'player'">
-			<ion-label floating>Enter email</ion-label>
-			<ion-input type="email" name="email" [(ngModel)] = "email" ></ion-input>
+	
+	<form [formGroup]="signupform" (ngSubmit)="oncreateUser()" novalidate>		
+		<ion-card>
+		    <ion-item *ngIf="usertype == 'player'">
+				<ion-label floating>Enter email</ion-label>
+				<ion-input type="email" formControlName="email"></ion-input>
+		    </ion-item>
+		</ion-card>
+		<ion-item class="error" *ngIf="signupform.get('email').hasError('required') && signupform.get('email').touched">
+	    	<ion-label color="danger">Email required ..</ion-label>
 	    </ion-item>
-	</ion-card>
-	<ion-card>
-	    <ion-item *ngIf="usertype == 'club'">
-			<ion-label floating>Enter club email</ion-label>
-			<ion-input type="email" name="email" [(ngModel)] = "email" ></ion-input>
+	    <ion-item *ngIf="signupform.get('email').hasError('invalidEmail') && signupform.get('email').touched && !signupform.get('email').hasError('required')">
+	    	<ion-label color="danger">Not a valid formatted email</ion-label>
 	    </ion-item>
-	</ion-card>
-	<ion-card *ngIf="usertype"> 
-	    <ion-item>
-			<ion-label floating>Enter password</ion-label>
-			<ion-input type="password" name="password" [(ngModel)] = "password" ></ion-input>
+
+		<ion-card>
+		    <ion-item *ngIf="usertype == 'club'">
+				<ion-label floating>Enter club email</ion-label>
+				<ion-input type="email" formControlName="email"></ion-input>
+		    </ion-item>
+		</ion-card>
+		<ion-item class="error" *ngIf="usertype == 'club' && signupform.get('email').hasError('required') && signupform.get('email').touched">
+		    <ion-label color="danger">Club email required ..</ion-label>
+		</ion-item>
+
+		<ion-card *ngIf="usertype"> 
+		    <ion-item>
+				<ion-label floating>Enter password</ion-label>
+				<ion-input type="password" formControlName="password"></ion-input>
+		    </ion-item>
+		</ion-card>
+		<ion-item class="error" *ngIf="signupform.get('password').hasError('required') && signupform.get('password').touched" >
+	    	<ion-label color="danger">Password can't be empty..</ion-label>
 	    </ion-item>
-	</ion-card>
-	<ion-card *ngIf="usertype"> 
-	    <ion-item>
-			<ion-label floating>Re-enter password</ion-label>
-			<ion-input type="password" name="repassword" [(ngModel)] = "repassword" ></ion-input>
+	    <ion-item class="error" *ngIf="signupform.get('password').hasError('minlength') && signupform.get('password').touched">
+	      <ion-label color="danger">Should be at least 6 characters..</ion-label>
 	    </ion-item>
-	</ion-card>
-	<ion-row>
-		<ion-col>
-			<button ion-button outline (click)="oncreateUser()" style="float: right; text-transform: none">Be a Member</button>
-		</ion-col>
-		<ion-col>
-			<button ion-button outline (click)="onCancel()" style="text-transform: none">Not Now</button>
-		</ion-col>	 	
-	</ion-row>
+
+		<ion-card *ngIf="usertype"> 
+		    <ion-item>
+				<ion-label floating>Re-enter password</ion-label>
+				<ion-input type="password" formControlName="repassword"></ion-input>
+		    </ion-item>
+		</ion-card>
+		<ion-item *ngIf="!matchPassword() && signupform.get('repassword').touched">
+			<ion-label color="danger">Passwords does not match</ion-label>
+		</ion-item>
+		<ion-label>
+			<button *ngIf="signupform.valid && matchPassword()" ion-button block outline style="float: right; text-transform: none">Be a Member</button>
+		</ion-label>	 	
+	</form>
+	<ion-label>
+		<button ion-button color="danger" block outline (click)="onCancel()" style="text-transform: none">Not Now</button>
+	</ion-label>
 </ion-content>

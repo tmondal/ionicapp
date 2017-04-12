@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { HomePage } from '../../pages/home/home';
-
+import { FormBuilder,FormGroup, Validators} from '@angular/forms';
+import { EmailValidator } from '../../validators/email';
 
 
 @Component({
@@ -11,31 +12,68 @@ import { HomePage } from '../../pages/home/home';
 })
 export class SignupPage {
 
+	signupform: FormGroup;
 
 	email: any = null;
 	password: any = null;
 	repassword: any = null;
 	usertype: any = null;
+	loading: any;
 	constructor(
-		public navCtrl: NavController, 
+		public navCtrl: NavController,
 		public navParams: NavParams,
+		public loadingCtrl: LoadingController,
+		public alertCtrl: AlertController,
+		public formbuilder: FormBuilder,
 		public authservice: AuthService
-	) {}
-
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad SignupPage');
+	) {
+		this.signupform = this.formbuilder.group({
+			email: ["", [Validators.required, EmailValidator.isValid]],
+			password: ["",[Validators.required , Validators.minLength(6)]],
+			repassword: ["",Validators.required]
+		});
 	}
-	oncreateUser(){
-		if(this.email && this.password && this.usertype) {
-			this.authservice.signupUser(this.email, this.password,this.usertype).then(() =>{
-				this.navCtrl.setRoot(HomePage);
-			},error =>{
-				console.log(error);
-			});
+
+	matchPassword(){
+		if(this.signupform.value.password == this.signupform.value.repassword) {
+			return true;
 		}else{
-			alert("Enter all field kindly :(");
+			return false;
 		}
 	}
+	oncreateUser(){
+		this.loading = this.loadingCtrl.create({content: "Requesting server..."});
+		this.loading.present();
+
+		if(this.signupform.invalid) {
+			this.loading.dismiss().then(()=>{
+				this.showOkAlert("Please enter valid data..");
+			});
+		}else{
+			this.authservice.signupUser(this.signupform.value.email, this.signupform.value.password,this.usertype).then(() =>{
+				this.loading.dismiss().then(()=>{
+					this.navCtrl.setRoot(HomePage);
+				});
+			},(error) =>{
+				this.loading.dismiss().then(()=>{
+					this.showOkAlert(error);
+				});
+			});
+		}
+	}
+	showOkAlert(message){
+		let alert = this.alertCtrl.create({
+			message: message,
+			buttons: [
+				{
+					text: "Ok",
+					role: 'cancel'
+				}
+			]
+		});
+		alert.present();
+	}
+
 	onCancel(){
 		this.navCtrl.pop();
 	}
