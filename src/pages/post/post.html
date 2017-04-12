@@ -11,7 +11,7 @@
 	<ion-card>
 	    <!-- image goes here -->
 	    <img style="height: 250px" [src]="coverimage" *ngIf="coverimage">
-	    <div class="card-title">Mohun Bagan</div>
+	    <div class="card-title">{{username}}</div>
 	    <p class="card-subtitle">We give importance to Talent</p>
 	</ion-card>
  	<ion-card>
@@ -24,7 +24,7 @@
 	      </ion-col>
 	    </ion-row>
  	</ion-card>
- 	<ion-card>
+ 	<ion-card *ngIf="rules">
  		<ion-list>
 	 		<ion-item>
 	 			<h2>The Event Rules:</h2>
@@ -38,33 +38,48 @@
 	 		</ion-item>
  		</ion-list>
  	</ion-card>
+ 	<ion-card *ngIf="criteria">
+ 		<ion-list>
+	 		<ion-item>
+	 			<h2>The Event Criteria:</h2>
+	 		</ion-item>
+	 		<ion-item>
+		 		<ol>
+		 			<li *ngFor="let criterion of criteria">
+		 				{{criterion}}
+		 			</li>
+		 		</ol>
+	 		</ion-item>
+ 		</ion-list>
+ 	</ion-card>
  	
  	<div *ngIf="posttype != 'hiring'"> 		
-	 	<button *ngIf="!participated" ion-button color="primary" full style="text-transform: none" (click)="onAccept()" style="margin: 3px" >
-	 		Accept Challenge <span style="width: 5px" ></span>
+	 	<button *ngIf="!participated" ion-button color="primary" block outline style="text-transform: none" (click)="onAccept()" style="margin: 3px" >
+	 		Accept challenge <span style="width: 5px" ></span>
 	 		<ion-icon name="happy"></ion-icon>
 	 	</button>
-	 	<button *ngIf="participated" ion-button color="danger" full style="text-transform: none" (click)="onDecline()" style="margin:3px" >
-	 		Reject Challenge <span style="width: 5px"></span>
+	 	<button *ngIf="participated" ion-button color="danger" block outline style="text-transform: none" (click)="onDecline()" style="margin:3px" >
+	 		Reject challenge <span style="width: 5px"></span>
 	 		<ion-icon name="sad"></ion-icon>
 	 	</button>
 	 	<button *ngIf="!participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()" style="margin: 3px" >
-	 		I'm Afried
+	 		I am afried
 	 	</button>
 		<button *ngIf="participated" ion-button block outline style="text-transform: none" (click)="onCancel()" style="margin: 3px">
-			I'm fine
+			I am fine
 		</button>
  	</div>
  	<div *ngIf="posttype == 'hiring'">
- 		<button *ngIf="!participated" ion-button color="primary" full style="text-transform: none" (click)="onAccept()" style="margin: 3px" >
+ 		<button *ngIf="!participated" ion-button color="primary" block outline style="text-transform: none" (click)="onAccept()" style="margin: 3px" >
 	 		Participating <span style="width: 5px" ></span>
 	 		<ion-icon name="happy"></ion-icon>
 	 	</button>
-	 	<button *ngIf="participated" ion-button color="danger" full style="text-transform: none" (click)="onDecline()" style="margin: 3px" >
+	 	<button *ngIf="participated" ion-button color="danger" block outline style="text-transform: none" (click)="onDecline()" style="margin: 3px" >
 	 		Withdrawing <span style="width: 5px"></span>
 	 		<ion-icon name="sad"></ion-icon>
 	 	</button>
-	 	<button *ngIf="!participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()" style="margin: 3px" >Not Qualified</button>
-		<button *ngIf="participated" ion-button color="danger" block outline style="text-transform: none" (click)="onCancel()" style="margin: 3px" >I'm Qualified</button>
+	 	<button *ngIf="!participated" ion-button color="danger" block outline (click)="onCancel()" style="margin: 3px" style="text-transform: none" >Not qualified</button>
+		<button *ngIf="participated" ion-button block outline style="text-transform: none" (click)="onCancel()" style="margin: 3px" >I am qualified</button>
  	</div>
 </ion-content>
+

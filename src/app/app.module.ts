@@ -19,6 +19,7 @@ import { HokeyscorePage } from '../pages/hokeyscore/hokeyscore';
 import { BadmintonscorePage } from '../pages/badmintonscore/badmintonscore';
 import { TenisscorePage } from '../pages/tenisscore/tenisscore';
 import { TtscorePage } from '../pages/ttscore/ttscore';
+import { MypostPage } from '../pages/mypost/mypost';
 import { PostPage } from '../pages/post/post';
 import { AllpostsPage } from '../pages/allposts/allposts';
 import { MomentsPage } from '../pages/moments/moments';
@@ -63,6 +64,7 @@ const AuthConfig = {
     BadmintonscorePage,
     TenisscorePage,
     TtscorePage,
+    MypostPage,
     PostPage,
     AllpostsPage,
     MomentsPage,
@@ -93,6 +95,7 @@ const AuthConfig = {
     BadmintonscorePage,
     TenisscorePage,
     TtscorePage,
+    MypostPage,
     PostPage,
     AllpostsPage,
     MomentsPage,

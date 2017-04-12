@@ -2,6 +2,7 @@ import { Component , OnInit} from '@angular/core';
 import { NavController, NavParams, ViewController} from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
+import { UserprofilePage } from '../../pages/userprofile/userprofile';
 
 
 @Component({
@@ -10,16 +11,19 @@ import { AuthService } from '../../providers/auth-service';
 })
 export class PostPage implements OnInit {
 
-	rules: String[];
+	rules: any;
+	criteria: any;
 	userservice: any;
 	coverimage: any;
-	posttype: any;
 	postid: any;
 	participating: any;
 	participated: boolean;
 	participateservice: any;
 	userId: any;
-
+	totalservice: any;
+	totalparticipators: any;
+	users: any;
+	username: any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams, 
@@ -27,8 +31,8 @@ export class PostPage implements OnInit {
 		private postservice: PostService,
 		public authservice : AuthService
 	) {
-		this.rules = navParams.get("paramRules");
-		this.posttype = navParams.get("posttype");
+		this.rules = navParams.get("rules");
+		this.criteria = navParams.get("criteria");
 		this.participating = navParams.get("participating");
 		this.postid = navParams.get("postid");
 		this.userId = navParams.get("userId");
@@ -39,6 +43,7 @@ export class PostPage implements OnInit {
 		});
 		this.userservice = this.authservice.getuserbyId(this.userId).subscribe((user)=>{
 			this.coverimage = user.coverimage;
+			this.username = user.name;
 		});
 	}
 	ngOnDestroy(){
@@ -61,4 +66,8 @@ export class PostPage implements OnInit {
 		this.postservice.removeParticipated(this.postid,this.participated);
 		this.postservice.updateParticipating(this.postid,this.participating);
 	}
+
+	onUsernameClick(userId){
+    	this.navCtrl.push(UserprofilePage,{userId: userId});
+  	}
 }

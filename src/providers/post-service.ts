@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LoadingController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { File } from 'ionic-native';
 import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
@@ -16,8 +17,12 @@ export class PostService {
   fireAuth: any;
   storageRef: any;
   imageRef: any;
-
-  constructor(public af: AngularFire,public toastCtrl: ToastController) {
+  loading: any;
+  constructor(
+    public af: AngularFire,
+    public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController
+  ) {
     af.auth.subscribe(user=>{
         if(user) {
           this.fireAuth = user.auth;
@@ -28,6 +33,9 @@ export class PostService {
     this.storageRef = firebase.storage().ref().child('images/');
   }
   tournamentAndHiringPost(post,userId,nativepath){ // image optional
+
+    this.loading = this.loadingCtrl.create({content: "Sending to server..."});
+    this.loading.present();
 
     let updatedPostData = {};
     let newPostkey = this.postnode.push().key;
@@ -47,7 +55,14 @@ export class PostService {
               updatedPostData["posts/" + newPostkey] = post;
               updatedPostData["userwise-post/" + userId +"/" + newPostkey] = post;
               this.af.database.object('/').update(updatedPostData);
+
+              this.loading.dismiss().then(()=>{
+                this.showToast("Success: post added to timeline");
+              });
             }).catch((err)=>{
+              this.loading.dismiss().then(()=>{
+                this.showToast('Failed to upload image :(');
+              });
               this.showToast('Failed to upload image :(');
             })
           }
@@ -57,6 +72,9 @@ export class PostService {
       updatedPostData["posts/" + newPostkey] = post;
       updatedPostData["userwise-post/" + userId +"/" + newPostkey] = post;
       this.af.database.object('/').update(updatedPostData);
+      this.loading.dismiss().then(()=>{
+        this.showToast("Post added without image");
+      });
     }
 
   }
@@ -85,7 +103,10 @@ export class PostService {
   }
 
   imagePost(post,userId,nativepath){
-    this.showToast(nativepath);
+    
+    this.loading = this.loadingCtrl.create({content: "Sending to server..."});
+    this.loading.present();
+
     let updatedPostData = {};
     let newPostkey = this.postnode.push().key;
 
@@ -110,8 +131,14 @@ export class PostService {
               updatedPostData["posts/" + newPostkey] = post;
               updatedPostData["userwise-post/" + userId +"/" + newPostkey] = post;
               this.af.database.object('/').update(updatedPostData);
+
+              this.loading.dismiss().then(()=>{
+                this.showToast("Success: post added to timeline");
+              });
             }).catch((err)=>{
-              this.showToast('Failed to upload image :(');
+              this.loading.dismiss().then(()=>{
+                this.showToast('Failed to upload image :(');
+              });
             })
           }
         })
@@ -162,11 +189,14 @@ export class PostService {
     item.remove();
   }
   getParticipating(postid: any){
-     return this.af.database.object('/posts' + postid); 
+    return this.af.database.object('/posts' + postid); 
   }
   updateParticipating(postid: any,participating: number){
     const item = this.af.database.object('/posts/' + postid);
     item.update({participating: participating});
+  }
+  getTotalparticipation(postid){
+    return this.af.database.list('/posts-participator/' + postid);
   }
 
   // Like Dislike logics

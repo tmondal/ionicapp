@@ -27,8 +27,8 @@ export class PostmodalPage implements OnInit{
 	eventdate: any;
 	eventtime: any;
 	participating: Number = 0;
-	entryfee: any;
-	prize: any;
+	entryfee: any = 0;
+	prize: any = 0;
 	rules: String[] = [];
 	rule: String;
 
@@ -135,8 +135,17 @@ export class PostmodalPage implements OnInit{
 			participating: this.participating,
 			rules: this.rules
 		}
-		this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
-		this.viewCtrl.dismiss();
+		if(this.posttype && this.sporttype && this.eventdate && this.eventtime && this.userimage && this.rules) {
+			this.viewCtrl.dismiss();
+			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+		}else if(!this.userimage){
+			alert("Please edit profile picture before adding post");
+		}
+		else if(!this.username) {
+			alert("Please edit your name before adding post");
+		}else{
+			alert("Please give all fields");
+		}
 	}
 	hiringSubmit(){
 		let post = {
@@ -150,8 +159,12 @@ export class PostmodalPage implements OnInit{
 			criteria: this.criteria,
 			participating: this.participating
 		}
-		this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
-		this.viewCtrl.dismiss();
+		if(this.posttype && this.sporttype && this.eventdate && this.eventtime && this.userimage && this.criteria) {
+			this.viewCtrl.dismiss();
+			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+		}else{
+			alert("Please supply all fields");
+		}
 	}
 	takePicture(){
 		const options: CameraOptions = {

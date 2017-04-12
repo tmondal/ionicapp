@@ -21,7 +21,7 @@ export class LoginPage {
 	constructor(
 		public navCtrl: NavController,
 		public navParams: NavParams,
-		public lodingCtrl: LoadingController,
+		public loadingCtrl: LoadingController,
 		public alertCtrl: AlertController,
 		public formbuilder: FormBuilder,
 		public authservice: AuthService
@@ -36,7 +36,7 @@ export class LoginPage {
 
 	onloginClick(){
 
-		this.loading = this.lodingCtrl.create({content: "Requesting server..."});
+		this.loading = this.loadingCtrl.create({content: "Requesting server..."});
 		this.loading.present();
 
 		if(this.loginform.invalid) {

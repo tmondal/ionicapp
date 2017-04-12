@@ -33,18 +33,18 @@
         <ion-card *ngIf="post.posttype == 'tournament'" class="post">
             <ion-item>
                 <ion-avatar item-left>
-                    <img [src]="post.userimage" style="height: 40px; width: 40px">
+                    <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
                 <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username}}</h2>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Fogot to edit name"}}</h2>
 
                 <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
             </ion-item>
             <ion-item>
                 <p>Organising a {{post.sporttype}} tournament on {{post.eventdate}}</p>
             </ion-item>
-            <ion-row>          
-                <!-- Image Shown here -->
+            <ion-row style="height: 250px; width: 100%">
+                <img [src]="post.imageurl" *ngIf="post.imageurl">
             </ion-row>
                 
             <ion-item>
@@ -53,7 +53,7 @@
                     <ion-col> Prize: {{post.prize}} </ion-col>
                 </ion-row>
             </ion-item>
-            <ion-row>
+            <ion-row *ngIf="post.userId != authuid">
                 <ion-col col-4>
                     <button ion-button icon-left clear small class="tournamentbutton">
                         <ion-icon name="person"></ion-icon>
@@ -73,33 +73,33 @@
                     </button>
                 </ion-col>
             </ion-row>
-
+            <button *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key,post.participating)" ion-button block outline style="text-transform: none">See all participants</button>
         </ion-card>
 
         <ion-card *ngIf="post.posttype == 'hiring'" class="post">
             <ion-item>
                 <ion-avatar item-left>
-                    <img [src]="post.userimage" style="height: 40px; width: 40px">
+                    <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
                 <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username}}</h2>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
 
                 <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
             </ion-item>
             <ion-item>
                 <p>Organising a {{post.sporttype}} <b>Hiring Trial</b> on {{post.eventdate}}</p>
             </ion-item>
-            <ion-row>          
-                <!-- Image Shown here -->
+            <ion-row style="height: 250px; width: 100%">          
+                <img [src]="post.imageurl" *ngIf="post.imageurl">
             </ion-row>
    
             <ion-item>
                 <ion-row>
                     <ion-col> Trial Date: {{post.eventdate}} </ion-col>
-                    <ion-col> **First come First </ion-col>
+                    <ion-col color="danger"> **First come First </ion-col>
                 </ion-row>
             </ion-item>
-            <ion-row>
+            <ion-row *ngIf="post.userId != authuid">
                 <ion-col col-4>
                     <button ion-button icon-left clear small class="hiringbutton">
                         <ion-icon name="person"></ion-icon>
@@ -113,20 +113,23 @@
                     </button>
                 </ion-col>
                 <ion-col center text-center col-4>
-                    <button ion-button outline class="hiringbutton" (click)="onCriteriaClick(post.criteria,post.posttype,post.participating,post.$key)">
+                    <button ion-button outline class="hiringbutton" (click)="onCriteriaClick(post.criteria,post.participating,post.$key,post.userId)">
                         Criteria <span style="width: 5px"></span>
                         <ion-icon name="arrow-round-forward"></ion-icon>
                     </button>
                 </ion-col>
             </ion-row>
+            <button *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key,post.participating)" ion-button block outline style="text-transform: none">See all participants</button>
         </ion-card>
+        <!-- Hiring post ends here -->
+
         <ion-card *ngIf="post.posttype == 'image'" class="post"> 
             <ion-item>
                 <ion-avatar item-left>
-                    <img [src]="post.userimage" style="height: 40px; width: 40px">
+                    <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
                 <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username}}</h2>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
 
                 <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
             </ion-item>
@@ -167,7 +170,7 @@
                    <img [src]="post.userimage" style="height: 40px; width: 40px">
                 </ion-avatar>
                 <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username}}</h2>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
 
                 <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
             </ion-item>

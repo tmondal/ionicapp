@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LoadingController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import { AngularFire } from 'angularfire2';
@@ -17,8 +18,12 @@ export class AuthService {
     profileimageurl: any;
     profile: any;
     following: any;
-
-    constructor(private af: AngularFire,public toastCtrl: ToastController) {
+    loading: any;
+    constructor(
+      public af: AngularFire,
+      public toastCtrl: ToastController,
+      public loadingCtrl: LoadingController
+    ) {
 
       af.auth.subscribe(user=>{
         if(user) {
@@ -31,6 +36,7 @@ export class AuthService {
 
     // For Authentication
     signupUser(email: string, password: string, usertype: string) : firebase.Promise<any> {
+
       return this.af.auth.createUser({
         email: email,
         password: password
@@ -59,6 +65,8 @@ export class AuthService {
     }
 
     updateCoverphoto(covernativepath){
+      this.loading = this.loadingCtrl.create({content: "Wait image uploading.."});
+      this.loading.present();
       // See cordova File plugin documentation.Get the file and store to firebase storage 
 
       (<any>window).resolveLocalFileSystemURL(covernativepath, (res) =>{
@@ -75,11 +83,15 @@ export class AuthService {
             this.imageRef.put(imgBlob).then((res)=>{
               this.showToast("blob sent");
               this.coverimageurl = res.downloadURL;
-              this.showToast('Success: coverphoto updated :)');              
               // update database accordingly
-              this.af.database.object('/users/' + this.auth.uid).update({coverimage: this.coverimageurl});   
+              this.af.database.object('/users/' + this.auth.uid).update({coverimage: this.coverimageurl});
+              this.loading.dismiss().then(()=>{
+                this.showToast('Success: coverphoto updated :)');              
+              });   
             }).catch((err)=>{
-              this.showToast('Failed to update cover photo :(');
+              this.loading.dismiss().then(()=>{
+                alert('Failed to update cover photo. May be large size and slow network:(');
+              });
             })
           }
         })
@@ -87,21 +99,32 @@ export class AuthService {
     }
     updateProfilephoto(profilenativepath){
 
+      this.loading = this.loadingCtrl.create({content: "Wait image uploading.."});
+      this.loading.present();
+
       (<any>window).resolveLocalFileSystemURL(profilenativepath, (res) =>{
         res.file((resFile)=>{
+          this.showToast("File selected with native path given");
           let reader = new FileReader();
           reader.readAsArrayBuffer(resFile);
           reader.onloadend = (evt: any) =>{
             let imgBlob = new Blob([evt.target.result],{type: 'image/jpeg'});
+            this.showToast("blob created");
             // Now store the blob(i.e raw data. One kind of file)
             this.imageRef = this.storageRef.child(`/${this.auth.uid}/profile.jpg`);
             this.imageRef.put(imgBlob).then((res)=>{
+              this.showToast("blob sent");
               this.profileimageurl = res.downloadURL;
               this.showToast('Success: profilephoto updated :)');
               // update database accordingly
               this.af.database.object('/users/' + this.auth.uid).update({profileimage: this.profileimageurl}); 
+              this.loading.dismiss().then(()=>{
+                this.showToast('Success: profile photo updated :)');              
+              });
             }).catch((err)=>{
-              this.showToast('Failed to update profile photo :(');
+              this.loading.dismiss().then(()=>{
+                alert('Failed to update profile photo. May be large size and slow network:(');
+              });
             })
           }
         })
@@ -115,13 +138,25 @@ export class AuthService {
       toast.present();
     }
     updateName(name){
-      this.af.database.object('/users/' + this.auth.uid).update({name: name});
+      this.af.database.object('/users/' + this.auth.uid).update({name: name}).then((success)=>{
+        this.showToast("Success: Name updated");
+      },(error)=>{
+        this.showToast("Faild to update name. Try again!");
+      });
     }
     updateContactno(contactno){
-      this.af.database.object('/users/' + this.auth.uid).update({contactno: contactno});
+      this.af.database.object('/users/' + this.auth.uid).update({contactno: contactno}).then((success)=>{
+        this.showToast("Success: contact no updated");
+      },(error)=>{
+        this.showToast("Failed: contact no failed to update");
+      });
     }
     updateCurrentClub(club){
-      this.af.database.object('/users/' + this.auth.uid).update({currentclub: club}); 
+      this.af.database.object('/users/' + this.auth.uid).update({currentclub: club}).then((success)=>{
+        this.showToast("Success: updated current club name");
+      },(error)=>{
+        this.showToast("Failed: current club name not updated");
+      }); 
     }
     
     followuser(targetuserId: any){

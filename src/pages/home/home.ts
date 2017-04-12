@@ -1,6 +1,7 @@
 import { Component ,OnInit } from '@angular/core';
 import { NavController,ModalController ,PopoverController} from 'ionic-angular';
 
+import { MypostPage } from '../mypost/mypost';
 import { PostPage } from '../post/post';
 import { UserprofilePage } from '../userprofile/userprofile';
 import { PostmodalPage } from '../postmodal/postmodal';
@@ -72,19 +73,19 @@ export class HomePage implements OnInit{
   }
   onRulesClick(rules,participating,postid,userId){
     let modal = this.modalCtrl.create(PostPage,{
-      paramRules: rules,
+      rules: rules,
       participating: participating,
       postid: postid,
-      userId: userId
+      userId: userId,
     });
     modal.present();
   }
-  onCriteriaClick(criteria,posttype,participating,postid){
+  onCriteriaClick(criteria,participating,postid,userId){
     let modal = this.modalCtrl.create(PostPage,{
-      paramRules: criteria,
-      posttype: posttype,
+      criteria: criteria,
       participating: participating,
-      postid: postid
+      postid: postid,
+      userId: userId,
     });
     modal.present();
   }
@@ -194,5 +195,16 @@ export class HomePage implements OnInit{
       });
     });
   }
+
+  seeParticipants(postid,participating){
+    console.log("postid: " + postid);
+    console.log("par:" + participating);
+    this.navCtrl.push(MypostPage,{
+      postid: postid,
+      userId: this.authuid,
+      participating: participating
+    });
+  }
 }
+
 
