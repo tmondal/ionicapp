@@ -28,13 +28,13 @@
 	      <ion-col col-4>
 	        <button ion-button icon-left clear small class="followerfont">
 	          <ion-icon name="people"></ion-icon>
-	          <ion-note>1k Followers</ion-note>
+	          <ion-note>{{countfollowers}} Followers</ion-note>
 	        </button>
 	      </ion-col>
 	      <ion-col col-4>
 	        <button ion-button icon-left clear small class="followingfont">
 	          <ion-icon name="people"></ion-icon>
-	          <ion-note>50 Following</ion-note>
+	          <ion-note>{{countfollowings}} Following</ion-note>
 	        </button>
 	      </ion-col>
 	      <ion-col col-4>
@@ -52,13 +52,13 @@
 		    <ion-col col-6>
 		        <button ion-button icon-left clear small class="followerfont">
 		          <ion-icon name="people"></ion-icon>
-		          <ion-note>1k Followers</ion-note>
+		          <ion-note>{{countfollowers}} Followers</ion-note>
 		        </button>
 		      </ion-col>
 		      <ion-col col-6>
 		        <button ion-button icon-left clear small class="followingfont">
 		          <ion-icon name="people"></ion-icon>
-		          <ion-note>50 Following</ion-note>
+		          <ion-note>{{countfollowings}} Following</ion-note>
 		        </button>
 		      </ion-col>
 	    </ion-row>
@@ -66,9 +66,7 @@
  	<ion-card >
 	  <ion-toolbar no-border-top style="margin-top: 5px">
 	    <ion-segment [(ngModel)]="clubprofile" style="background-color: #fff">
-	      <ion-segment-button value="relatedposts" class="middlenavbar">
-	        Posts
-	      </ion-segment-button>
+	      
 	      <ion-segment-button value="moments"  class="middlenavbar">
 	        Moments
 	      </ion-segment-button>
@@ -82,9 +80,7 @@
 	  </ion-toolbar>
  	</ion-card>
   <div [ngSwitch]="clubprofile">
-    <div *ngSwitchCase="'relatedposts'">
-    	<page-allposts [userId]="userId"></page-allposts> <!-- sending userId to allposts page -->
-    </div>
+    
     <div *ngSwitchCase="'moments'">      
     	<page-moments></page-moments>
     </div>
@@ -122,27 +118,25 @@
 	</ion-card>
 	<ion-card>
 		<ion-item>					
-			Contact:
+			Contact details:
 		</ion-item>
 		<ion-row>
-			<ion-col col-3>
+			<ion-col>
 				<ion-label>
 				<ion-icon name="call"></ion-icon>
-				<span style="width: 2px"></span> Phone:
 				</ion-label>
 			</ion-col>
-			<ion-col col-9>
+			<ion-col>
 				<ion-label> {{contactno}} </ion-label> 
 			</ion-col>
 		</ion-row>
 		<ion-row>
-			<ion-col col-3>
+			<ion-col>
 				<ion-label>
 				<ion-icon name="mail"></ion-icon>
-				<span style="width: 2px"></span>Email:
 				</ion-label>
 			</ion-col>
-			<ion-col col-9>
+			<ion-col>
 				<ion-label> {{useremail}} </ion-label>
 			 </ion-col>
 		</ion-row>
@@ -152,13 +146,13 @@
 	      <ion-col col-4>
 	        <button ion-button icon-left clear small class="followerfont">
 	          <ion-icon name="people"></ion-icon>
-	          <ion-note>1k Followers</ion-note>
+	          <ion-note>{{countfollowers}} Followers</ion-note>
 	        </button>
 	      </ion-col>
 	      <ion-col col-4>
 	        <button ion-button icon-left clear small class="followingfont">
 	          <ion-icon name="people"></ion-icon>
-	          <ion-note>50 Following</ion-note>
+	          <ion-note>{{countfollowings}} Following</ion-note>
 	        </button>
 	      </ion-col>
 	      <ion-col col-4>
@@ -176,13 +170,13 @@
 		    <ion-col col-6>
 		        <button ion-button icon-left clear small class="followerfont">
 		          <ion-icon name="people"></ion-icon>
-		          <ion-note>1k Followers</ion-note>
+		          <ion-note>{{countfollowers}} Followers</ion-note>
 		        </button>
 		      </ion-col>
 		      <ion-col col-6>
 		        <button ion-button icon-left clear small class="followingfont">
 		          <ion-icon name="people"></ion-icon>
-		          <ion-note>50 Following</ion-note>
+		          <ion-note>{{countfollowings}} Following</ion-note>
 		        </button>
 		      </ion-col>
 	    </ion-row>
@@ -190,33 +184,29 @@
  	<div>
 	  <ion-toolbar no-border-top style="margin-top: 5px">
 	    <ion-segment [(ngModel)]="playerprofile" style="background-color: #fff">
-			<ion-segment-button value="relatedposts"  class="middlenavbar">
-				Attempted
-			</ion-segment-button>
+			
 			<ion-segment-button value="moments"  class="middlenavbar">
 				Moments
 			</ion-segment-button>
-			<ion-segment-button value="achievements"  class="middlenavbar">
-				Memories
+			<ion-segment-button value="followers"  class="middlenavbar">
+				Followers
 			</ion-segment-button>
-			<ion-segment-button value="friends"  class="middlenavbar">
-				Friends
+			<ion-segment-button value="followings"  class="middlenavbar">
+				Followings
 			</ion-segment-button>
 	    </ion-segment>
 	  </ion-toolbar>
  	</div>
 	<div [ngSwitch]="playerprofile">
-		<div *ngSwitchCase="'relatedposts'">
-			<page-allposts [userId]="userId"></page-allposts>
-		</div>
+		
 		<div *ngSwitchCase="'moments'">      
-			<page-moments></page-moments>
+			<page-moments [userId]="userId" ></page-moments>
 		</div>
-		<div *ngSwitchCase="'achievements'">
-			<page-achieve></page-achieve>
+		<div *ngSwitchCase="'followers'">
+			<page-followers></page-followers>
 		</div>
-		<div *ngSwitchCase="'friends'">
-			<p>My friends</p>
+		<div *ngSwitchCase="'followings'">
+			<page-followings></page-followings>
 		</div>
 	</div>
 </ion-content>

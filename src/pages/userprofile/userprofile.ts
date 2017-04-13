@@ -3,7 +3,10 @@ import { NavController, NavParams ,PopoverController} from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 import { AuthService } from '../../providers/auth-service';
 import { EditProfilePage } from '../edit-profile/edit-profile'; 
-
+// import { AchievePage } from '../achieve/achieve';
+// import { ClubplayersPage } from '../clubplayers/clubplayers';
+// import { FollowersPage } from '../followers/followers';
+// import { FollowingsPage } from '../followings/followings';
 import { LoginPage } from '../login/login';
 @Component({
   selector: 'page-userprofile',
@@ -25,16 +28,23 @@ export class UserprofilePage implements OnInit{
 	following: boolean;
 	followingservice: any;
 	userservice: any;
-	clubprofile: String = "relatedposts";
-	playerprofile: String = "relatedposts";
+	getfollowers: any;
+	getfollowings: any;
+	countfollowers: any;
+	countfollowings: any;
+
+	clubprofile: String = "moments";
+	playerprofile: String = "moments";
+
+	
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
 		public popoverCtrl: PopoverController,
 		public af: AngularFire,
 		public authservice: AuthService
-	) { 
-	}
+	) {}
+	
 	ngOnInit(){
 		this.af.auth.subscribe(user=>{
 			if(user) {
@@ -43,10 +53,21 @@ export class UserprofilePage implements OnInit{
 		});
 		this.userId = this.navParams.get("userId");
 
-		this.followingservice = this.authservice.checkiffollowing(this.userId).subscribe(user=>{
+		this.getfollowers = this.authservice.getFollowers(this.userId).subscribe(users=>{
+			console.log("Followers: ");
+			console.log(users);
+			this.countfollowers = users.length;
+		});
+		this.getfollowings = this.authservice.getFollowings(this.userId).subscribe(users=>{
+			console.log("Followings: ");
+			console.log(users);
+			this.countfollowings = users.length;
+		});
+
+		this.authservice.checkIffollowing(this.userId).subscribe(user=>{
 			this.following = user.following;
 		});
-		this.userservice = this.authservice.getuserbyId(this.userId).subscribe(user =>{
+		this.authservice.getuserbyId(this.userId).subscribe(user =>{
 			this.usertype = user.usertype;
 			this.name = user.name;
 			this.contactno = user.contactno;
@@ -56,9 +77,10 @@ export class UserprofilePage implements OnInit{
 			this.profileimage = user.profileimage;
 		});
 	}
+	
 	ngOnDestroy(){
-		this.userservice.unsubscribe();
-		this.followingservice.unsubscribe();
+		this.getfollowers.unsubscribe();
+		this.getfollowings.unsubscribe();
 	}
 	
 	compareusertype(){
@@ -77,9 +99,11 @@ export class UserprofilePage implements OnInit{
   		}
   	}
   	follow(){
+  		this.following = true;
   		this.authservice.followuser(this.userId);
   	}
   	unfollow(){
+  		this.following = false;
   		this.authservice.unfollowuser(this.userId);
   	}
   	onEditProfile(){

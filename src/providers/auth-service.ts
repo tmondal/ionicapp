@@ -172,8 +172,14 @@ export class AuthService {
       const following = this.af.database.object("/users-following/" + this.auth.uid + "/" + targetuserId);
       following.remove();
     }
-    checkiffollowing(targetuserId: any){
+    checkIffollowing(targetuserId: any){
       this.following = this.af.database.object("/users-following/" + this.auth.uid + "/" + targetuserId);
       return this.following.take(1); // take function does unsubscribe at the end which is good
+    }
+    getFollowers(userid){
+      return this.af.database.list('/users-followers/' + userid);
+    }
+    getFollowings(userid){
+      return this.af.database.list('/users-following/' + userid);
     }
 }

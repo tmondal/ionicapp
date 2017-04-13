@@ -171,7 +171,7 @@ export class PostService {
   }
   getPosts(){     
     this.posts = this.af.database.list('/posts');
-    return this.posts.take(1);
+    return this.posts;
   }
 
   // participation logics

@@ -36,7 +36,7 @@
                     <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
                 <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Fogot to edit name"}}</h2>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
 
                 <p><ion-icon name="pin"></ion-icon><span> </span>Kolkata,Yesterday at 1.20pm</p>
             </ion-item>
@@ -49,8 +49,8 @@
                 
             <ion-item>
                 <ion-row>
-                    <ion-col> Entry Fee: {{post.entryfee}} </ion-col>
-                    <ion-col> Prize: {{post.prize}} </ion-col>
+                    <ion-col color="secondary"> Entry Fee: {{post.entryfee}} </ion-col>
+                    <ion-col color="secondary"> Prize: {{post.prize}} </ion-col>
                 </ion-row>
             </ion-item>
             <ion-row *ngIf="post.userId != authuid">
@@ -73,7 +73,7 @@
                     </button>
                 </ion-col>
             </ion-row>
-            <button *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key,post.participating)" ion-button block outline style="text-transform: none">See all participants</button>
+            <button *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key,post.participating)" ion-button block outline style="text-transform: none;margin-top: 20px">See all participants</button>
         </ion-card>
 
         <ion-card *ngIf="post.posttype == 'hiring'" class="post">
@@ -119,7 +119,7 @@
                     </button>
                 </ion-col>
             </ion-row>
-            <button *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key,post.participating)" ion-button block outline style="text-transform: none">See all participants</button>
+            <button *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key,post.participating)" ion-button block outline style="text-transform: none;margin-top: 20px">See all participants</button>
         </ion-card>
         <!-- Hiring post ends here -->
 
@@ -142,14 +142,14 @@
             <ion-row>
                 <ion-col col-4>
                     <button (click)="likePost(post.$key)" ion-button icon-center clear small class="scorebutton">
-                        <ion-icon name="thumbs-up"></ion-icon>
+                        <ion-icon name="thumbs-up" [class.gray-color]="liked == false" ></ion-icon>
                         <span style="width: 5px"></span>
                         <div>{{post.likes}}</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
                     <button (click)="dislikePost(post.$key)" ion-button icon-center clear small class="scorebutton">
-                        <ion-icon name="thumbs-down"></ion-icon>
+                        <ion-icon name="thumbs-down" [class.gray-color]="disliked == false"></ion-icon>
                         <span style="width: 5px"></span>
                         <div>{{post.dislikes}}</div>
                     </button>

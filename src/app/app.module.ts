@@ -21,7 +21,6 @@ import { TenisscorePage } from '../pages/tenisscore/tenisscore';
 import { TtscorePage } from '../pages/ttscore/ttscore';
 import { MypostPage } from '../pages/mypost/mypost';
 import { PostPage } from '../pages/post/post';
-import { AllpostsPage } from '../pages/allposts/allposts';
 import { MomentsPage } from '../pages/moments/moments';
 import { AchievePage } from '../pages/achieve/achieve';
 import { UserprofilePage } from '../pages/userprofile/userprofile';
@@ -29,6 +28,9 @@ import { UsereditoptsPage } from '../pages/usereditopts/usereditopts';
 import { EditPostPage } from '../pages/edit-post/edit-post';
 import { EditProfilePage } from '../pages/edit-profile/edit-profile';
 import { PostmoreoptPage } from '../pages/postmoreopt/postmoreopt';
+import { ClubplayersPage } from '../pages/clubplayers/clubplayers';
+import { FollowersPage } from '../pages/followers/followers';
+import { FollowingsPage } from '../pages/followings/followings';
 
 import { AuthService } from '../providers/auth-service';
 import { PostService } from '../providers/post-service';
@@ -66,14 +68,16 @@ const AuthConfig = {
     TtscorePage,
     MypostPage,
     PostPage,
-    AllpostsPage,
     MomentsPage,
     AchievePage,
     UserprofilePage,
     UsereditoptsPage,
     EditPostPage,
     EditProfilePage,
-    PostmoreoptPage
+    PostmoreoptPage,
+    ClubplayersPage,
+    FollowersPage,
+    FollowingsPage
   ],
   imports: [
     //FormsModule, for template driven form
@@ -97,14 +101,16 @@ const AuthConfig = {
     TtscorePage,
     MypostPage,
     PostPage,
-    AllpostsPage,
     MomentsPage,
     AchievePage,
     UserprofilePage,
     UsereditoptsPage,
     EditPostPage,
     EditProfilePage,
-    PostmoreoptPage
+    PostmoreoptPage,
+    ClubplayersPage,
+    FollowersPage,
+    FollowingsPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
               Camera, AuthService,PostService,StorageService ,DatePicker]
