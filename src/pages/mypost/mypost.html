@@ -16,10 +16,18 @@
  	<ion-card>
 	 	<ion-row>
 	      <ion-col>
-	        <button ion-button icon-left clear small>
+	        <button *ngIf="participating > 1" ion-button icon-left clear small>
 	          <ion-icon name="people"></ion-icon>
 	          <div style="text-transform: none">{{participating}} Teams Participating</div>
 	        </button>
+            <button *ngIf="participating == 1" ion-button icon-left clear small>
+              <ion-icon name="person"></ion-icon>
+              <div style="text-transform: none">{{participating}} Team Participating</div>
+            </button>
+            <button *ngIf="participating == 0" ion-button icon-left clear small>
+              <ion-icon name="sad"></ion-icon>
+              <div style="text-transform: none">No Teams Participating</div>
+            </button>
 	      </ion-col>
 	    </ion-row>
  	</ion-card>

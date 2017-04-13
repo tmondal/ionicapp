@@ -28,8 +28,7 @@
         </div>
     </ion-card>
 
-    <ion-list *ngFor="let post of posts">
-
+    <ion-list *ngFor="let post of posts, let i = index">
         <ion-card *ngIf="post.posttype == 'tournament'" class="post">
             <ion-item>
                 <ion-avatar item-left>
@@ -141,17 +140,17 @@
             </div>
             <ion-row>
                 <ion-col col-4>
-                    <button (click)="likePost(post.$key)" ion-button icon-center clear small class="scorebutton">
-                        <ion-icon name="thumbs-up" [class.gray-color]="liked == false" ></ion-icon>
+                    <button (click)="likePost(post.$key,i)" ion-button icon-center clear small class="scorebutton">
+                        <ion-icon name="thumbs-up" [class.gray-color]="liked[i] == 0" ></ion-icon>
                         <span style="width: 5px"></span>
-                        <div>{{post.likes}}</div>
+                        <div [class.gray-color]="liked[i] == 0">{{post.likes}}</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
-                    <button (click)="dislikePost(post.$key)" ion-button icon-center clear small class="scorebutton">
-                        <ion-icon name="thumbs-down" [class.gray-color]="disliked == false"></ion-icon>
+                    <button (click)="dislikePost(post.$key,i)" ion-button icon-center clear small class="scorebutton">
+                        <ion-icon name="thumbs-down" [class.gray-color]="disliked[i] == 0" ></ion-icon>
                         <span style="width: 5px"></span>
-                        <div>{{post.dislikes}}</div>
+                        <div [class.gray-color]="disliked[i] == 0">{{post.dislikes}}</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
@@ -215,17 +214,17 @@
             <br>
             <ion-row>
                 <ion-col col-4>
-                    <button (click)="likePost(post.$key)" ion-button icon-center clear small class="scorebutton">
-                        <ion-icon name="thumbs-up"></ion-icon>
+                    <button (click)="likePost(post.$key,i)" ion-button icon-center clear small class="scorebutton">
+                        <ion-icon name="thumbs-up" [class.gray-color]="liked[i] == 0" ></ion-icon>
                         <span style="width: 5px"></span>
-                        <div>{{post.likes}}</div>
+                        <div [class.gray-color]="liked[i] == 0">{{post.likes}}</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
-                    <button (click)="dislikePost(post.$key)" ion-button icon-center clear small class="scorebutton">
-                        <ion-icon name="thumbs-down"></ion-icon>
+                    <button (click)="dislikePost(post.$key,i)" ion-button icon-center clear small class="scorebutton">
+                        <ion-icon name="thumbs-down" [class.gray-color]="disliked[i] == 0"></ion-icon>
                         <span style="width: 5px"></span>
-                        <div>{{post.dislikes}}</div>
+                        <div [class.gray-color]="disliked[i] == 0">{{post.dislikes}}</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
