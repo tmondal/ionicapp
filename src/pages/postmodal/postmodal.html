@@ -53,20 +53,20 @@
 				<ion-card>
 					<ion-item>
 			  			<ion-label>Event Date </ion-label>
-			  			<ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="eventdate"></ion-datetime>
+			  			<ion-datetime displayFormat="DD MMM, YY" pickerFormat="DDD MMM YYYY" [(ngModel)]="eventdate"></ion-datetime>
 					</ion-item>
 				</ion-card>
 				<ion-card>
 					<ion-item>
-					  <ion-label>Event Time</ion-label>
-					  <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="eventtime"></ion-datetime>
+			  			<ion-label>Event Venue </ion-label>
+			  			<ion-input value="eventvenue" [(ngModel)] = "eventvenue" placeholder="Default: our club ground.."></ion-input>
 					</ion-item>
 				</ion-card>
 				<ion-card>
 					<ion-item>
 						<ion-row>
-							<ion-col col-10>Upload from gallery: </ion-col>
-							<ion-col col-2>
+							<ion-col col-10>Upload club/ground/achieve photo: </ion-col>
+							<ion-col col-2 style="padding-top: 25px">
 								<button (click)="chooseFile()" style="background-color: white">
 									<ion-icon name="image"></ion-icon>
 								</button>
@@ -138,8 +138,20 @@
 				</ion-card>
 				<ion-card>
 					<ion-item>
-					  <ion-label>Event Time</ion-label>
-					  <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="eventtime"></ion-datetime>
+			  			<ion-label>Event Venue </ion-label>
+			  			<ion-input value="eventvenue" [(ngModel)] = "eventvenue" placeholder="Default: our club ground.."></ion-input>
+					</ion-item>
+				</ion-card>
+				<ion-card>
+					<ion-item>
+						<ion-row>
+							<ion-col col-10>Upload club/achieve/ground photo : </ion-col>
+							<ion-col col-2 style="padding-top: 25px">
+								<button (click)="chooseFile()" style="background-color: white">
+									<ion-icon name="image"></ion-icon>
+								</button>
+							</ion-col>
+						</ion-row>
 					</ion-item>
 				</ion-card>
 				<ion-card>
@@ -186,7 +198,7 @@
 						<ion-row>
 							<ion-col col-10>Take a picture: </ion-col>
 							<ion-col col-2>
-								<button style="background-color: white">
+								<button style="background-color: white" (click)="takePicture()" >
 								 	<ion-icon name="camera"></ion-icon>
 								</button>
 							</ion-col>
@@ -201,7 +213,7 @@
 						<ion-row>
 							<ion-col col-10>Take a video: </ion-col>
 							<ion-col col-2>
-								<button style="background-color: white">
+								<button style="background-color: white" (click)="takeVideo()" >
 								 	<ion-icon name="camera"></ion-icon>
 								</button>
 							</ion-col>
@@ -246,7 +258,7 @@
 						<page-footballscore></page-footballscore>
 					</div>
 					<div *ngSwitchCase = "'cricket'">	<!-- Cricket score post -->				
-						<page-cricketscore [cricketarray] = "[posttype,sporttype,cricket]" ></page-cricketscore>
+						<page-cricketscore [crickettype] = "cricket" ></page-cricketscore>
 					</div>
 					<div *ngSwitchCase = "'hokey'">	<!-- Hokey score post -->			
 						<page-hokeyscore></page-hokeyscore>
@@ -267,6 +279,7 @@
 			<!-- Match result post starts -->
 			<div *ngSwitchCase = "'result'">			
 				<!-- place for Match result Post -->
+				<p color="danger">Not implemented yet..Sorry :(</p>
 				<ion-card>
 					<button (click)="resultSubmit()" ion-button full>Post</button>
 				</ion-card>
@@ -279,6 +292,7 @@
 			<!-- Some tips post starts -->
 			<div *ngSwitchCase = "'tips'">			
 				<!-- place for tips post -->
+				<p color="danger">Not implemented yet..Sorry :(</p>
 				<ion-card>
 					<button (click)="tipsSubmit()" ion-button full>Post</button>
 				</ion-card>

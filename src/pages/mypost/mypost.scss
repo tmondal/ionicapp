@@ -5,11 +5,8 @@ page-mypost {
 		background: #f4f4f4;
 		ion-card {
 			position: relative;
-			text-align: center;
-			margin: 0px;
-			margin-top:5px; 
+			text-align: center; 
 			padding: 0px;
-			width: 100%;
 		}
 		
 		.logo {
@@ -42,7 +39,16 @@ page-mypost {
 			width: 100%;
 			color: #fff;
 		}
-
+		.participants{
+			width: inherit;
+			margin: 0px 6px 0px 6px;
+		}
+		.item-md {
+			padding-left: 0px;
+		}
+		.item-md.item-block .item-inner{
+			padding-left: 10px;
+		}
 	}
 
 }

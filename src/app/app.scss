@@ -29,9 +29,13 @@ ion-app.md {
 .button-md {
 	margin: 0px;	
 }
-ion-app.md [padding], ion-app.md [padding] .scroll-content{
+/*ion-app.md [padding], ion-app.md [padding] .scroll-content{
 	padding: 10px;
-}
+}*/
 .list-md {
 	margin: 2px 0px 10px 0px;
+}
+.card-md {
+	width: inherit;
+	margin: 6px;
 }

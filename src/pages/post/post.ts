@@ -24,6 +24,7 @@ export class PostPage implements OnInit {
 	totalparticipators: any;
 	users: any;
 	username: any;
+	currentusername:any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams, 
@@ -36,8 +37,13 @@ export class PostPage implements OnInit {
 		this.participating = navParams.get("participating");
 		this.postid = navParams.get("postid");
 		this.userId = navParams.get("userId");
+		this.currentusername = navParams.get("username");
 	}
-	ngOnInit(){		
+	ngOnInit(){
+
+		if (!this.currentusername) {
+			alert("Please update profile before accepting challenge so that challenger can contact you :)");
+		}
 		this.participateservice = this.postservice.getParticipated(this.postid).subscribe(user=>{
 			this.participated = user.participated;
 		});

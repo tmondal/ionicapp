@@ -17,11 +17,39 @@
 <ion-content *ngIf="!compareusertype()" class="card-background-page">
 	<ion-card>
 	    <!-- cover photo -->
+	    <img id="coverimage" [src]="coverimage" *ngIf="coverimage != null">
 	    <div class="card-title">{{name}}</div>
 	    <p class="card-subtitle">We care our players..</p>
 	    <ion-card class="profilepic">
 	    	<!-- profile photo -->
+	    	<img [src]="profileimage" *ngIf="profileimage != null">
 	    </ion-card>
+	</ion-card>
+	<!-- Place location or direction or distance from current user here -->
+	<ion-card>
+		<ion-item>					
+			Contact details:
+		</ion-item>
+		<ion-row>
+			<ion-col col-2>
+				<ion-label style="text-align: right">
+				<ion-icon name="call"></ion-icon>
+				</ion-label>
+			</ion-col>
+			<ion-col>
+				<ion-label> {{contactno}} </ion-label> 
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col col-2>
+				<ion-label style="text-align: right">
+				<ion-icon name="mail"></ion-icon>
+				</ion-label>
+			</ion-col>
+			<ion-col>
+				<ion-label> {{useremail}} </ion-label>
+			 </ion-col>
+		</ion-row>
 	</ion-card>
  	<ion-card>
 	 	<ion-row *ngIf="!sameuser()">
@@ -63,34 +91,34 @@
 		      </ion-col>
 	    </ion-row>
  	</ion-card>
- 	<ion-card >
+ 	<div>
 	  <ion-toolbar no-border-top style="margin-top: 5px">
 	    <ion-segment [(ngModel)]="clubprofile" style="background-color: #fff">
 	      
 	      <ion-segment-button value="moments"  class="middlenavbar">
 	        Moments
 	      </ion-segment-button>
-	      <ion-segment-button value="achievements"  class="middlenavbar">
-	        Memories
+	      <ion-segment-button value="followers"  class="middlenavbar">
+	        Followers
 	      </ion-segment-button>
 	      <ion-segment-button value="players"  class="middlenavbar">
 	        Players
 	      </ion-segment-button>
 	    </ion-segment>
 	  </ion-toolbar>
- 	</ion-card>
-  <div [ngSwitch]="clubprofile">
-    
-    <div *ngSwitchCase="'moments'">      
-    	<page-moments></page-moments>
-    </div>
-    <div *ngSwitchCase="'achievements'">
-    	<page-achieve></page-achieve>
-    </div>
-    <div *ngSwitchCase="'players'">
-    	<p>Our players</p>
-    </div>
-  </div>
+	</div>
+	<div [ngSwitch]="clubprofile">
+
+		<div *ngSwitchCase="'moments'">      
+			<page-moments></page-moments>
+		</div>
+		<div *ngSwitchCase="'achievements'">
+			<page-followers></page-followers>
+		</div>
+		<div *ngSwitchCase="'players'">
+			<page-clubplayers></page-clubplayers>
+		</div>
+	</div>
 </ion-content>
 
 <!-- For players profile -->
@@ -121,8 +149,8 @@
 			Contact details:
 		</ion-item>
 		<ion-row>
-			<ion-col>
-				<ion-label>
+			<ion-col col-2>
+				<ion-label style="text-align: right">
 				<ion-icon name="call"></ion-icon>
 				</ion-label>
 			</ion-col>
@@ -131,8 +159,8 @@
 			</ion-col>
 		</ion-row>
 		<ion-row>
-			<ion-col>
-				<ion-label>
+			<ion-col col-2>
+				<ion-label style="text-align: right">
 				<ion-icon name="mail"></ion-icon>
 				</ion-label>
 			</ion-col>

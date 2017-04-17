@@ -54,13 +54,9 @@ export class UserprofilePage implements OnInit{
 		this.userId = this.navParams.get("userId");
 
 		this.getfollowers = this.authservice.getFollowers(this.userId).subscribe(users=>{
-			console.log("Followers: ");
-			console.log(users);
 			this.countfollowers = users.length;
 		});
 		this.getfollowings = this.authservice.getFollowings(this.userId).subscribe(users=>{
-			console.log("Followings: ");
-			console.log(users);
 			this.countfollowings = users.length;
 		});
 

@@ -1,4 +1,4 @@
-<div [ngSwitch] = "cricketarray[2]">
+<div [ngSwitch] = "crickettype">
 	<div *ngSwitchCase = "'odi'">
 		<ion-card>
 			<ion-row>
@@ -103,7 +103,6 @@
 
 
 	<div *ngSwitchCase = "'test'">	<!-- Test cricket score post -->				
-		<p>Disabled.Only format ready.Will be enabled soon :)</p>
 		<ion-card>
 			<ion-row>
 				<ion-col col-4>
@@ -128,11 +127,11 @@
 			<ion-item>
 				<ion-label>Test No:</ion-label>
 				<ion-select [(ngModel)] = "testno" >
-					<ion-option value = "test1">Test No 1</ion-option>
-					<ion-option value = "test2">Test No 2</ion-option>
-					<ion-option value = "test3">Test No 3</ion-option>
-					<ion-option value = "test4">Test No 4</ion-option>
-					<ion-option value = "test5">Test No 5</ion-option>
+					<ion-option value = "Test 1">Test No 1</ion-option>
+					<ion-option value = "Test 2">Test No 2</ion-option>
+					<ion-option value = "Test 3">Test No 3</ion-option>
+					<ion-option value = "Test 4">Test No 4</ion-option>
+					<ion-option value = "Test 5">Test No 5</ion-option>
 				</ion-select>
 			</ion-item>
 		</ion-card>
@@ -149,8 +148,8 @@
 			<ion-item>
 				<ion-label>Innings No:</ion-label>
 				<ion-select [(ngModel)] = "inningsno" >
-					<ion-option value = "innings1">Innings No 1</ion-option>
-					<ion-option value = "innings2">innings No 2</ion-option>
+					<ion-option value = "Innings 1">Innings No 1</ion-option>
+					<ion-option value = "Innings 2">innings No 2</ion-option>
 				</ion-select>
 			</ion-item>
 		</ion-card>
@@ -160,7 +159,7 @@
 					<ion-label>Runs scored:</ion-label>
 				</ion-col>
 				<ion-col col-8>
-					<ion-input value="runsone" [(ngModel)] = "runsone" placeholder="{{teamone}} runs scored..."></ion-input>
+					<ion-input value="runsscored" [(ngModel)] = "runsscored" placeholder="{{teamone}} runs scored..."></ion-input>
 				</ion-col>
 			</ion-row>
 			<ion-row>
@@ -168,7 +167,7 @@
 					<ion-label>Wicket Fallen:</ion-label>
 				</ion-col>
 				<ion-col col-8>
-					<ion-input value="wickestone" [(ngModel)] = "wickestone" placeholder="{{teamone}} wicket loss..."></ion-input>
+					<ion-input value="wickets" [(ngModel)] = "wickets" placeholder="{{teamone}} wicket lost..."></ion-input>
 				</ion-col>
 			</ion-row>
 		</ion-card>
@@ -178,7 +177,7 @@
 					<ion-label>Runs scored:</ion-label>
 				</ion-col>
 				<ion-col col-8>
-					<ion-input value="runstwo" [(ngModel)] = "runstwo" placeholder="{{teamtwo}} runs scored..."></ion-input>
+					<ion-input value="runsscored" [(ngModel)] = "runsscored" placeholder="{{teamtwo}} runs scored..."></ion-input>
 				</ion-col>
 			</ion-row>
 			<ion-row>
@@ -186,13 +185,13 @@
 					<ion-label>Wicket Fallen:</ion-label>
 				</ion-col>
 				<ion-col col-8>
-					<ion-input value="wickesttwo" [(ngModel)] = "wickesttwo" placeholder="{{teamtwo}} wicket lose..."></ion-input>
+					<ion-input value="wickets" [(ngModel)] = "wickets" placeholder="{{teamtwo}} wicket lost..."></ion-input>
 				</ion-col>
 			</ion-row>
 		</ion-card>
-		<!-- <ion-card>
+		<ion-card>
 			<button (click)="testScore()" ion-button full>Post</button>
-		</ion-card> -->
+		</ion-card>
 		<ion-card>
 			<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
 		</ion-card>

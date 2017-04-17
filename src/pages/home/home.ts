@@ -10,16 +10,17 @@ import { PostmoreoptPage } from '../postmoreopt/postmoreopt';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
 import { AngularFire } from 'angularfire2';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
 })
 
 export class HomePage implements OnInit{
 
   authuid: any;
-  posts: any;
   user: any;
   profileimage: any = null;
   currentuserId: any;
@@ -28,10 +29,15 @@ export class HomePage implements OnInit{
   currentusersubscription: any;
   imagesubscription: any;
   userimage: any = null;
+  username: any = null;
   usertype: any;
 
+  posts: any[] = [];
+  feed: any[] = [];
+  posttime: any[] = [];
   liked: any[] = [];
   disliked: any[] = [];
+  length: any;
   likes: any;
   dislikes: any;
   constructor(
@@ -45,11 +51,25 @@ export class HomePage implements OnInit{
 
   ngOnInit(){
     
-    this.postsubscription = this.postservice.getPosts().subscribe(posts =>{
-      this.posts = posts;
-      for (var i = 0; i <= this.posts.length - 1; i++) {
+
+    this.postservice.getFeed().subscribe(feed =>{
+      console.log(feed);
+      this.length = feed.length - 1;
+      for (let i = this.length,k=0; i >= 0; i--,k++) {
+        this.posts[k] = feed[i];
+      }
+
+      // Format created_at time 
+
+      for (let i = 0; i <= this.length; i++) {
+        this.posttime[i] = moment(this.posts[i].created_at).fromNow();
+      }
+
+      // Get like dislike
+
+      for (let i = 0; i <= this.length; i++) {
         if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score') {
-          this.postservice.getLikedDisliked(this.posts[i].$key).subscribe(user=>{
+          this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
             if(user.liked == undefined) {
               this.liked[i] = false;
             }else{
@@ -65,9 +85,11 @@ export class HomePage implements OnInit{
         }
       }
     });
+   
     this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
       this.authuid = user.$key;
       this.usertype = user.usertype;
+      this.username = user.name;
       this.profileimage = user.profileimage;
     });
   }
@@ -77,10 +99,52 @@ export class HomePage implements OnInit{
     authentiaction rule showing permission-denied . So i had to unsubscribe the /post link
     when home component destroys.
     */
-    this.postsubscription.unsubscribe();
+    // this.postsubscription.unsubscribe();
     this.currentusersubscription.unsubscribe();
   }
   
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+    this.postservice.getFeed().subscribe(feed =>{
+      console.log(feed);
+      this.length = feed.length - 1;
+      for (let i = this.length,k=0; i >= 0; i--,k++) {
+        this.posts[k] = feed[i];
+      }
+
+      // Format created_at time 
+
+      for (let i = 0; i <= this.length; i++) {
+        this.posttime[i] = moment(this.posts[i].created_at).fromNow();
+      }
+
+      // Get like dislike
+
+      for (let i = 0; i <= this.length; i++) {
+        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score') {
+          this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
+            if(user.liked == undefined) {
+              this.liked[i] = false;
+            }else{
+              this.liked[i] = user.liked;
+            }
+            if(user.disliked == undefined) {
+              this.disliked[i] = false;
+            }
+            else{
+              this.disliked[i] = user.disliked;
+            }
+          });
+        }
+      }
+    });
+    
+    setTimeout(() => {
+      refresher.complete();
+    }, 2000);
+  }
+
+
   onCreatePostClick(){
     // let modal = this.modalCtrl.create(PostmodalPage);
     // modal.present();
@@ -92,6 +156,7 @@ export class HomePage implements OnInit{
       participating: participating,
       postid: postid,
       userId: userId,
+      username: this.username
     });
     modal.present();
   }
@@ -101,6 +166,7 @@ export class HomePage implements OnInit{
       participating: participating,
       postid: postid,
       userId: userId,
+      username: this.username
     });
     modal.present();
   }
@@ -152,7 +218,7 @@ export class HomePage implements OnInit{
           this.postservice.updateLikesDislikes(postid,this.likes,this.dislikes);
         }
         else if(this.liked[i]) {
-          alert("One press enough to show your love :)");
+          alert("Don't press multiple times it hurts server :)");
         }
         else{
           alert("Bad engineer. Can't handle all cases :(");

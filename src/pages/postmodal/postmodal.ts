@@ -7,7 +7,7 @@ import { StorageService } from '../../providers/storage-service';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
 import { AngularFire } from 'angularfire2';
-
+import * as moment from 'moment';
 
 
 
@@ -25,7 +25,7 @@ export class PostmodalPage implements OnInit{
 	posttype: any = "tournament";
 	sporttype: any;
 	eventdate: any;
-	eventtime: any;
+	eventvenue: any = null;
 	participating: Number = 0;
 	entryfee: any = 0;
 	prize: any = 0;
@@ -35,11 +35,13 @@ export class PostmodalPage implements OnInit{
 	criteria: String[] = [];
 	criterion: any;
 
-	phototaken: boolean;
 	image: any;
 	imagesrc: any;
+	imagetaken: boolean = false;
 	nativepath: any;
-	imageurl: any = null;
+	filechoosen: boolean = false;
+	videosrc: any;
+	videotaken: boolean = false;
 	imagetitle: any;
 	likes: any = 0;
 	dislikes: any = 0;
@@ -61,9 +63,8 @@ export class PostmodalPage implements OnInit{
 		public postservice: PostService,
 		public authservice: AuthService,
 		public storageservice: StorageService
-	) {
-		this.phototaken = false;
-	}
+	) {}
+	
 	ngOnInit(){
 		/* Initially i was trying to get current user inside constructor and 
 		it got f***ed up when i logout
@@ -75,11 +76,11 @@ export class PostmodalPage implements OnInit{
 		// 	this.currentuserId = user.uid;
 		// });
 
+		
 		this.authservice.getmyprofile().subscribe((user)=>{
 			this.currentuserId = user.$key;
-			this.userimage = user.profileimage;
-			this.username = user.name;
-			console.log("My id: " + this.currentuserId);
+			// this.userimage = user.profileimage;
+			// this.username = user.name;
 		});
 	}
 
@@ -105,6 +106,9 @@ export class PostmodalPage implements OnInit{
 		this.fileChooser.open().then((uri) =>{
 			this.filePath.resolveNativePath(uri).then( (filepath) =>{
 				this.nativepath = filepath;
+				this.filechoosen = true;
+				this.imagetaken = false;
+				this.videotaken = false;
 				this.showToast('Success: File choosen :)');
 			}).catch((err)=>{
 				this.showToast('Failed: could not get native path');
@@ -122,83 +126,136 @@ export class PostmodalPage implements OnInit{
 	}
 
 	tournamentSubmit(){
-		let post = { 
+
+		let evtdate = moment(this.eventdate).format("Do MMM YY");
+		let post = {
+			created_at: Date.now(),
 			userId: this.currentuserId,
 			userimage: this.userimage,
 			username: this.username,
 			posttype: this.posttype,
 			sporttype: this.sporttype,
-			eventdate: this.eventdate,
-			eventtime: this.eventtime,
+			eventdate: evtdate,
+			eventvenue: this.eventvenue,
 			entryfee: this.entryfee,
 			prize: this.prize,
 			participating: this.participating,
 			rules: this.rules
 		}
-		if(this.posttype && this.sporttype && this.eventdate && this.eventtime && this.userimage && this.rules) {
+		if(this.posttype && this.sporttype && this.eventdate && this.userimage &&this.username && this.rules) {
 			this.viewCtrl.dismiss();
 			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
-		}else if(!this.userimage){
-			alert("Please edit profile picture before adding post");
 		}
-		else if(!this.username) {
-			alert("Please edit your name before adding post");
-		}else{
-			alert("Please give all fields");
+		else if(this.posttype && this.sporttype && this.eventdate && !this.userimage &&this.username && this.rules){
+			alert("Please edit profile picture before next post.");
+			this.viewCtrl.dismiss();
+			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+		}
+		else if(this.posttype && this.sporttype && this.eventdate && this.userimage && !this.username && this.rules) {
+			alert("Please edit your name before next post.");
+			this.viewCtrl.dismiss();
+			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+		}
+		else if(this.posttype && this.sporttype && this.eventdate && !this.userimage && !this.username && this.rules) {
+			alert("Please edit your name and profile pic before next post.");
+			this.viewCtrl.dismiss();
+			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+		}
+		else{
+			alert("Please give all fields.");
 		}
 	}
 	hiringSubmit(){
+
+		let evtdate = moment(this.eventdate).format("Do MMM YY");
 		let post = {
+			created_at: Date.now(),
 			userId: this.currentuserId,
 			userimage: this.userimage,
 			username: this.username,
 			posttype: this.posttype,
 			sporttype: this.sporttype,
-			eventdate: this.eventdate,
-			eventtime: this.eventtime,
+			eventdate: evtdate,
+			eventvenue: this.eventvenue,
 			criteria: this.criteria,
 			participating: this.participating
 		}
-		if(this.posttype && this.sporttype && this.eventdate && this.eventtime && this.userimage && this.criteria) {
+		if(this.posttype && this.sporttype && this.eventdate && this.userimage && this.username && this.criteria) {
 			this.viewCtrl.dismiss();
 			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
-		}else{
+		}else if (this.posttype && this.sporttype && this.eventdate && !this.userimage && this.username && this.criteria) {
+			alert("Please edit profile picture before next post.");
+			this.viewCtrl.dismiss();
+			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+		}
+		else if (this.posttype && this.sporttype && this.eventdate && this.userimage && !this.username && this.criteria) {
+			alert("Please edit your name before next post.");
+			this.viewCtrl.dismiss();
+			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+		}
+		else if (this.posttype && this.sporttype && this.eventdate && !this.userimage && !this.username && this.criteria) {
+			alert("Please edit your name and profile pic before next post.");
+			this.viewCtrl.dismiss();
+			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+		}
+		else{
 			alert("Please supply all fields");
 		}
 	}
 	takePicture(){
 		const options: CameraOptions = {
 			quality: 100,
+			targetWidth: 1000,
+      		targetHeight: 800,
+      		allowEdit: true,
 			sourceType: this.camera.PictureSourceType.CAMERA,
 			destinationType: this.camera.DestinationType.DATA_URL,
 			encodingType: this.camera.EncodingType.JPEG,
 			mediaType: this.camera.MediaType.PICTURE,
+			saveToPhotoAlbum: true,
 			correctOrientation: true
 		}
 
-		this.camera.getPicture(options).then((imageSrc) => {
+		this.camera.getPicture(options).then((imagedata) => {
 			
-      		this.imagesrc = 'data:image/jpeg;base64,' + imageSrc;
-			this.phototaken  =true;
-			let toast = this.toastCtrl.create({
-				message: 'Success: picture taken :)',
-				duration: 3000
-			});
-			toast.present();
+      		this.imagesrc =  imagedata;
+			this.imagetaken  = true;
+			this.filechoosen = false;
+			this.videotaken = false;
+			this.showToast('Success: picture taken :)');
 		}, (err) => {
-			
-			let toast = this.toastCtrl.create({
-				message: 'Error: during getting picture :(',
-				duration: 3000
-			});
-			toast.present();
+			this.showToast('Error: during clicking picture :(');
 		});
 	}
 	
-	
+	takeVideo(){
+		const options: CameraOptions = {
+			quality: 5,
+			targetWidth: 100,
+      		targetHeight: 100,
+			sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+			destinationType: this.camera.DestinationType.DATA_URL,
+			encodingType: this.camera.EncodingType.JPEG,
+			mediaType: this.camera.MediaType.VIDEO,
+			correctOrientation: true
+		}
+
+		this.camera.getPicture(options).then((videodata) => {
+			
+      		this.videosrc =  videodata;
+			this.videotaken  = true;
+			this.filechoosen = false;
+			this.imagetaken = false;
+			this.showToast('Success: video taken from file :)');
+		}, (err) => {
+			this.showToast('Error: during taking video :(');
+		});
+	}
 
 	mediaFileSubmit(){
+		
 		let post = {
+			created_at: Date.now(),
 			userId: this.currentuserId,
 			userimage: this.userimage,
 			username: this.username,
@@ -208,8 +265,21 @@ export class PostmodalPage implements OnInit{
 			dislikes: this.dislikes,
 			comments: this.comments
 		}
-		this.postservice.imagePost(post,this.currentuserId,this.nativepath);
-		this.viewCtrl.dismiss();
+		if (this.filechoosen && !this.imagetaken && !this.videotaken) {
+			alert("You have choosen file from device..");
+			this.postservice.fileimagePost(post,this.currentuserId,this.nativepath);
+			this.viewCtrl.dismiss();
+		}else if (this.imagetaken && !this.filechoosen && !this.videotaken) {
+			alert("You have taken picture to upload..");
+			this.postservice.cameraimagePost(post,this.currentuserId,this.imagesrc);
+			this.viewCtrl.dismiss();
+		}else if(this.videotaken && !this.imagetaken && !this.filechoosen){
+			alert("You decided to upload video form device..");
+			this.postservice.cameravideoPost(post,this.currentuserId,this.videosrc);
+			this.viewCtrl.dismiss();
+		}else{
+			alert("You must select one option among all three..");
+		}
 	}
 	
 }

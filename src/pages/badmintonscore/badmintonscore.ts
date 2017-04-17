@@ -1,4 +1,4 @@
-import { Component , OnInit} from '@angular/core';
+import { Component , OnInit } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 
@@ -9,6 +9,7 @@ import { AngularFire } from 'angularfire2';
   templateUrl: 'badmintonscore.html'
 })
 export class BadmintonscorePage implements OnInit{
+
 
 	currentuserId: any;
 	constructor(

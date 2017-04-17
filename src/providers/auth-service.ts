@@ -162,24 +162,24 @@ export class AuthService {
     followuser(targetuserId: any){
       let followuserdata = {};
 
-      followuserdata["users-followers/" + targetuserId + "/" + this.auth.uid] = {following: true};
-      followuserdata["users-following/" + this.auth.uid + "/" + targetuserId] = {following: true};
+      followuserdata["userwise-followers/" + targetuserId + "/" + this.auth.uid] = {following: true};
+      followuserdata["userwise-following/" + this.auth.uid + "/" + targetuserId] = {following: true};
       this.af.database.object('/').update(followuserdata);
     }
     unfollowuser(targetuserId: any){
-      const follower = this.af.database.object("/users-followers/" + targetuserId + "/" + this.auth.uid);
+      const follower = this.af.database.object("/userwise-followers/" + targetuserId + "/" + this.auth.uid);
       follower.remove();
-      const following = this.af.database.object("/users-following/" + this.auth.uid + "/" + targetuserId);
+      const following = this.af.database.object("/userwise-following/" + this.auth.uid + "/" + targetuserId);
       following.remove();
     }
     checkIffollowing(targetuserId: any){
-      this.following = this.af.database.object("/users-following/" + this.auth.uid + "/" + targetuserId);
+      this.following = this.af.database.object("/userwise-following/" + this.auth.uid + "/" + targetuserId);
       return this.following.take(1); // take function does unsubscribe at the end which is good
     }
     getFollowers(userid){
-      return this.af.database.list('/users-followers/' + userid);
+      return this.af.database.list('/userwise-followers/' + userid).take(1);
     }
     getFollowings(userid){
-      return this.af.database.list('/users-following/' + userid);
+      return this.af.database.list('/userwise-following/' + userid).take(1);
     }
 }

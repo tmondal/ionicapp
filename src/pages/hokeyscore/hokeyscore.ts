@@ -8,7 +8,7 @@ import { AngularFire } from 'angularfire2';
   templateUrl: 'hokeyscore.html'
 })
 export class HokeyscorePage {
-
+	
 	currentuserId: any;
 	constructor(
 		public navCtrl: NavController, 

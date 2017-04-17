@@ -8,7 +8,7 @@
 </ion-header>
 
 
-<ion-content style="margin-top: 70px" padding *ngIf="usertype == 'player'" class="card-background-page">
+<ion-content padding class="card-background-page">
 
 	<ion-card>
 		<ion-row>
@@ -37,8 +37,11 @@
 	</ion-row>
 	<ion-card>
 		<ion-row>
-			<ion-col col-8>
+			<ion-col col-8 *ngIf="usertype == 'player'">
 				<ion-label>Update profile photo: </ion-label>
+			</ion-col>
+			<ion-col col-8 *ngIf="usertype == 'club'">
+				<ion-label>Update Logo: </ion-label>
 			</ion-col>
 			<ion-col col-2 style="padding: 16px">
 				<button style="background-color: white">
@@ -60,6 +63,18 @@
 			<button style="text-transform: none" ion-button outline color="danger" (click)="onprofileCancel()">Cancel</button>
 		</ion-col>
 	</ion-row>
+	<ion-card>
+		<ion-row>
+			<ion-col col-10>
+				<ion-label>Set club location: </ion-label>
+			</ion-col>
+			<ion-col col-2 style="padding: 16px">
+				<button style="background-color: white">
+				 	<ion-icon name="map"></ion-icon>
+				</button>
+			</ion-col>
+		</ion-row>
+	</ion-card>
 	<ion-card>
 		<ion-row>
 			<ion-col>
@@ -97,7 +112,7 @@
 			<button style="text-transform: none" ion-button outline color="danger" (click)="oncontactCancel()" >Cancel</button>
 		</ion-col>
 	</ion-row>
-	<ion-card>
+	<ion-card *ngIf="usertype == 'player'">
 		<ion-row>
 			<ion-col>
 				<ion-label>Update Current Club: </ion-label>

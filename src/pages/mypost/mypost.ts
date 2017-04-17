@@ -31,9 +31,9 @@ export class MypostPage implements OnInit {
 	}
 
 	ngOnInit(){
-		this.authservice.getuserbyId(this.userId).subscribe((user)=>{
+		this.authservice.getmyprofile().subscribe((user)=>{
 			this.coverimage = user.coverimage;
-			this.username = user.username;
+			this.username = user.name;
 		});
 		this.totalservice = this.postservice.getTotalparticipation(this.postid).subscribe((users)=>{
 			console.log(users.length);
