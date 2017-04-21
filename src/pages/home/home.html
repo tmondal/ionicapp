@@ -32,12 +32,82 @@
                     </ion-avatar>                                                     
                 </ion-col>
                 <ion-col col-10 (click)="onCreatePostClick()"> 
-                    <button  ion-button clear style="text-transform: none" ><ion-note> Give a challenge to all club and player..</ion-note></button>
+                    <ion-item>
+                    <button  ion-button full clear style="text-transform: none" >
+                         Give a challenge to all club and player..
+                    </button>
+                    </ion-item>
                 </ion-col>
             </ion-row>
         </div>
     </ion-card>
-    
+
+    <ion-card>
+        <ion-item>
+            Clubs to follow:
+        </ion-item>
+ 
+        <ion-card style="box-shadow: 0px 0px 1px 0px">
+
+            <ion-slides>
+              <ion-slide *ngFor="let club of clubs, let i = index" style="height: 100%">
+                
+                <div>
+                    <ion-label>
+                        <ion-icon name="more" style="float: right" (click)="onMoreClick($event)"></ion-icon>
+                    </ion-label>
+
+                    <ion-row>
+                        <ion-col col-2></ion-col>
+                        <ion-col>
+                            <button ion-button full clear style="height: 130px">                        
+                                <ion-avatar>
+                                    <img style="width: 120px; height: 120px; border-radius: 100px " [src]="club.profileimage" *ngIf="club.profileimage">
+                                </ion-avatar>
+                            </button>
+                        </ion-col>
+                        <ion-col col-2 style="margin: auto">
+                            <button ion-button full clear>                       
+                                <ion-icon name="arrow-dropright" style="float: right"></ion-icon>
+                            </button>
+                        </ion-col>      
+                    </ion-row>
+                    <ion-row>
+                        <button ion-button full clear>
+                            {{club.name}}
+                        </button>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <button ion-button full clear style="font-size: 1.2rem">                            
+                                <ion-icon name="people"></ion-icon><span style="width: 5px"></span>
+                                {{countfollowers[i] || 0}} Followers
+                            </button>
+                        </ion-col>
+                        <ion-col>
+                            <button ion-button full clear style="font-size: 1.2rem">                            
+                                <ion-icon name="people"></ion-icon><span style="width: 5px"></span>
+                                {{countfollowings[i] || 0}} Following
+                            </button>
+                        </ion-col>
+                        <ion-col *ngIf="club.$key != authuid">
+                            <button *ngIf="!iffollowing[i]" (click)="follow(i)" ion-button full clear style="font-size: 1.2rem">                            
+                                <ion-icon name="person-add"></ion-icon><span style="width: 5px"></span>
+                                Follow
+                            </button>
+                            <button *ngIf="iffollowing[i]" (click)="unfollow(i)" ion-button full clear color="danger" style="font-size: 1.2rem">                            
+                                <ion-icon name="person"></ion-icon><span style="width: 5px"></span>
+                                Unfollow
+                            </button>
+                        </ion-col>
+                    </ion-row>
+                </div>
+              </ion-slide>
+            </ion-slides>
+        </ion-card>  
+
+    </ion-card>
+
     <ion-list *ngFor="let post of posts, let i = index">
 
         <ion-card *ngIf="post.posttype == 'tournament'" >
@@ -66,20 +136,20 @@
                 </ion-row>
             </ion-item>
             <ion-row *ngIf="post.userId != authuid">
-                <ion-col col-4>
-                    <button ion-button icon-left clear small class="tournamentbutton">
+                <ion-col>
+                    <button ion-button icon-left full clear>
                         <ion-icon name="person"></ion-icon>
                         <div>{{post.participating}} Going</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-left clear small class="tournamentbutton">
+                <ion-col>
+                    <button ion-button icon-left full clear>
                         <ion-icon name="car"></ion-icon>
                         <div>1.4km</div>
                     </button>
                 </ion-col>
-                <ion-col center text-center col-4>
-                    <button ion-button outline class="tournamentbutton" (click)="onRulesClick(post.rules,post.participating,post.$key,post.userId)">
+                <ion-col center text-center>
+                    <button ion-button block outline (click)="onRulesClick(post.rules,post.participating,post.$key,post.userId)">
                         Rules <span style="width: 5px"></span>
                         <ion-icon name="arrow-round-forward"></ion-icon>
                     </button>
@@ -114,19 +184,19 @@
             </ion-item>
             <ion-row *ngIf="post.userId != authuid">
                 <ion-col col-4>
-                    <button ion-button icon-left clear small class="hiringbutton">
+                    <button ion-button icon-left clear small>
                         <ion-icon name="person"></ion-icon>
                         <div>{{post.participating}} Going</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
-                    <button ion-button icon-left clear small class="hiringbutton">
+                    <button ion-button icon-left clear small>
                         <ion-icon name="car"></ion-icon>
                         <div>1.4km</div>
                     </button>
                 </ion-col>
                 <ion-col center text-center col-4>
-                    <button ion-button outline class="hiringbutton" (click)="onCriteriaClick(post.criteria,post.participating,post.$key,post.userId)">
+                    <button ion-button block outline (click)="onCriteriaClick(post.criteria,post.participating,post.$key,post.userId)">
                         Criteria <span style="width: 5px"></span>
                         <ion-icon name="arrow-round-forward"></ion-icon>
                     </button>
@@ -232,21 +302,21 @@
             <br>
             <ion-row>
                 <ion-col col-4>
-                    <button (click)="likePost(post.$key,i)" ion-button icon-center clear small class="scorebutton">
+                    <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
                         <ion-icon name="thumbs-up" [class.gray-color]="liked[i] == 0" ></ion-icon>
                         <span style="width: 5px"></span>
                         <div [class.gray-color]="liked[i] == 0">{{post.likes}}</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
-                    <button (click)="dislikePost(post.$key,i)" ion-button icon-center clear small class="scorebutton">
+                    <button (click)="dislikePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
                         <ion-icon name="thumbs-down" [class.gray-color]="disliked[i] == 0"></ion-icon>
                         <span style="width: 5px"></span>
                         <div [class.gray-color]="disliked[i] == 0">{{post.dislikes}}</div>
                     </button>
                 </ion-col>
                 <ion-col col-4>
-                    <button ion-button icon-center clear small class="scorebutton">
+                    <button ion-button icon-center full clear class="scorebutton">
                         <ion-icon name="chatboxes"></ion-icon>
                         <span style="width: 5px"></span>
                         <div>{{post.comments}} </div>
@@ -391,4 +461,21 @@
             </ion-row>
         </ion-card>
     </ion-list>
+
 </ion-content>
+
+
+
+<!-- <ion-content>
+    <div class="horizontal-scroll-wrapper squares">
+      <ion-card>item 1</ion-card>
+      <ion-card>item 2</ion-card>
+      <ion-card>item 3</ion-card>
+      <ion-card>item 4</ion-card>
+      <ion-card>item 5</ion-card>
+      <ion-card>item 6</ion-card>
+      <ion-card>item 7</ion-card>
+      <ion-card>item 8</ion-card>
+    </div>
+</ion-content> -->
+ 

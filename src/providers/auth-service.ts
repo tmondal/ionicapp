@@ -63,6 +63,22 @@ export class AuthService {
       this.profile =  this.af.database.object('/users/' + this.auth.uid);
       return this.profile.take(1);
     }
+    getClubstofollow(){
+      return this.af.database.list('/users/',{
+        query: {
+          orderByChild: 'usertype',
+          equalTo: 'club'
+        }
+      }).take(1);
+    }
+    getPlayerstofollow(){
+      return this.af.database.list('/users/',{
+        query: {
+          orderByChild: 'usertype',
+          equalTo: 'player'
+        }
+      }).take(1);
+    }
 
     updateCoverphoto(covernativepath){
       this.loading = this.loadingCtrl.create({content: "Wait image uploading.."});

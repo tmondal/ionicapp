@@ -5,14 +5,7 @@ page-home {
     font-weight: 100;
     padding: 0px 2.8em;
   }
-  .tournamentbutton {
-    text-transform: none;
-    font-weight: 100;
-  }
-  .hiringbutton {
-    text-transform: none;
-    font-weight: 100;
-  }
+  
   .home {
     background: #f4f4f4;
   }
@@ -28,10 +21,21 @@ page-home {
     width: 100%;
 
   }
-  ion-item{
-                         
-  }
   .gray-color{
     color: gray;
+  }
+  .col {
+    padding: 0px;
+  }
+  .button-md {
+    padding: 0px;
+  }
+
+  ion-scroll{
+     white-space: nowrap;
+     height: 150px; 
+  }
+  img{
+  margin: 10px;
   }
 }

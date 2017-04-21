@@ -20,21 +20,18 @@
 	</ion-card>
 	
 	<form [formGroup]="signupform" (ngSubmit)="oncreateUser()" novalidate>		
-		<ion-card>
-		    <ion-item *ngIf="usertype == 'player'">
+		<ion-card *ngIf="usertype == 'player'">
+		    <ion-item>
 				<ion-label floating>Enter email</ion-label>
 				<ion-input type="email" formControlName="email"></ion-input>
 		    </ion-item>
 		</ion-card>
-		<ion-item class="error" *ngIf="signupform.get('email').hasError('required') && signupform.get('email').touched">
+		<ion-item class="error" *ngIf="signupform.get('email').hasError('required') && signupform.get('email').touched && usertype == 'player'">
 	    	<ion-label color="danger">Email required ..</ion-label>
 	    </ion-item>
-	    <ion-item *ngIf="signupform.get('email').hasError('invalidEmail') && signupform.get('email').touched && !signupform.get('email').hasError('required')">
-	    	<ion-label color="danger">Not a valid formatted email</ion-label>
-	    </ion-item>
 
-		<ion-card>
-		    <ion-item *ngIf="usertype == 'club'">
+		<ion-card *ngIf="usertype == 'club'">
+		    <ion-item>
 				<ion-label floating>Enter club email</ion-label>
 				<ion-input type="email" formControlName="email"></ion-input>
 		    </ion-item>
@@ -42,6 +39,10 @@
 		<ion-item class="error" *ngIf="usertype == 'club' && signupform.get('email').hasError('required') && signupform.get('email').touched">
 		    <ion-label color="danger">Club email required ..</ion-label>
 		</ion-item>
+		
+	    <ion-item *ngIf="signupform.get('email').hasError('invalidEmail') && signupform.get('email').touched && !signupform.get('email').hasError('required')">
+	    	<ion-label color="danger">Not a valid formatted email</ion-label>
+	    </ion-item>
 
 		<ion-card *ngIf="usertype"> 
 		    <ion-item>

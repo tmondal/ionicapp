@@ -1,7 +1,7 @@
 // http://ionicframework.com/docs/v2/theming/
 
 
-// App Global Sass
+/*// App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
 // styles are for the entire app and not just one component.
@@ -13,7 +13,7 @@
 //
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
+// automatically applied to the <body> element in the app.*/
 
 ion-label {
 	font-weight: 100;
@@ -27,7 +27,9 @@ ion-app.md {
 	font-family: "Roboto", "Helvetica Neue", sans-serif;
 }
 .button-md {
-	margin: 0px;	
+	margin: 0px;
+	text-transform: none;
+	font-weight: 100;	
 }
 /*ion-app.md [padding], ion-app.md [padding] .scroll-content{
 	padding: 10px;

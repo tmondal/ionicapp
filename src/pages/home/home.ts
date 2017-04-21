@@ -40,6 +40,12 @@ export class HomePage implements OnInit{
   length: any;
   likes: any;
   dislikes: any;
+  items: any;
+  clubs: any[] = [];
+  players: any;
+  iffollowing: any[] = [];
+  countfollowers: any[] = [];
+  countfollowings:any[] = [];
   constructor(
   	public navCtrl: NavController,
   	public modalCtrl: ModalController,
@@ -50,7 +56,6 @@ export class HomePage implements OnInit{
   ) {}
 
   ngOnInit(){
-    
 
     this.postservice.getFeed().subscribe(feed =>{
       console.log(feed);
@@ -84,6 +89,25 @@ export class HomePage implements OnInit{
           });
         }
       }
+    });
+
+    this.authservice.getClubstofollow().subscribe(clubs =>{
+      this.clubs = clubs;
+      for (let i = 0; i <= clubs.length - 1; i++) {
+        this.authservice.checkIffollowing(clubs[i].$key).subscribe(user =>{
+          this.iffollowing[i] = user.following;
+        })
+        this.authservice.getFollowers(clubs[i].$key).subscribe(users=>{
+          this.countfollowers[i] = users.length;
+        });
+        this.authservice.getFollowings(clubs[i].$key).subscribe(users=>{
+          this.countfollowings[i] = users.length;
+        });
+      }
+      console.log(this.clubs);
+    });
+    this.authservice.getPlayerstofollow().subscribe(players =>{
+      this.players = players;
     });
    
     this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
@@ -138,13 +162,36 @@ export class HomePage implements OnInit{
         }
       }
     });
+
+    this.authservice.getClubstofollow().subscribe(clubs =>{
+      this.clubs = clubs;
+      console.log(clubs);
+      for (let i = 0; i <= clubs.length - 1; i++) {
+        this.authservice.checkIffollowing(clubs[i].$key).subscribe(user =>{
+          this.iffollowing[i] = user.following;
+        })
+        this.authservice.getFollowers(clubs[i].$key).subscribe(users=>{
+          this.countfollowers[i] = users.length;
+        });
+        this.authservice.getFollowings(clubs[i].$key).subscribe(users=>{
+          this.countfollowings[i] = users.length;
+        });
+      }
+    });
     
     setTimeout(() => {
       refresher.complete();
     }, 2000);
   }
 
-
+  follow(i){
+    this.iffollowing[i] = true;
+    this.authservice.followuser(this.clubs[i].$key);
+  }
+  unfollow(i){
+    this.iffollowing[i] = false;
+    this.authservice.unfollowuser(this.clubs[i].$key);
+  }
   onCreatePostClick(){
     // let modal = this.modalCtrl.create(PostmodalPage);
     // modal.present();

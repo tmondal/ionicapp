@@ -270,15 +270,7 @@ export class PostService {
   getPost(id){
     return this.af.database.object('/posts/' + id).take(1);
   }
-  // getPosts(){
-  //   this.posts = this.af.database.list('/posts',{
-  //     query: {
-  //       orderByChild: 'created_at',
-  //       endAt: Date.now()
-  //     }
-  //   });
-  //   return this.posts;
-  // }
+ 
   getFeed(){
     this.posts = this.af.database.list('/userwise-feed/' + this.fireauth.uid , {
       query: {
@@ -291,27 +283,29 @@ export class PostService {
 
   // participation logics
   getParticipated(postid: any){
-    return this.af.database.object('/posts-participator/' + postid + "/" + this.fireauth.uid);
+    return this.af.database.object('/postwise-participator/' + postid + "/" + this.fireauth.uid);
   }
   updateParticipated(postid: any,participated: boolean){
     console.log(postid);
-    const item = this.af.database.object('/posts-participator/' + postid + "/" + this.fireauth.uid);
+    const item = this.af.database.object('/postwise-participator/' + postid + "/" + this.fireauth.uid);
     item.update({participated: participated});
   }
   removeParticipated(postid: any,participated: boolean){
     console.log(postid);
-    const item = this.af.database.object('/posts-participator/' + postid + "/" + this.fireauth.uid);
+    const item = this.af.database.object('/postwise-participator/' + postid + "/" + this.fireauth.uid);
     item.remove();
   }
   getParticipating(postid: any){
-    return this.af.database.object('/posts' + postid); 
+    return this.af.database.object('/posts/' + postid); 
   }
   updateParticipating(postid: any,participating: number){
-    const item = this.af.database.object('/posts/' + postid);
-    item.update({participating: participating});
+    let updatedata = {};
+    updatedata['/posts/' + postid + '/participating'] = participating;
+    updatedata['/userwise-feed/' + this.fireauth.uid + "/" + postid + '/participating'] = participating;
+    this.af.database.object('/').update(updatedata);
   }
   getTotalparticipation(postid){
-    return this.af.database.list('/posts-participator/' + postid);
+    return this.af.database.list('/postwise-participator/' + postid);
   }
 
   // Like Dislike logics

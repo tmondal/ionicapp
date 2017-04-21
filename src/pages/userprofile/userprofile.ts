@@ -61,6 +61,8 @@ export class UserprofilePage implements OnInit{
 		});
 
 		this.authservice.checkIffollowing(this.userId).subscribe(user=>{
+			console.log("Userprofile: ");
+			console.log(user);
 			this.following = user.following;
 		});
 		this.authservice.getuserbyId(this.userId).subscribe(user =>{
