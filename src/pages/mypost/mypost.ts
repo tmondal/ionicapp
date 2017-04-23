@@ -27,7 +27,6 @@ export class MypostPage implements OnInit {
 	) {
 		this.postid = this.navParams.get("postid");
 		this.userId = this.navParams.get("userId");
-		this.participating = this.navParams.get("participating");
 	}
 
 	ngOnInit(){
@@ -36,7 +35,7 @@ export class MypostPage implements OnInit {
 			this.username = user.name;
 		});
 		this.totalservice = this.postservice.getTotalparticipation(this.postid).subscribe((users)=>{
-			console.log(users.length);
+			this.participating = users.length;
 			for (var i = 0; i <= users.length - 1; i++) {
 				this.authservice.getuserbyId(users[i].$key).subscribe(user=>{
 					this.users.push(user);

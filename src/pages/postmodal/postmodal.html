@@ -16,15 +16,15 @@
 				<ion-label> Post Type: </ion-label>
 				<ion-select [(ngModel)]="posttype">
 			      <ion-option value="tournament">Tournament</ion-option>
-			      <ion-option value="hiring">Hiring Trial</ion-option>
+			      <ion-option value="hiring">Trial for Hiring</ion-option>
 			      <ion-option value="image">Text and Video/Image</ion-option>
+			      <ion-option value="youtube">Share Youtube video</ion-option>
 			      <ion-option value="score">Score Update</ion-option>
 			      <ion-option value="result">Match Result</ion-option>
-			      <ion-option value="tips">Some Tips</ion-option>
 			    </ion-select>
 			</ion-item>
 		</ion-card>
-		<ion-card *ngIf = "(posttype != 'image') && (posttype != 'tips') ">
+		<ion-card *ngIf = "(posttype != 'image') && (posttype != 'youtube') ">
 			<ion-item>
 				<ion-label> Sport Type: </ion-label>
 				<ion-select [(ngModel)]="sporttype">
@@ -133,7 +133,7 @@
 				<ion-card>
 					<ion-item>
 			  			<ion-label>Event Date </ion-label>
-			  			<ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="eventdate"></ion-datetime>
+			  			<ion-datetime displayFormat="DD MMM, YY" pickerFormat="DDD MMM YYYY" [(ngModel)]="eventdate"></ion-datetime>
 					</ion-item>
 				</ion-card>
 				<ion-card>
@@ -192,7 +192,6 @@
 
 			<!-- video or image post starts -->
 			<div *ngSwitchCase = "'image'">			
-				<!-- place for image or video upload -->
 				<ion-card>
 					<ion-item>
 						<ion-row>
@@ -205,9 +204,9 @@
 						</ion-row>
 					</ion-item>
 				</ion-card>
-				<button ion-button clear full>
-					OR
-				</button>
+
+				<button ion-button clear full>OR</button>
+
 				<ion-card>
 					<ion-item>
 						<ion-row>
@@ -220,13 +219,28 @@
 						</ion-row>
 					</ion-item>
 				</ion-card>
-				<button ion-button clear full>
-					OR
-				</button>
+
+				<button ion-button clear full>OR</button>
+
 				<ion-card>
 					<ion-item>
 						<ion-row>
-							<ion-col col-10>Upload from gallery: </ion-col>
+							<ion-col col-10>Upload image from gallery: </ion-col>
+							<ion-col col-2>
+								<button (click)="chooseFile()" style="background-color: white">
+									<ion-icon name="image"></ion-icon>
+								</button>
+							</ion-col>
+						</ion-row>
+					</ion-item>
+				</ion-card>
+
+				<button ion-button clear full>OR</button>
+
+				<ion-card>
+					<ion-item>
+						<ion-row>
+							<ion-col col-10>Upload video from gallery: </ion-col>
 							<ion-col col-2>
 								<button (click)="chooseFile()" style="background-color: white">
 									<ion-icon name="image"></ion-icon>
@@ -289,18 +303,29 @@
 			</div>
 			<!-- Match result post ends -->
 
-			<!-- Some tips post starts -->
-			<div *ngSwitchCase = "'tips'">			
-				<!-- place for tips post -->
-				<p color="danger">Not implemented yet..Sorry :(</p>
+			<!-- Youtube post starts -->
+			<div *ngSwitchCase = "'youtube'">			
+				
 				<ion-card>
-					<button (click)="tipsSubmit()" ion-button full>Post</button>
+					<ion-item>Paste link:</ion-item>
+					<ion-item>
+						<ion-input vlaue="youtubelink" [(ngModel)]="youtubelink"></ion-input>
+					</ion-item>
+				</ion-card>
+				<ion-card>
+					<ion-item>Title:</ion-item>
+					<ion-item>
+						<ion-input vlaue="youtubetitle" [(ngModel)]="youtubetitle"></ion-input>
+					</ion-item>
+				</ion-card>
+				<ion-card>
+					<button (click)="youtubeSubmit()" ion-button full>Post</button>
 				</ion-card>
 				<ion-card>
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
 				</ion-card>
 			</div>
-			<!-- Some tips post ends -->
+			<!-- Youtube post ends -->
 		</div>
 	</ion-list>
 </ion-content>

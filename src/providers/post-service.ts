@@ -35,7 +35,7 @@ export class PostService {
     this.postnode = this.af.database.list('/posts');
     this.storageRef = firebase.storage().ref().child('images/');
   }
-  tournamentAndHiringPost(post,userId,nativepath){ // image optional
+  tournamentAndHiringPost(post,userid,nativepath){ // image optional
 
     this.loading = this.loadingCtrl.create({
       content: "Sending to server..."
@@ -58,8 +58,8 @@ export class PostService {
               post.imageurl = res.downloadURL;
               this.showToast('Success: image uploaded :)');
               updatedPostData["posts/" + newpostkey] = post;
-              updatedPostData["userwise-feed/" + userId +"/"+ newpostkey] = post;
-              this.authservice.getFollowers(userId).subscribe(followers =>{
+              updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
+              this.authservice.getFollowers(userid).subscribe(followers =>{
                 for (let i = followers.length - 1; i >= 0; i--) {
                   updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
                 }
@@ -78,8 +78,8 @@ export class PostService {
       })
     }else{
       updatedPostData["posts/" + newpostkey] = post;
-      updatedPostData["userwise-feed/" + userId +"/"+ newpostkey] = post;
-      this.authservice.getFollowers(userId).subscribe(followers =>{
+      updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
+      this.authservice.getFollowers(userid).subscribe(followers =>{
         for (let i = followers.length - 1; i >= 0; i--) {
           updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
         }
@@ -92,7 +92,7 @@ export class PostService {
 
   }
 
-  cameraimagePost(post,userId,imagesrc){
+  cameraimagePost(post,userid,imagesrc){
 
     this.loading = this.loadingCtrl.create({
       content: "Wait !! sending to server... "
@@ -123,8 +123,8 @@ export class PostService {
           post.imageurl = uploadTask.snapshot.downloadURL;
           this.showToast('Success: image sent to the server and got url:)');
           updatedPostData["posts/" + newpostkey] = post;
-          updatedPostData["userwise-feed/" + userId +"/"+ newpostkey] = post;
-          this.authservice.getFollowers(userId).subscribe(followers =>{
+          updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
+          this.authservice.getFollowers(userid).subscribe(followers =>{
             for (let i = followers.length - 1; i >= 0; i--) {
               updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
             }
@@ -143,7 +143,7 @@ export class PostService {
     }
   }
   
-  cameravideoPost(post,userId,videosrc){
+  cameravideoPost(post,userid,videosrc){
     this.loading = this.loadingCtrl.create({
       content: "Wait !! sending to server... "
     });
@@ -172,8 +172,8 @@ export class PostService {
           post.videourl = uploadTask.snapshot.downloadURL;
           this.showToast('Success: video sent to the server and got url:)');
           updatedPostData["posts/" + newpostkey] = post;
-          updatedPostData["userwise-feed/" + userId +"/"+ newpostkey] = post;
-          this.authservice.getFollowers(userId).subscribe(followers =>{
+          updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
+          this.authservice.getFollowers(userid).subscribe(followers =>{
             for (let i = followers.length - 1; i >= 0; i--) {
               updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
             }
@@ -192,7 +192,7 @@ export class PostService {
     }
   }
 
-  fileimagePost(post,userId,nativepath){
+  fileimagePost(post,userid,nativepath){
     
     this.loading = this.loadingCtrl.create({
       content: "Sending to server..."
@@ -221,8 +221,8 @@ export class PostService {
               post.imageurl = res.downloadURL;
               this.showToast('Success: image sent to the server and got url:)');
               updatedPostData["posts/" + newpostkey] = post;
-              updatedPostData["userwise-feed/" + userId +"/"+ newpostkey] = post;
-              this.authservice.getFollowers(userId).subscribe(followers =>{
+              updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
+              this.authservice.getFollowers(userid).subscribe(followers =>{
                 for (let i = followers.length - 1; i >= 0; i--) {
                   updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
                 }
@@ -244,14 +244,14 @@ export class PostService {
     }
   }
 
-  scoreAndMatchresultPost(post,userId){ // No image. Simple post
+  simplePost(post,userid){ // No image. Simple post
 
     let updatedPostData = {};
     let newpostkey = this.postnode.push().key;
 
     updatedPostData["posts/" + newpostkey] = post;
-    updatedPostData["userwise-feed/" + userId +"/"+ newpostkey] = post;
-    this.authservice.getFollowers(userId).subscribe(followers =>{
+    updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
+    this.authservice.getFollowers(userid).subscribe(followers =>{
       for (let i = followers.length - 1; i >= 0; i--) {
         updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
       }
@@ -313,7 +313,7 @@ export class PostService {
     return this.af.database.object('/postwise-likedDisliked/' + postid + "/" + this.fireauth.uid);
   }
   countLikesDislikes(postid){
-    return this.af.database.object('/posts/' + postid);
+    return this.af.database.object('/puserwise-feed/' + this.fireauth.uid +"/"+ postid);
   }
   likeDislikePost(postid,liked,disliked){
     this.af.database.object('/postwise-likedDisliked/' + postid + "/" + this.fireauth.uid).update({
@@ -322,9 +322,19 @@ export class PostService {
     });
   }
   updateLikesDislikes(postid,likes,dislikes){
-    this.af.database.object('/posts/' + postid).update({
-      likes : likes,
-      dislikes: dislikes
+
+    let likedislikedata = {};
+
+    likedislikedata["posts/" + postid + '/likes'] = likes;
+    likedislikedata["posts/" + postid + '/dislikes'] = dislikes;
+    likedislikedata["userwise-feed/" + this.fireauth.uid +"/"+ postid + '/likes'] = likes;
+    likedislikedata["userwise-feed/" + this.fireauth.uid +"/"+ postid + '/dislikes'] = dislikes;
+    this.authservice.getFollowers(this.fireauth.uid).subscribe(followers =>{
+      for (let i = followers.length - 1; i >= 0; i--) {
+        likedislikedata["userwise-feed/" + followers[i].$key +"/"+ postid + '/likes'] = likes;
+        likedislikedata["userwise-feed/" + followers[i].$key +"/"+ postid + '/dislikes'] = dislikes;
+      }
+      this.af.database.object('/').update(likedislikedata);
     });
   }
 }

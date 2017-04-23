@@ -7,7 +7,9 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { DatePicker } from '@ionic-native/date-picker';
 import { Camera} from '@ionic-native/camera';
 import { MyApp } from './app.component';
+
 import { Feedpipe } from '../pipes/feedpipe';
+import { Youtube } from '../pipes/youtube';
 
 import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
@@ -56,6 +58,7 @@ const AuthConfig = {
 @NgModule({
   declarations: [
     Feedpipe,
+    Youtube,
     MyApp,
     LoginPage,
     SignupPage,

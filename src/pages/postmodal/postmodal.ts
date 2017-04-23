@@ -49,6 +49,10 @@ export class PostmodalPage implements OnInit{
 
 	cricket: any;
 	cricketarray: any;
+
+	youtubelink: any;
+	youtubetitle: any;
+	newstr: any;
 	
 
 	constructor(
@@ -281,5 +285,50 @@ export class PostmodalPage implements OnInit{
 			alert("You must select one option among all three..");
 		}
 	}
-	
+	youtubeSubmit(){
+
+		this.replacestring();
+		let post = {
+			created_at: Date.now(),
+			userId: this.currentuserId,
+			userimage: this.userimage,
+			username: this.username,
+			posttype: this.posttype,
+			youtubelink: this.youtubelink,
+			title: this.youtubetitle,
+			likes: this.likes,
+			dislikes: this.dislikes,
+			comments: this.comments
+		}
+		if (this.youtubelink && this.youtubetitle) {
+			console.log("Youtube link: ");
+			console.log(this.youtubelink);
+			this.postservice.simplePost(post,this.currentuserId);
+			this.viewCtrl.dismiss();
+		}else if (this.youtubelink && !this.youtubetitle) {
+			alert("Proper title attract users to see the video.");
+			this.postservice.simplePost(post,this.currentuserId);
+			this.viewCtrl.dismiss();
+		}else if (!this.youtubelink && this.youtubetitle) {
+			alert("You must give a appropriate youtube link. ");
+		}else{
+			alert("Please provide all fields.");
+		}
+
+	}
+
+	replacestring(){
+		let re = /watch/;
+		if (this.youtubelink.search(re) != -1) {
+			let index = this.youtubelink.lastIndexOf("=");
+	    	this.newstr = this.youtubelink.substring(index + 1);
+	    	console.log("New str: " + this.newstr);
+	    	this.youtubelink = 'https://www.youtube.com/embed/' + this.newstr;
+		}else{
+	    	let index = this.youtubelink.lastIndexOf("/");
+	    	this.newstr = this.youtubelink.substring(index);
+	    	console.log("New str: " + this.newstr);
+	    	this.youtubelink = 'https://www.youtube.com/embed' + this.newstr;
+		}
+  	}	
 }

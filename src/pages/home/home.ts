@@ -73,7 +73,7 @@ export class HomePage implements OnInit{
       // Get like dislike
 
       for (let i = 0; i <= this.length; i++) {
-        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score') {
+        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
           this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
             if(user.liked == undefined) {
               this.liked[i] = false;
@@ -145,7 +145,7 @@ export class HomePage implements OnInit{
       // Get like dislike
 
       for (let i = 0; i <= this.length; i++) {
-        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score') {
+        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
           this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
             if(user.liked == undefined) {
               this.liked[i] = false;
@@ -233,6 +233,7 @@ export class HomePage implements OnInit{
     
     // First see if previously liked or disliked .As every post does not have this
     // function we get explicitly by postid
+    console.log("Postid: " + postid);
 
     this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
       if(user.liked === undefined) {
@@ -248,6 +249,7 @@ export class HomePage implements OnInit{
 
       this.postservice.countLikesDislikes(postid).take(1).subscribe(post =>{
 
+        console.log("Likes: " + post.likes + "Dislikes: " + post.dislikes);
         this.likes = post.likes;
         this.dislikes = post.dislikes;
 
@@ -316,11 +318,10 @@ export class HomePage implements OnInit{
     });
   }
 
-  seeParticipants(postid,participating){
+  seeParticipants(postid){
     this.navCtrl.push(MypostPage,{
       postid: postid,
       userId: this.authuid,
-      participating: participating
     });
   }
 }

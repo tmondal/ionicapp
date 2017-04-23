@@ -75,6 +75,7 @@ export class CricketscorePage implements OnInit{
 			dislikes: this.dislikes,
 			comments: this.comments,
 		}
+		
 		if (!this.teamone && !this.teamtwo ) {
 			alert("Teams name can't be empty..");
 		}else if (!this.userimage) {
@@ -85,7 +86,7 @@ export class CricketscorePage implements OnInit{
 			alert("Let the game start ..\n Better select text/image post type..");
 		}else{			
 			this.viewCtrl.dismiss();
-			this.postservice.scoreAndMatchresultPost(post,this.currentuserId);
+			this.postservice.simplePost(post,this.currentuserId);
 		}
 	}
 	testScore(){
@@ -109,6 +110,7 @@ export class CricketscorePage implements OnInit{
 			dislikes: this.dislikes,
 			comments: this.comments
 		}
+
 		if (!this.teamone && !this.teamtwo ) {
 			alert("Teams name can't be empty..");
 		}else if (!this.userimage) {
@@ -119,7 +121,7 @@ export class CricketscorePage implements OnInit{
 			alert("Let the game start ..\n Better select text/image post type..");
 		}else{			
 			this.viewCtrl.dismiss();
-			this.postservice.scoreAndMatchresultPost(post,this.currentuserId);
+			this.postservice.simplePost(post,this.currentuserId);
 		}
 	
 	}

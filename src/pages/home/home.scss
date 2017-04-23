@@ -31,11 +31,18 @@ page-home {
     padding: 0px;
   }
 
-  ion-scroll{
+  /*ion-scroll{
      white-space: nowrap;
      height: 150px; 
   }
   img{
   margin: 10px;
+  }*/
+  ion-scroll{
+  white-space: nowrap;
+  .scroll-item {
+    display: inline-block;
+    width: 200px;
   }
+}
 }
