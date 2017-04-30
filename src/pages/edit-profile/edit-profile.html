@@ -8,7 +8,7 @@
 </ion-header>
 
 
-<ion-content padding class="card-background-page">
+<ion-content style="padding: 6px" class="card-background-page">
 
 	<ion-card>
 		<ion-row>
@@ -16,12 +16,12 @@
 				<ion-label>Update cover photo: </ion-label>
 			</ion-col>
 			<ion-col col-2 style="padding: 16px">
-				<button style="background-color: white">
+				<button style="background-color: white" (click)="captureCoverimage()" >
 				 	<ion-icon name="camera"></ion-icon>
 				</button>
 			</ion-col>
 			<ion-col col-2 style="padding: 16px">
-				<button (click)="chooseCoverFile()" style="background-color: white">
+				<button (click)="selectCoverimage()" style="background-color: white">
 					<ion-icon name="image"></ion-icon>
 				</button>
 			</ion-col>
@@ -44,12 +44,12 @@
 				<ion-label>Update Logo: </ion-label>
 			</ion-col>
 			<ion-col col-2 style="padding: 16px">
-				<button style="background-color: white">
+				<button style="background-color: white" (click)="captureProfileiamge()">
 				 	<ion-icon name="camera"></ion-icon>
 				</button>
 			</ion-col>
 			<ion-col col-2 style="padding: 16px">
-				<button (click)="chooseProfileFile()" style="background-color: white">
+				<button (click)="selectProfileimage()" style="background-color: white">
 					<ion-icon name="image"></ion-icon>
 				</button>
 			</ion-col>
@@ -69,7 +69,7 @@
 				<ion-label>Set club location: </ion-label>
 			</ion-col>
 			<ion-col col-2 style="padding: 16px">
-				<button style="background-color: white">
+				<button style="background-color: white" (click)="onmapClick()" >
 				 	<ion-icon name="map"></ion-icon>
 				</button>
 			</ion-col>

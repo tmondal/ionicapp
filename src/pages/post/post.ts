@@ -1,8 +1,9 @@
 import { Component , OnInit} from '@angular/core';
-import { NavController, NavParams, ViewController} from 'ionic-angular';
+import { NavController, NavParams, ViewController, ModalController} from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
 import { UserprofilePage } from '../../pages/userprofile/userprofile';
+import { GooglemapdistancePage } from '../../pages/googlemapdistance/googlemapdistance';
 
 
 @Component({
@@ -25,10 +26,16 @@ export class PostPage implements OnInit {
 	users: any;
 	username: any;
 	currentusername:any;
+	mylat: any;
+	mylng: any;
+	postlat: any;
+	postlng: any;
+
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams, 
 		public viewCtrl: ViewController,
+		public modalCtrl: ModalController,
 		private postservice: PostService,
 		public authservice : AuthService
 	) {
@@ -38,6 +45,8 @@ export class PostPage implements OnInit {
 		this.postid = navParams.get("postid");
 		this.userId = navParams.get("userId");
 		this.currentusername = navParams.get("username");
+		this.mylat = navParams.get("lat");
+		this.mylng = navParams.get("lng");
 	}
 	ngOnInit(){
 
@@ -50,12 +59,24 @@ export class PostPage implements OnInit {
 		this.userservice = this.authservice.getuserbyId(this.userId).subscribe((user)=>{
 			this.coverimage = user.coverimage;
 			this.username = user.name;
+			this.postlat = user.longitude;
+			this.postlng = user.longitude;
 		});
 	}
 	ngOnDestroy(){
 		this.participateservice.unsubscribe();
 		this.userservice.unsubscribe();
 	}
+	// onmapClick(){
+	// 	let modal = this.modalCtrl.create(GooglemapdistancePage,
+	// 		{
+	// 			mylat: this.mylat,
+	// 			mylng: this.mylng,
+	// 			postlat: this.postlat,
+	// 			postlng: this.postlng
+	// 		});
+	// 	modal.present();
+	// }
 	onCancel(){
 		this.viewCtrl.dismiss();
 	}
@@ -72,8 +93,4 @@ export class PostPage implements OnInit {
 		this.postservice.removeParticipated(this.postid,this.participated);
 		this.postservice.updateParticipating(this.postid,this.participating);
 	}
-
-	onUsernameClick(userId){
-    	this.navCtrl.push(UserprofilePage,{userId: userId});
-  	}
 }

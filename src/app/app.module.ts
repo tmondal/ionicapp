@@ -6,8 +6,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { DatePicker } from '@ionic-native/date-picker';
 import { Camera} from '@ionic-native/camera';
+import { MediaCapture } from '@ionic-native/media-capture';
+import { GoogleMaps } from '@ionic-native/google-maps';
+import { Geolocation } from '@ionic-native/geolocation';
 import { MyApp } from './app.component';
-
 import { Feedpipe } from '../pipes/feedpipe';
 import { Youtube } from '../pipes/youtube';
 
@@ -34,6 +36,8 @@ import { PostmoreoptPage } from '../pages/postmoreopt/postmoreopt';
 import { ClubplayersPage } from '../pages/clubplayers/clubplayers';
 import { FollowersPage } from '../pages/followers/followers';
 import { FollowingsPage } from '../pages/followings/followings';
+import { GooglemapPage } from '../pages/googlemap/googlemap';
+import { GooglemapdistancePage } from '../pages/googlemapdistance/googlemapdistance';
 
 import { AuthService } from '../providers/auth-service';
 import { PostService } from '../providers/post-service';
@@ -57,6 +61,7 @@ const AuthConfig = {
 
 @NgModule({
   declarations: [
+    
     Feedpipe,
     Youtube,
     MyApp,
@@ -82,13 +87,15 @@ const AuthConfig = {
     PostmoreoptPage,
     ClubplayersPage,
     FollowersPage,
-    FollowingsPage
+    FollowingsPage,
+    GooglemapPage,
+    GooglemapdistancePage
   ],
   imports: [
     //FormsModule, for template driven form
     ReactiveFormsModule,
     AngularFireModule.initializeApp(firebaseConfig,AuthConfig),
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -115,9 +122,21 @@ const AuthConfig = {
     PostmoreoptPage,
     ClubplayersPage,
     FollowersPage,
-    FollowingsPage
+    FollowingsPage,
+    GooglemapPage,
+    GooglemapdistancePage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
-              Camera, AuthService,PostService,StorageService ,DatePicker]
+  providers: [
+      Camera,
+      MediaCapture,
+      DatePicker,
+      GoogleMaps,
+      Geolocation,
+      AuthService,
+      PostService,
+      StorageService,
+      
+      {provide: ErrorHandler, useClass: IonicErrorHandler},
+  ]
 })
 export class AppModule {}

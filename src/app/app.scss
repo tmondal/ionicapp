@@ -15,13 +15,20 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.*/
 
+* {
+	font-weight: 100;
+}
+
 ion-label {
 	font-weight: 100;
 	white-space: normal;
 }
 .toolbar-title-md {
 	font-weight: 100;
-	color: #000;
+	color: white;
+}
+.toolbar-background-md{
+	background: inherit;
 }
 ion-app.md {
 	font-family: "Roboto", "Helvetica Neue", sans-serif;
@@ -31,20 +38,10 @@ ion-app.md {
 	text-transform: none;
 	font-weight: 100;	
 }
-/*ion-app.md [padding], ion-app.md [padding] .scroll-content{
-	padding: 10px;
-}*/
 .list-md {
 	margin: 2px 0px 10px 0px;
 }
 .card-md {
 	width: inherit;
 	margin: 6px;
-}
-.toolbar-background-md {
-	background-color: #3b6b9c;
-	color: white;
-}
-.toolbar-title-md {
-	color: white;
 }

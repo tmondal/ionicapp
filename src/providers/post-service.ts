@@ -16,8 +16,10 @@ export class PostService {
   postnode: any;
   currentuser: any;
   fireauth: any;
-  storageRef: any;
+  storageimageRef: any;
+  storagevideoRef: any;
   imageRef: any;
+  videoRef: any;
   loading: any;
   progress: any = 0;
   followers: any[] = [];
@@ -28,84 +30,27 @@ export class PostService {
     public authservice: AuthService
   ) {
     af.auth.subscribe(user=>{
-        if(user) {
-          this.fireauth = user.auth;
-        }
+      if(user) {
+        this.fireauth = user.auth;
+      }
     });
     this.postnode = this.af.database.list('/posts');
-    this.storageRef = firebase.storage().ref().child('images/');
+    this.storageimageRef = firebase.storage().ref().child('images/');
+    this.storagevideoRef = firebase.storage().ref().child('videos/');
   }
-  tournamentAndHiringPost(post,userid,nativepath){ // image optional
 
-    this.loading = this.loadingCtrl.create({
-      content: "Sending to server..."
-    });
-    this.loading.present();
-
-    let updatedPostData = {};
-    let newpostkey = this.postnode.push().key;
-
-    if(nativepath) {
-      (<any>window).resolveLocalFileSystemURL(nativepath, (res) =>{
-        res.file((resFile)=>{
-          let reader = new FileReader();
-          reader.readAsArrayBuffer(resFile);
-          reader.onloadend = (evt: any) =>{
-            let imgBlob = new Blob([evt.target.result],{type: 'image/jpeg'});
-            this.imageRef = this.storageRef.child(`/${newpostkey}/main.jpg`);
-            this.imageRef.put(imgBlob).then((res)=>{
-
-              post.imageurl = res.downloadURL;
-              this.showToast('Success: image uploaded :)');
-              updatedPostData["posts/" + newpostkey] = post;
-              updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
-              this.authservice.getFollowers(userid).subscribe(followers =>{
-                for (let i = followers.length - 1; i >= 0; i--) {
-                  updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
-                }
-                this.af.database.object('/').update(updatedPostData);
-                this.loading.dismiss().then(()=>{
-                  alert("Post added without image.\n But post with image looks good :)");
-                });
-              });
-            }).catch((err)=>{
-              this.loading.dismiss().then(()=>{
-                this.showToast('Failed to upload image :(');
-              });
-            })
-          }
-        })
-      })
-    }else{
-      updatedPostData["posts/" + newpostkey] = post;
-      updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
-      this.authservice.getFollowers(userid).subscribe(followers =>{
-        for (let i = followers.length - 1; i >= 0; i--) {
-          updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
-        }
-        this.af.database.object('/').update(updatedPostData);
-        this.loading.dismiss().then(()=>{
-          alert("Post added without image.\n But post with image looks good :)");
-        });
-      });
-    }
-
-  }
 
   cameraimagePost(post,userid,imagesrc){
 
-    this.loading = this.loadingCtrl.create({
-      content: "Wait !! sending to server... "
-    });
-    this.loading.present();
 
-    let updatedPostData = {};
+    let updatedpostdata = {};
     let newpostkey = this.postnode.push().key;
     
-    // First put image to Storage and get url of the image 
+    // First put image to Storage and get url of the image
     if(imagesrc) {
+      alert("Image will be uploaded in background.\nOnce done we will show the status.");
 
-      this.imageRef = this.storageRef.child(`/${newpostkey}/main.jpg`);
+      this.imageRef = this.storageimageRef.child(`/${newpostkey}/main.jpg`);
       this.showToast("Storage ref created..");
 
       let uploadTask = this.imageRef.putString(imagesrc,'base64');
@@ -122,125 +67,82 @@ export class PostService {
         },(success) =>{
           post.imageurl = uploadTask.snapshot.downloadURL;
           this.showToast('Success: image sent to the server and got url:)');
-          updatedPostData["posts/" + newpostkey] = post;
-          updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
+          updatedpostdata["posts/" + newpostkey] = post;
+          updatedpostdata["userwise-feed/" + userid +"/"+ newpostkey] = post;
           this.authservice.getFollowers(userid).subscribe(followers =>{
             for (let i = followers.length - 1; i >= 0; i--) {
-              updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
+              updatedpostdata["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
             }
-            this.af.database.object('/').update(updatedPostData);
-            this.loading.dismiss().then(()=>{
-              alert("Post added without image.\n But post with image looks good :)");
-            });
+            this.af.database.object('/').update(updatedpostdata);
+            alert("Post added to related feeds.\n Please refress again.");
           });
         }
       );
     }
     else{
-      this.loading.dismiss().then(()=>{
-        this.showToast("Please select an image..");
-      });
-    }
-  }
-  
-  cameravideoPost(post,userid,videosrc){
-    this.loading = this.loadingCtrl.create({
-      content: "Wait !! sending to server... "
-    });
-    this.loading.present();
 
-    let updatedPostData = {};
-    let newpostkey = this.postnode.push().key;
-    
-    if(videosrc) {
-
-      this.imageRef = this.storageRef.child(`/${newpostkey}/main.mp4`);
-      this.showToast("Storage ref created..");
-
-      let uploadTask = this.imageRef.putString(videosrc,'base64');
-      this.showToast("putString called..");
-      uploadTask.on('state_changed',
-
-        (snapshot) => {
-          this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          
-        }, (error) => {
-          this.loading.dismiss().then(()=>{
-            this.showToast("Error occured during data send to server..");
-          });
-        },(success) =>{
-          post.videourl = uploadTask.snapshot.downloadURL;
-          this.showToast('Success: video sent to the server and got url:)');
-          updatedPostData["posts/" + newpostkey] = post;
-          updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
-          this.authservice.getFollowers(userid).subscribe(followers =>{
-            for (let i = followers.length - 1; i >= 0; i--) {
-              updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
-            }
-            this.af.database.object('/').update(updatedPostData);
-            this.loading.dismiss().then(()=>{
-              alert("Post added without image.\n But post with image looks good :)");
-            });
-          });
+      updatedpostdata["posts/" + newpostkey] = post;
+      updatedpostdata["userwise-feed/" + userid +"/"+ newpostkey] = post;
+      this.authservice.getFollowers(userid).subscribe(followers =>{
+        for (let i = followers.length - 1; i >= 0; i--) {
+          updatedpostdata["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
         }
-      );
-    }
-    else{
-      this.loading.dismiss().then(()=>{
-        this.showToast("Please take a video..");
+        this.af.database.object('/').update(updatedpostdata);
+        this.loading.dismiss().then(()=>{
+          alert("Post added without image.\n But post with image looks good :)");
+        });
       });
     }
   }
 
-  fileimagePost(post,userid,nativepath){
+  galleryvideoPost(post,userid,nativepath){
     
-    this.loading = this.loadingCtrl.create({
-      content: "Sending to server..."
-    });
-    this.loading.present();
-
-    let updatedPostData = {};
+    let updatedpostdata = {};
     let newpostkey = this.postnode.push().key;
 
     // See cordova File plugin documentation .
     // get the file and store to firebase storage 
-    if(nativepath) {      
+    alert("Video path: " + nativepath);
+    if(nativepath) { 
+
+      alert("Video will be uploaded in background.\nOnce done we will let you know.");
+
       (<any>window).resolveLocalFileSystemURL(nativepath, (res) =>{
         res.file((resFile)=>{
           this.showToast("File selected with native path given");
           let reader = new FileReader();
           reader.readAsArrayBuffer(resFile);
           reader.onloadend = (evt: any) =>{
-            let imgBlob = new Blob([evt.target.result],{type: 'image/jpeg'});
-            this.showToast("blob created");
+            let imgBlob = new Blob([evt.target.result],{type:  "video/mp4"});
+            this.showToast("Blob created");
             // Now store the blob(i.e raw data. One kind of file)
-            this.imageRef = this.storageRef.child(`/${newpostkey}/main.jpg`);
-            this.showToast("image ref created");
-            this.imageRef.put(imgBlob).then((res)=>{
-              this.showToast("blob sent");
-              post.imageurl = res.downloadURL;
-              this.showToast('Success: image sent to the server and got url:)');
-              updatedPostData["posts/" + newpostkey] = post;
-              updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
+            this.videoRef = this.storagevideoRef.child(`/${newpostkey}/main.mp4`);
+            this.showToast("Video ref created");
+            this.videoRef.put(imgBlob).then((res)=>{
+              this.showToast("Blob sent");
+              post.videourl = res.downloadURL;
+              this.showToast('Success: video sent to the server and got url:)');
+              updatedpostdata["posts/" + newpostkey] = post;
+              updatedpostdata["userwise-feed/" + userid +"/"+ newpostkey] = post;
               this.authservice.getFollowers(userid).subscribe(followers =>{
                 for (let i = followers.length - 1; i >= 0; i--) {
-                  updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
+                  updatedpostdata["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
                 }
-                this.af.database.object('/').update(updatedPostData);
-                this.loading.dismiss().then(()=>{
-                  alert("Post added without image.\n But post with image looks good :)");
-                });
+                this.af.database.object('/').update(updatedpostdata);
+                alert("Video added to related feeds.\n Now refress again.");
               });
             }).catch((err)=>{
-              this.loading.dismiss().then(()=>{
-                this.showToast('Failed to upload image :(');
-              });
+              alert(err);
             })
           }
+        },err=>{
+          alert(err);
         })
+      },(error)=>{
+        alert(error);
       })
     }else{
-      this.showToast("Please select an image..");
+      this.showToast("Please select a video..");
     }
   }
 
@@ -277,7 +179,7 @@ export class PostService {
         orderByChild: 'created_at',
         endAt: Date.now()
       }
-    }).take(1);
+    });
     return this.posts;
   }
 
@@ -313,7 +215,7 @@ export class PostService {
     return this.af.database.object('/postwise-likedDisliked/' + postid + "/" + this.fireauth.uid);
   }
   countLikesDislikes(postid){
-    return this.af.database.object('/puserwise-feed/' + this.fireauth.uid +"/"+ postid);
+    return this.af.database.object('/userwise-feed/' + this.fireauth.uid +"/"+ postid);
   }
   likeDislikePost(postid,liked,disliked){
     this.af.database.object('/postwise-likedDisliked/' + postid + "/" + this.fireauth.uid).update({

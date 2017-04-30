@@ -1,5 +1,6 @@
 import { Component , OnInit} from '@angular/core';
 import { Camera ,CameraOptions} from '@ionic-native/camera';
+import { MediaCapture } from '@ionic-native/media-capture';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { NavController, NavParams, ViewController, ToastController} from 'ionic-angular';
@@ -35,13 +36,16 @@ export class PostmodalPage implements OnInit{
 	criteria: String[] = [];
 	criterion: any;
 
-	image: any;
-	imagesrc: any;
+	selectimagedata: any;
+
+	cameraimagedata: any;
+	galleryimagedata: any;
+	galleryvideodata: any;
 	imagetaken: boolean = false;
-	nativepath: any;
-	filechoosen: boolean = false;
-	videosrc: any;
-	videotaken: boolean = false;
+	galleryimage: boolean = false;
+	galleryvideo: boolean = false;
+
+
 	imagetitle: any;
 	likes: any = 0;
 	dislikes: any = 0;
@@ -62,6 +66,7 @@ export class PostmodalPage implements OnInit{
 		public toastCtrl: ToastController,
 		public af: AngularFire,
 		public camera: Camera,
+		public mediaCapture: MediaCapture,
 		private fileChooser: FileChooser,
 		private filePath: FilePath,
 		public postservice: PostService,
@@ -83,8 +88,8 @@ export class PostmodalPage implements OnInit{
 		
 		this.authservice.getmyprofile().subscribe((user)=>{
 			this.currentuserId = user.$key;
-			// this.userimage = user.profileimage;
-			// this.username = user.name;
+			this.userimage = user.profileimage;
+			this.username = user.name;
 		});
 	}
 
@@ -106,21 +111,100 @@ export class PostmodalPage implements OnInit{
 	onCriteriaDel(i){
 		this.criteria.splice(i,1);
 	}
-	chooseFile(){
-		this.fileChooser.open().then((uri) =>{
-			this.filePath.resolveNativePath(uri).then( (filepath) =>{
-				this.nativepath = filepath;
-				this.filechoosen = true;
-				this.imagetaken = false;
-				this.videotaken = false;
-				this.showToast('Success: File choosen :)');
-			}).catch((err)=>{
-				this.showToast('Failed: could not get native path');
-			})
-		}).catch((err)=>{
-			this.showToast('Failed! Try again :( ');
-		})
+
+	
+	// Capture photo using camera
+	capturePictureByCamera(){
+		const options: CameraOptions = {
+			quality: 100,
+			targetWidth: 400,
+      		targetHeight: 400,
+      		allowEdit: true,
+			sourceType: this.camera.PictureSourceType.CAMERA,
+			destinationType: this.camera.DestinationType.DATA_URL,
+			encodingType: this.camera.EncodingType.JPEG,
+			mediaType: this.camera.MediaType.PICTURE,
+			saveToPhotoAlbum: true,
+			correctOrientation: true
+		}
+
+		this.camera.getPicture(options).then((imagedata) => {
+			
+      		this.cameraimagedata =  imagedata;
+			this.imagetaken  = true;
+			this.galleryimage = false;
+			this.galleryvideo = false;
+			this.showToast('Success: picture taken :)');
+		}, (err) => {
+			this.showToast('Error: during clicking picture :(');
+		});
+		
 	}
+	captureVideoByCamera(){
+		let options = { quality: 0 };
+		this.mediaCapture.captureVideo(options).then((video)=>{
+			alert("Success: Video captured.");
+			alert("Now select the video from gallery.");
+		},(error)=>{
+			alert("Error: can not capture video.\nBut you can take from gallery.");
+		}).then(()=>{
+			this.selectGalleryVideo();
+		});
+	}
+
+	selectGalleryImage(){
+		const options: CameraOptions = {
+			quality: 100,
+			targetWidth: 400,
+      		targetHeight: 400,
+      		allowEdit: true,
+			sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+			destinationType: this.camera.DestinationType.DATA_URL,
+			encodingType: this.camera.EncodingType.JPEG,
+			mediaType: this.camera.MediaType.PICTURE,
+			correctOrientation: true
+		}
+
+		this.camera.getPicture(options).then((imagedata) => {
+			
+      		this.galleryimagedata =  imagedata;
+			this.imagetaken  = false;
+			this.galleryimage = true;
+			this.galleryvideo = false;
+			this.showToast('Success: image selected :)');
+		}, (err) => {
+			this.showToast('Error: during selecting picture :(');
+		})
+		
+	}
+	// select video form gallery using camera options
+	selectGalleryVideo(){
+
+		const options: CameraOptions = {
+			quality: 100,
+			targetHeight: 250,
+			targetWidth: 150,
+			sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+			destinationType: this.camera.DestinationType.DATA_URL,
+			encodingType: this.camera.EncodingType.JPEG,
+			mediaType: this.camera.MediaType.VIDEO
+		}
+
+		this.camera.getPicture(options).then((videodata) => {
+			
+      		this.galleryvideodata = "file://" + videodata; // File chooser was giving this format
+      		alert(videodata);
+			this.imagetaken  = false;
+			this.galleryimage = false;
+			this.galleryvideo = true;
+			this.showToast('Success: video selected from gallery :)');
+		}, (err) => {
+			this.showToast('Error: during selecting video :(');
+		});
+
+	}
+
+
 	showToast(message){
 	    let toast = this.toastCtrl.create({
 	      message: message,
@@ -148,27 +232,53 @@ export class PostmodalPage implements OnInit{
 		}
 		if(this.posttype && this.sporttype && this.eventdate && this.userimage &&this.username && this.rules) {
 			this.viewCtrl.dismiss();
-			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+			if (this.imagetaken && !this.galleryimage) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+			}else if (this.galleryimage && !this.imagetaken) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+			}else{
+				this.postservice.cameraimagePost(post,this.currentuserId,null);
+			}
 		}
 		else if(this.posttype && this.sporttype && this.eventdate && !this.userimage &&this.username && this.rules){
 			alert("Please edit profile picture before next post.");
 			this.viewCtrl.dismiss();
-			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+			if (this.imagetaken && !this.galleryimage) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+			}else if (this.galleryimage && !this.imagetaken) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+			}else{
+				this.postservice.cameraimagePost(post,this.currentuserId,null);
+			}
 		}
 		else if(this.posttype && this.sporttype && this.eventdate && this.userimage && !this.username && this.rules) {
 			alert("Please edit your name before next post.");
 			this.viewCtrl.dismiss();
-			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+			if (this.imagetaken && !this.galleryimage) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+			}else if (this.galleryimage && !this.imagetaken) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+			}else{
+				this.postservice.cameraimagePost(post,this.currentuserId,null);
+			}
 		}
 		else if(this.posttype && this.sporttype && this.eventdate && !this.userimage && !this.username && this.rules) {
 			alert("Please edit your name and profile pic before next post.");
 			this.viewCtrl.dismiss();
-			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+			if (this.imagetaken && !this.galleryimage) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+			}else if (this.galleryimage && !this.imagetaken) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+			}else{
+				this.postservice.cameraimagePost(post,this.currentuserId,null);
+			}
 		}
 		else{
 			alert("Please give all fields.");
 		}
 	}
+
+
 	hiringSubmit(){
 
 		let evtdate = moment(this.eventdate).format("Do MMM YY");
@@ -186,77 +296,53 @@ export class PostmodalPage implements OnInit{
 		}
 		if(this.posttype && this.sporttype && this.eventdate && this.userimage && this.username && this.criteria) {
 			this.viewCtrl.dismiss();
-			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+			if (this.imagetaken && !this.galleryimage) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+			}else if (this.galleryimage && !this.imagetaken) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+			}else{
+				this.postservice.cameraimagePost(post,this.currentuserId,null);
+			}
 		}else if (this.posttype && this.sporttype && this.eventdate && !this.userimage && this.username && this.criteria) {
 			alert("Please edit profile picture before next post.");
 			this.viewCtrl.dismiss();
-			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+			if (this.imagetaken && !this.galleryimage) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+			}else if (this.galleryimage && !this.imagetaken) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+			}else{
+				this.postservice.cameraimagePost(post,this.currentuserId,null);
+			}
 		}
 		else if (this.posttype && this.sporttype && this.eventdate && this.userimage && !this.username && this.criteria) {
 			alert("Please edit your name before next post.");
 			this.viewCtrl.dismiss();
-			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+			if (this.imagetaken && !this.galleryimage) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+			}else if (this.galleryimage && !this.imagetaken) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+			}else{
+				this.postservice.cameraimagePost(post,this.currentuserId,null);
+			}
 		}
 		else if (this.posttype && this.sporttype && this.eventdate && !this.userimage && !this.username && this.criteria) {
 			alert("Please edit your name and profile pic before next post.");
 			this.viewCtrl.dismiss();
-			this.postservice.tournamentAndHiringPost(post,this.currentuserId,this.nativepath);
+			if (this.imagetaken && !this.galleryimage) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+			}else if (this.galleryimage && !this.imagetaken) {
+				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+			}else{
+				this.postservice.cameraimagePost(post,this.currentuserId,null);
+			}
 		}
 		else{
 			alert("Please supply all fields");
 		}
 	}
-	takePicture(){
-		const options: CameraOptions = {
-			quality: 100,
-			targetWidth: 1000,
-      		targetHeight: 800,
-      		allowEdit: true,
-			sourceType: this.camera.PictureSourceType.CAMERA,
-			destinationType: this.camera.DestinationType.DATA_URL,
-			encodingType: this.camera.EncodingType.JPEG,
-			mediaType: this.camera.MediaType.PICTURE,
-			saveToPhotoAlbum: true,
-			correctOrientation: true
-		}
 
-		this.camera.getPicture(options).then((imagedata) => {
-			
-      		this.imagesrc =  imagedata;
-			this.imagetaken  = true;
-			this.filechoosen = false;
-			this.videotaken = false;
-			this.showToast('Success: picture taken :)');
-		}, (err) => {
-			this.showToast('Error: during clicking picture :(');
-		});
-	}
 	
-	takeVideo(){
-		const options: CameraOptions = {
-			quality: 5,
-			targetWidth: 100,
-      		targetHeight: 100,
-			sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
-			destinationType: this.camera.DestinationType.DATA_URL,
-			encodingType: this.camera.EncodingType.JPEG,
-			mediaType: this.camera.MediaType.VIDEO,
-			correctOrientation: true
-		}
-
-		this.camera.getPicture(options).then((videodata) => {
-			
-      		this.videosrc =  videodata;
-			this.videotaken  = true;
-			this.filechoosen = false;
-			this.imagetaken = false;
-			this.showToast('Success: video taken from file :)');
-		}, (err) => {
-			this.showToast('Error: during taking video :(');
-		});
-	}
-
-	mediaFileSubmit(){
+	textAndImageVideoSubmit(){
 		
 		let post = {
 			created_at: Date.now(),
@@ -269,22 +355,24 @@ export class PostmodalPage implements OnInit{
 			dislikes: this.dislikes,
 			comments: this.comments
 		}
-		if (this.filechoosen && !this.imagetaken && !this.videotaken) {
-			alert("You have choosen file from device..");
-			this.postservice.fileimagePost(post,this.currentuserId,this.nativepath);
+		if (this.imagetaken && !this.galleryimage && !this.galleryvideo) {
+			alert("You captured an image using camera.");
 			this.viewCtrl.dismiss();
-		}else if (this.imagetaken && !this.filechoosen && !this.videotaken) {
-			alert("You have taken picture to upload..");
-			this.postservice.cameraimagePost(post,this.currentuserId,this.imagesrc);
+			this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+		}else if (this.galleryimage && !this.imagetaken && !this.galleryvideo) {
+			alert("You selected an image from gallery.");
 			this.viewCtrl.dismiss();
-		}else if(this.videotaken && !this.imagetaken && !this.filechoosen){
-			alert("You decided to upload video form device..");
-			this.postservice.cameravideoPost(post,this.currentuserId,this.videosrc);
+			this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+		}else if (this.galleryvideo && !this.imagetaken && !this.galleryimage) {
+			alert("You selected a video from gallery.");
 			this.viewCtrl.dismiss();
-		}else{
-			alert("You must select one option among all three..");
+			this.postservice.galleryvideoPost(post,this.currentuserId,this.galleryvideodata);
+		}
+		else{
+			alert("You must select one option among all options..");
 		}
 	}
+
 	youtubeSubmit(){
 
 		this.replacestring();
@@ -301,8 +389,6 @@ export class PostmodalPage implements OnInit{
 			comments: this.comments
 		}
 		if (this.youtubelink && this.youtubetitle) {
-			console.log("Youtube link: ");
-			console.log(this.youtubelink);
 			this.postservice.simplePost(post,this.currentuserId);
 			this.viewCtrl.dismiss();
 		}else if (this.youtubelink && !this.youtubetitle) {
@@ -322,12 +408,10 @@ export class PostmodalPage implements OnInit{
 		if (this.youtubelink.search(re) != -1) {
 			let index = this.youtubelink.lastIndexOf("=");
 	    	this.newstr = this.youtubelink.substring(index + 1);
-	    	console.log("New str: " + this.newstr);
 	    	this.youtubelink = 'https://www.youtube.com/embed/' + this.newstr;
 		}else{
 	    	let index = this.youtubelink.lastIndexOf("/");
 	    	this.newstr = this.youtubelink.substring(index);
-	    	console.log("New str: " + this.newstr);
 	    	this.youtubelink = 'https://www.youtube.com/embed' + this.newstr;
 		}
   	}	

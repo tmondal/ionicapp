@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, ViewController ,ToastController} from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
-import { FileChooser } from '@ionic-native/file-chooser';
-import { FilePath } from '@ionic-native/file-path';
+import { Camera ,CameraOptions} from '@ionic-native/camera';
+import { GooglemapPage } from '../../pages/googlemap/googlemap';
 
 import { AuthService } from '../../providers/auth-service';
 
 @Component({
   selector: 'page-edit-profile',
   templateUrl: 'edit-profile.html',
-  providers: [FileChooser,FilePath]
 })
 export class EditProfilePage implements OnInit{
 
@@ -19,14 +18,15 @@ export class EditProfilePage implements OnInit{
 	contactno: any = null;
 	currentclub: any = null;
 	authsubscription: any;
-	profilenativepath: any;
-	covernativepath: any;
 	coverselected: boolean = false;
 	profileselected: boolean = false;
 	nameselected: boolean = false;
 	contactselected: boolean = false;
 	clubselected: boolean = false;
-
+	selectimagedata: any;
+	cameraimagedata: any;
+	imagetaken: boolean = false;
+	galleryimage: boolean = false;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -34,8 +34,7 @@ export class EditProfilePage implements OnInit{
 		public toastCtrl: ToastController,
 		public af: AngularFire,
 		public authservice: AuthService,
-		private fileChooser: FileChooser,
-		private filePath: FilePath
+		public camera: Camera,
 	) {}
 
 	ngOnInit(){		
@@ -49,35 +48,142 @@ export class EditProfilePage implements OnInit{
 			this.name = user.name;
 			this.contactno = user.contactno;
 			this.currentclub = user.currentclub;
-			console.log(user);
 		});
 	}
-	chooseCoverFile(){
-		this.fileChooser.open().then((uri) =>{
-			this.filePath.resolveNativePath(uri).then( (filepath) =>{
-				this.covernativepath = filepath;
-				this.showToast('Success: File choosen :-)');
-				this.coverselected = true;
-			}).catch((err)=>{
-				this.showToast('Failed: could not get native path');
-			})
-		}).catch((err)=>{
-			this.showToast('Failed to choose file :-( ');
-		})
+	// chooseCoverFile(){
+	// 	this.fileChooser.open().then((uri) =>{
+	// 		this.filePath.resolveNativePath(uri).then( (filepath) =>{
+	// 			this.covernativepath = filepath;
+	// 			this.showToast('Success: File choosen :-)');
+	// 			this.coverselected = true;
+	// 		}).catch((err)=>{
+	// 			this.showToast('Failed: could not get native path');
+	// 		})
+	// 	}).catch((err)=>{
+	// 		this.showToast('Failed to choose file :-( ');
+	// 	})
+	// }
+	// chooseProfileFile(){
+	// 	this.fileChooser.open().then((uri) =>{
+	// 		this.filePath.resolveNativePath(uri).then( (filepath) =>{
+	// 			this.profilenativepath = filepath;
+	// 			this.showToast('Success: File choosen :-)');
+	// 			this.profileselected = true;
+	// 		}).catch((err)=>{
+	// 			this.showToast('Failed: could not get native path');
+	// 		})
+	// 	}).catch((err)=>{
+	// 		this.showToast('Failed to choose file :-( ');
+	// 	})
+	// }
+
+	selectCoverimage(){
+		const options: CameraOptions = {
+			quality: 100,
+			targetWidth: 1000,
+      		targetHeight: 800,
+      		allowEdit: true,
+			sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+			destinationType: this.camera.DestinationType.DATA_URL,
+			encodingType: this.camera.EncodingType.JPEG,
+			mediaType: this.camera.MediaType.PICTURE,
+			saveToPhotoAlbum: true,
+			correctOrientation: true
+		}
+
+		this.camera.getPicture(options).then((imagedata) => {
+			
+      		this.selectimagedata =  imagedata;
+      		this.imagetaken  = false;
+			this.galleryimage = true;
+			this.coverselected = true;
+			this.showToast('Success: picture taken :)');
+		}, (err) => {
+			this.showToast('Error: during selecting picture :(');
+		});
 	}
-	chooseProfileFile(){
-		this.fileChooser.open().then((uri) =>{
-			this.filePath.resolveNativePath(uri).then( (filepath) =>{
-				this.profilenativepath = filepath;
-				this.showToast('Success: File choosen :-)');
-				this.profileselected = true;
-			}).catch((err)=>{
-				this.showToast('Failed: could not get native path');
-			})
-		}).catch((err)=>{
-			this.showToast('Failed to choose file :-( ');
-		})
+
+	// Capture photo using camera
+	captureCoverimage(){
+		const options: CameraOptions = {
+			quality: 100,
+			targetWidth: 1000,
+      		targetHeight: 800,
+      		allowEdit: true,
+			sourceType: this.camera.PictureSourceType.CAMERA,
+			destinationType: this.camera.DestinationType.DATA_URL,
+			encodingType: this.camera.EncodingType.JPEG,
+			mediaType: this.camera.MediaType.PICTURE,
+			saveToPhotoAlbum: true,
+			correctOrientation: true
+		}
+
+		this.camera.getPicture(options).then((imagedata) => {
+			
+      		this.cameraimagedata =  imagedata;
+			this.imagetaken  = true;
+			this.galleryimage = false;
+			this.coverselected = true;
+			this.showToast('Success: picture taken :)');
+		}, (err) => {
+			this.showToast('Error: during clicking picture :(');
+		});
+		
 	}
+	selectProfileimage(){
+		const options: CameraOptions = {
+			quality: 100,
+			targetWidth: 1000,
+      		targetHeight: 800,
+      		allowEdit: true,
+			sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+			destinationType: this.camera.DestinationType.DATA_URL,
+			encodingType: this.camera.EncodingType.JPEG,
+			mediaType: this.camera.MediaType.PICTURE,
+			saveToPhotoAlbum: true,
+			correctOrientation: true
+		}
+
+		this.camera.getPicture(options).then((imagedata) => {
+			
+      		this.selectimagedata =  imagedata;
+      		this.imagetaken  = false;
+			this.galleryimage = true;
+			this.profileselected = true;
+			this.showToast('Success: picture taken :)');
+		}, (err) => {
+			this.showToast('Error: during selecting picture :(');
+		});
+	}
+
+	// Capture photo using camera
+	captureProfileiamge(){
+		const options: CameraOptions = {
+			quality: 100,
+			targetWidth: 1000,
+      		targetHeight: 800,
+      		allowEdit: true,
+			sourceType: this.camera.PictureSourceType.CAMERA,
+			destinationType: this.camera.DestinationType.DATA_URL,
+			encodingType: this.camera.EncodingType.JPEG,
+			mediaType: this.camera.MediaType.PICTURE,
+			saveToPhotoAlbum: true,
+			correctOrientation: true
+		}
+
+		this.camera.getPicture(options).then((imagedata) => {
+			
+      		this.cameraimagedata =  imagedata;
+			this.imagetaken  = true;
+			this.galleryimage = false;
+			this.profileselected = true;
+			this.showToast('Success: picture taken :)');
+		}, (err) => {
+			this.showToast('Error: during clicking picture :(');
+		});
+		
+	}
+
 	showToast(message){
 	    let toast = this.toastCtrl.create({
 	      message: message,
@@ -88,10 +194,15 @@ export class EditProfilePage implements OnInit{
 
 	oncoverSubmit(){
 		this.coverselected = false;
-		if(this.covernativepath) {			
-			this.authservice.updateCoverphoto(this.covernativepath);
-		}else{
-			this.showToast("Please select a file (-_-)");
+		if(this.galleryimage && !this.imagetaken) {
+			alert("You have selected an image.");			
+			this.authservice.updateCoverphoto(this.selectimagedata);
+		}else if (this.imagetaken && !this.galleryimage) {
+			alert("You have captured an image.");			
+			this.authservice.updateCoverphoto(this.cameraimagedata);
+		}
+		else{
+			this.showToast("Please capture or select an image.");
 		}
 	}
 	oncoverCancel(){
@@ -99,14 +210,22 @@ export class EditProfilePage implements OnInit{
 	}
 	onprofileSubmit(){
 		this.profileselected = false;
-		if(this.profilenativepath) {
-			this.authservice.updateProfilephoto(this.profilenativepath);
-		}else{
-			this.showToast("Please select a file (-_-)");
+		if(this.galleryimage && !this.imagetaken) {
+			alert("You have selected an image.");
+			this.authservice.updateProfilephoto(this.selectimagedata);
+		}else if (this.imagetaken && !this.galleryimage) {
+			alert("You have captured an image.");			
+			this.authservice.updateProfilephoto(this.cameraimagedata);
+		}
+		else{
+			this.showToast("Please capture or select an image.");
 		}
 	}
 	onprofileCancel(){
 		this.profileselected = false;
+	}
+	onmapClick(){
+		this.navCtrl.push(GooglemapPage);
 	}
 	nameTouched(){
 		this.nameselected = true;

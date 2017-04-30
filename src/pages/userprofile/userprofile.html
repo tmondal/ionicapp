@@ -1,13 +1,13 @@
 
 <ion-header>
-	<ion-navbar>
+	<ion-navbar color="blue">
 		<ion-title>UserProfile</ion-title>
 		<ion-buttons end>
 			<button ion-button *ngIf="sameuser()" (click)="onEditProfile()" style="margin-right: 20px">
-	      	 <ion-icon name="create"></ion-icon>
+	      	 <ion-icon name="create" color="white"></ion-icon>
 	      	</button>
 			<button ion-button *ngIf="sameuser()" (click)="onLogout()" style="margin-right: 10px">
-				 <ion-icon name="log-out"></ion-icon>
+				 <ion-icon name="log-out" color="white"></ion-icon>
 			</button>
 	    </ion-buttons>
 	</ion-navbar>
@@ -33,7 +33,7 @@
 		<ion-row>
 			<ion-col col-2>
 				<ion-label style="text-align: right">
-				<ion-icon name="call"></ion-icon>
+				<ion-icon name="call" color="green"></ion-icon>
 				</ion-label>
 			</ion-col>
 			<ion-col>
@@ -43,7 +43,7 @@
 		<ion-row>
 			<ion-col col-2>
 				<ion-label style="text-align: right">
-				<ion-icon name="mail"></ion-icon>
+				<ion-icon name="mail" color="red"></ion-icon>
 				</ion-label>
 			</ion-col>
 			<ion-col>
@@ -54,19 +54,19 @@
  	<ion-card>
 	 	<ion-row *ngIf="!sameuser()">
 	      <ion-col col-4>
-	        <button ion-button icon-left clear small class="followerfont">
+	        <button ion-button icon-left clear small color="blue" class="followerfont">
 	          <ion-icon name="people"></ion-icon>
-	          <ion-note>{{countfollowers}} Followers</ion-note>
+	          {{countfollowers}} Followers
 	        </button>
 	      </ion-col>
 	      <ion-col col-4>
-	        <button ion-button icon-left clear small class="followingfont">
+	        <button ion-button icon-left clear small color="blue" class="followingfont">
 	          <ion-icon name="people"></ion-icon>
-	          <ion-note>{{countfollowings}} Following</ion-note>
+	          {{countfollowings}} Following
 	        </button>
 	      </ion-col>
 	      <ion-col col-4>
-	        <button *ngIf="!following" ion-button icon-left small outline class="followfont" (click)="follow()" >
+	        <button *ngIf="!following" ion-button icon-left small outline color="blue" class="followfont" (click)="follow()" >
 	          <ion-icon name="person"></ion-icon>
 	          Follow
 	        </button>
@@ -78,15 +78,15 @@
 	    </ion-row>
 	    <ion-row *ngIf="sameuser()">
 		    <ion-col col-6>
-		        <button ion-button icon-left clear small class="followerfont">
+		        <button ion-button icon-left clear small color="blue" class="followerfont">
 		          <ion-icon name="people"></ion-icon>
-		          <ion-note>{{countfollowers}} Followers</ion-note>
+		          {{countfollowers}} Followers
 		        </button>
 		      </ion-col>
 		      <ion-col col-6>
-		        <button ion-button icon-left clear small class="followingfont">
+		        <button ion-button icon-left clear small color="blue" class="followingfont">
 		          <ion-icon name="people"></ion-icon>
-		          <ion-note>{{countfollowings}} Following</ion-note>
+		          {{countfollowings}} Following
 		        </button>
 		      </ion-col>
 	    </ion-row>
@@ -95,7 +95,7 @@
 	  <ion-toolbar no-border-top style="margin-top: 5px">
 	    <ion-segment [(ngModel)]="clubprofile" style="background-color: #fff">
 	      
-	      <ion-segment-button value="moments"  class="middlenavbar">
+	      <ion-segment-button value="moments"  class="middlenavbar" color="blue">
 	        Moments
 	      </ion-segment-button>
 	      <ion-segment-button value="followers"  class="middlenavbar">
@@ -140,7 +140,7 @@
 				<ion-item>Current Club:</ion-item>
 			</ion-col>
 			<ion-col>				
-			<button ion-button clear style="text-transform: none">{{currentclub}}</button>
+			<button ion-button clear color="blue" style="text-transform: none">{{currentclub}}</button>
 			</ion-col>
 		</ion-row>
 	</ion-card>
@@ -151,7 +151,7 @@
 		<ion-row>
 			<ion-col col-2>
 				<ion-label style="text-align: right">
-				<ion-icon name="call"></ion-icon>
+				<ion-icon name="call" color="green"></ion-icon>
 				</ion-label>
 			</ion-col>
 			<ion-col>
@@ -161,7 +161,7 @@
 		<ion-row>
 			<ion-col col-2>
 				<ion-label style="text-align: right">
-				<ion-icon name="mail"></ion-icon>
+				<ion-icon name="mail" color="red"></ion-icon>
 				</ion-label>
 			</ion-col>
 			<ion-col>
@@ -172,19 +172,19 @@
  	<ion-card>
 	 	<ion-row *ngIf="!sameuser()">
 	      <ion-col col-4>
-	        <button ion-button icon-left clear small class="followerfont">
+	        <button ion-button icon-left clear small color="blue" class="followerfont">
 	          <ion-icon name="people"></ion-icon>
 	          <ion-note>{{countfollowers}} Followers</ion-note>
 	        </button>
 	      </ion-col>
 	      <ion-col col-4>
-	        <button ion-button icon-left clear small class="followingfont">
+	        <button ion-button icon-left clear small color="blue" class="followingfont">
 	          <ion-icon name="people"></ion-icon>
 	          <ion-note>{{countfollowings}} Following</ion-note>
 	        </button>
 	      </ion-col>
 	      <ion-col col-4>
-	        <button *ngIf="!following" ion-button icon-left small outline class="followfont" (click)= "follow()" >
+	        <button *ngIf="!following" ion-button icon-left small outline color="blue" class="followfont" (click)= "follow()" >
 	          <ion-icon name="person"></ion-icon>
 	          Follow
 	        </button>
@@ -196,13 +196,13 @@
 	    </ion-row>
 	    <ion-row *ngIf="sameuser()">
 		    <ion-col col-6>
-		        <button ion-button icon-left clear small class="followerfont">
+		        <button ion-button icon-left clear small color="blue" class="followerfont">
 		          <ion-icon name="people"></ion-icon>
 		          <ion-note>{{countfollowers}} Followers</ion-note>
 		        </button>
 		      </ion-col>
 		      <ion-col col-6>
-		        <button ion-button icon-left clear small class="followingfont">
+		        <button ion-button icon-left clear small color="blue" class="followingfont">
 		          <ion-icon name="people"></ion-icon>
 		          <ion-note>{{countfollowings}} Following</ion-note>
 		        </button>

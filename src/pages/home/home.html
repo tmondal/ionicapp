@@ -1,11 +1,11 @@
 <ion-header>
-    <ion-navbar>
-        <ion-title>
+    <ion-navbar style="background-color: #3F51B5">
+        <ion-title color="white">
           Connect Club
         </ion-title>
         <ion-buttons end>
             <button ion-button (click)="calluserdetails()">
-                <ion-icon name="person" style="color: white"></ion-icon>
+                <ion-icon name="person" color="white"></ion-icon>
             </button>
         </ion-buttons>
     </ion-navbar>
@@ -26,8 +26,8 @@
         <div>
             <ion-row>
                 <ion-col col-2>
-                    <ion-avatar item-left>
-                        <img [src]="profileimage" *ngIf="profileimage" style="height: 40px; width: 40px">
+                    <ion-avatar item-left style="padding: 5px">
+                        <!-- <img [src]="profileimage" *ngIf="profileimage" style="height: 40px; width: 40px"> -->
                     </ion-avatar>                                                     
                 </ion-col>
                 <ion-col col-10 (click)="onCreatePostClick()"> 
@@ -42,10 +42,18 @@
     </ion-card>
 
     <ion-card style="height: 220px">
-        <ion-item style="border-bottom: 1px solid #e0e0e0">
-            Clubs to follow:
-        </ion-item>
-
+        <ion-row style="border-bottom: 1px solid #e0e0e0">
+            <ion-col>
+            <ion-item>
+                Clubs to follow:
+            </ion-item>
+            </ion-col>
+            <ion-col>
+            <ion-label style="float: right">
+                View all
+            </ion-label>
+            </ion-col>
+        </ion-row>
         <ion-scroll scrollX="true" style="height: 180px;" >
             <ion-card class="scroll-item" *ngFor="let club of clubs, let i = index" style="height: 100%; width: 100px">
                 <ion-label style="margin: 0px">
@@ -55,7 +63,7 @@
                 <ion-row style="height: 60px">
                     <button ion-button full clear style="height: 100%">                        
                         <ion-avatar>
-                            <img style="width: 60px; height: 60px; border-radius: 30px " [src]="club.profileimage" *ngIf="club.profileimage">
+                            <!-- <img style="width: 60px; height: 60px; border-radius: 30px " [src]="club.profileimage" *ngIf="club.profileimage"> -->
                         </ion-avatar>
                     </button>  
                 </ion-row>
@@ -86,7 +94,7 @@
         <ion-card *ngIf="post.posttype == 'tournament'" >
             <ion-item>
                 <ion-avatar item-left>
-                    <img [src]="post.userimage" *ngIf="post.userimage">
+                    <!-- <img [src]="post.userimage" *ngIf="post.userimage"> -->
                 </ion-avatar>
                 <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
                 <h2 (click)="onUsernameClick(post.userId)">
@@ -98,14 +106,15 @@
             <ion-item>
                 <p>Organising a <b>{{post.sporttype}}</b> tournament on <b>{{post.eventdate}}</b> at {{post.eventvenue || "our club ground"}}</p> 
             </ion-item>
-            <ion-row style="height: 250px; width: 100%; border-bottom: 1px solid #e0e0e0">
-                <img [src]="post.imageurl" *ngIf="post.imageurl">
+            <ion-row style="height: 300px; width: 100%; padding: 10px;">
+                <!-- <img [src]="post.imageurl" *ngIf="post.imageurl"> -->
+                <div *ngIf="!post.imageurl" style="background-color: #f7f7f7;height: 100%;width: 100%;border: 1px solid #ececec"></div>
             </ion-row>
                 
-            <ion-item style="background-color: #096682; color: white">
+            <ion-item color="teal">
                 <ion-row>
-                    <ion-col color="secondary"> Entry Fee: {{post.entryfee}} </ion-col>
-                    <ion-col color="secondary"> Prize: {{post.prize}} </ion-col>
+                    <ion-col style="font-size: small; font-weight: 500"> Entry Fee: {{post.entryfee}} </ion-col>
+                    <ion-col style="font-size: small; font-weight: 500"> Prize Money: {{post.prize}} </ion-col>
                 </ion-row>
             </ion-item>
             <ion-row *ngIf="post.userId != authuid" style="padding: 5px 0px">
@@ -128,13 +137,13 @@
                     </button>
                 </ion-col>
             </ion-row>
-            <button *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key)" ion-button block outline style="text-transform: none;margin-top: 20px">See all participants</button>
+            <button *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key)" ion-button block outline style="text-transform: none;margin-top: 20px;color:#673AB7">See all participants</button>
         </ion-card>
 
         <ion-card *ngIf="post.posttype == 'hiring'" >
             <ion-item>
                 <ion-avatar item-left>
-                    <img [src]="post.userimage" *ngIf="post.userimage">
+                    <!-- <img [src]="post.userimage" *ngIf="post.userimage"> -->
                 </ion-avatar>
                 <ion-icon name="more" item-right (click)="onMoreClick($event)"></ion-icon>
                 <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
@@ -145,14 +154,15 @@
                 <p>Organising a <b>{{post.sporttype}} Trial for Hiring Players</b> on {{post.eventdate}}</p>
                 <p>Be present at {{post.eventvenue || "our club ground"}}</p>
             </ion-item>
-            <ion-row style="height: 250px; width: 100%">          
-                <img [src]="post.imageurl" *ngIf="post.imageurl">
+            <ion-row style="height: 300px; width: 100%; padding: 10px;">          
+                <!-- <img [src]="post.imageurl" *ngIf="post.imageurl"> -->
+                <div *ngIf="!post.imageurl" style="background-color: #f7f7f7;height: 100%;width: 100%;border: 1px solid #ececec"></div>
             </ion-row>
    
-            <ion-item>
+            <ion-item color="pink">
                 <ion-row>
-                    <ion-col> Trial Date: {{post.eventdate}} </ion-col>
-                    <ion-col color="danger"> **First come First </ion-col>
+                    <ion-col style="font-size: small; font-weight: 500"> Trial Date: {{post.eventdate}} </ion-col>
+                    <ion-col style="font-size: small; font-weight: 500"> **First come First </ion-col>
                 </ion-row>
             </ion-item>
             <ion-row *ngIf="post.userId != authuid">
@@ -192,38 +202,59 @@
             <ion-item>
                 <p>{{post.title}}</p>
             </ion-item>
-            <div>                
-                <img [src] ="post.imageurl" *ngIf="post.imageurl" style="padding: 5px; height: 250px">
-                <video width="320" height="240" autoplay *ngIf="post.videourl">
+            <div style="width: 100%;">                
+                <!-- <img [src] ="post.imageurl" *ngIf="post.imageurl" style="padding: 5px; height: 250px; background-color: #f7f7f7;"> -->
+               <!--  <video width="100%" height="100%" autoplay *ngIf="post.videourl" controls>
                     <source [src]="post.videourl" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+                </video> -->
             </div>
-            <ion-row>
-                <ion-col col-4>
-                    <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="liked[i] == false">{{post.likes}}</div>
+            <ion-row style="height: 23px;margin: inherit;text-align: center">
+                <ion-col col-1 style="padding: 3px;height: 100%">
+                <div style="border-radius: 20px;background-color:#ff5722;width: 100%;height: 100%">             
+                    <ion-icon style="padding-bottom: 2px;font-size: .9em" name="thumbs-up" color="white"></ion-icon>
+                </div>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes > 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you and {{post.likes - 1}}&nbsp;others</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 0 && !liked[i]"></ion-col>
+
+                <ion-col style="text-align: right;padding-top: 2px">
+                    <ion-note color="pink" *ngIf="post.dislikes != 0">{{post.dislikes}}&nbsp;Dislikes</ion-note>
+                    <ion-note *ngIf="post.comments != 0">{{post.comments}}&nbsp;Comments</ion-note>
+                </ion-col>
+            </ion-row>
+            <ion-row style="border: 1px solid #f5f5f5; margin: inherit">
+                <ion-col>
+                    <button (click)="likePost(post.$key,i)" style="color:#e040fb" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button (click)="dislikePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-down" [class.gray-color]="disliked[i] == false" ></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="disliked[i] == false">{{post.dislikes}}</div>
+                <ion-col>
+                    <button (click)="dislikePost(post.$key,i)" color="pink" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-top:3px" name="thumbs-down" [class.gray-color]="disliked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="disliked[i] == false" style="font-size: 1.2rem;font-weight:500">Dislike</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="chatboxes"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div>{{post.comments}} </div>
+                <ion-col>
+                    <button ion-button color="teal" icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em" name="chatboxes"></ion-icon>
+                        &nbsp;
+                        <div style="font-size: 1.2rem;font-weight:500">Comment</div>
                     </button>
                 </ion-col>
             </ion-row>
         </ion-card>
-        <ion-card *ngIf="post.posttype == 'youtube'" > 
+        <ion-card *ngIf="post.posttype == 'youtube'"> 
             <ion-item>
                 <ion-avatar item-left>
                     <img [src]="post.userimage" *ngIf="post.userimage">
@@ -239,26 +270,48 @@
             <div>                
                 <iframe width="100%" height="250" [src]="post.youtubelink | youtube" frameborder="0" allowfullscreen></iframe>
             </div>
-            <ion-row>
-                <ion-col col-4>
-                    <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="liked[i] == false">{{post.likes}}</div>
+            <ion-row style="height: 23px;margin: inherit;text-align: center">
+                <ion-col col-1 style="padding: 3px;height: 100%">
+                <div style="border-radius: 20px;background-color:#FFC107;width: 100%;height: 100%">             
+                    <ion-icon style="padding-bottom: 2px;font-size: .9em" name="thumbs-up" color="white"></ion-icon>
+                </div>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes > 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you and {{post.likes - 1}}&nbsp;others</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 0 && !liked[i]"></ion-col>
+
+                <ion-col style="text-align: right;padding-top: 2px">
+                    <ion-note color="pink" *ngIf="post.dislikes != 0">{{post.dislikes}}&nbsp;Dislikes</ion-note>
+                    <ion-note *ngIf="post.comments != 0">{{post.comments}}&nbsp;Comments</ion-note>
+                </ion-col>
+            </ion-row>
+            <ion-row style="border: 1px solid #f5f5f5; margin: inherit">
+                <ion-col>
+                    <button (click)="likePost(post.$key,i)" color="primary" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button (click)="dislikePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-down" [class.gray-color]="disliked[i] == false" ></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="disliked[i] == false">{{post.dislikes}}</div>
+                <ion-col>
+                    <button (click)="dislikePost(post.$key,i)" color="pink" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-top:3px" name="thumbs-down" [class.gray-color]="disliked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="disliked[i] == false" style="font-size: 1.2rem;font-weight:500">Dislike</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="chatboxes"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div>{{post.comments}} </div>
+                <ion-col>
+                    <button ion-button color="teal" icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em" name="chatboxes"></ion-icon>
+                        &nbsp;
+                        <div style="font-size: 1.2rem;font-weight:500">Comment</div>
                     </button>
                 </ion-col>
             </ion-row>
@@ -312,27 +365,48 @@
                 <ion-col col-3>{{post.overs}} </ion-col>
                 <ion-col col-1></ion-col>
             </ion-row>
-            <br>
-            <ion-row>
-                <ion-col col-4>
-                    <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-up" [class.gray-color]="liked[i] == 0" ></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="liked[i] == 0">{{post.likes}}</div>
+            <ion-row style="height: 23px;margin: inherit;text-align: center">
+                <ion-col col-1 style="padding: 3px;height: 100%">
+                <div style="border-radius: 20px;background-color:#FFC107;width: 100%;height: 100%">             
+                    <ion-icon style="padding-bottom: 2px;font-size: .9em" name="thumbs-up" color="white"></ion-icon>
+                </div>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes > 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you and {{post.likes - 1}}&nbsp;others</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 0 && !liked[i]"></ion-col>
+
+                <ion-col style="text-align: right;padding-top: 2px">
+                    <ion-note color="pink" *ngIf="post.dislikes != 0">{{post.dislikes}}&nbsp;Dislikes</ion-note>
+                    <ion-note *ngIf="post.comments != 0">{{post.comments}}&nbsp;Comments</ion-note>
+                </ion-col>
+            </ion-row>
+            <ion-row style="border: 1px solid #f5f5f5; margin: inherit">
+                <ion-col>
+                    <button (click)="likePost(post.$key,i)" color="primary" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button (click)="dislikePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-down" [class.gray-color]="disliked[i] == 0"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="disliked[i] == 0">{{post.dislikes}}</div>
+                <ion-col>
+                    <button (click)="dislikePost(post.$key,i)" color="pink" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-top:3px" name="thumbs-down" [class.gray-color]="disliked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="disliked[i] == false" style="font-size: 1.2rem;font-weight:500">Dislike</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="chatboxes"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div>{{post.comments}} </div>
+                <ion-col>
+                    <button ion-button color="teal" icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em" name="chatboxes"></ion-icon>
+                        &nbsp;
+                        <div style="font-size: 1.2rem;font-weight:500">Comment</div>
                     </button>
                 </ion-col>
             </ion-row>
@@ -369,27 +443,48 @@
                 <ion-col col-3>{{post.wickets}} </ion-col>
                 <ion-col col-1></ion-col>
             </ion-row>
-            <br>
-            <ion-row>
-                <ion-col col-4>
-                    <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-up" [class.gray-color]="liked[i] == 0" ></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="liked[i] == 0">{{post.likes}}</div>
+            <ion-row style="height: 23px;margin: inherit;text-align: center">
+                <ion-col col-1 style="padding: 3px;height: 100%">
+                <div style="border-radius: 20px;background-color:#FFC107;width: 100%;height: 100%">             
+                    <ion-icon style="padding-bottom: 2px;font-size: .9em" name="thumbs-up" color="white"></ion-icon>
+                </div>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes > 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you and {{post.likes - 1}}&nbsp;others</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 0 && !liked[i]"></ion-col>
+
+                <ion-col style="text-align: right;padding-top: 2px">
+                    <ion-note color="pink" *ngIf="post.dislikes != 0">{{post.dislikes}}&nbsp;Dislikes</ion-note>
+                    <ion-note *ngIf="post.comments != 0">{{post.comments}}&nbsp;Comments</ion-note>
+                </ion-col>
+            </ion-row>
+            <ion-row style="border: 1px solid #f5f5f5; margin: inherit">
+                <ion-col>
+                    <button (click)="likePost(post.$key,i)" color="primary" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button (click)="dislikePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-down" [class.gray-color]="disliked[i] == 0"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="disliked[i] == 0">{{post.dislikes}}</div>
+                <ion-col>
+                    <button (click)="dislikePost(post.$key,i)" color="pink" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-top:3px" name="thumbs-down" [class.gray-color]="disliked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="disliked[i] == false" style="font-size: 1.2rem;font-weight:500">Dislike</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="chatboxes"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div>{{post.comments}} </div>
+                <ion-col>
+                    <button ion-button color="teal" icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em" name="chatboxes"></ion-icon>
+                        &nbsp;
+                        <div style="font-size: 1.2rem;font-weight:500">Comment</div>
                     </button>
                 </ion-col>
             </ion-row>
@@ -414,7 +509,7 @@
                     <ion-col>{{post.teamtwo}}</ion-col>
                 </ion-row>
             </ion-item>
-            <div style="border: 1px solid gray">
+            <div style="border: 1px solid #e0e0e0; margin: 5px">
                 <div>
                     <ion-row style="font-weight: 100">
                         <ion-col col-4 style="padding-left: 11px">Goal Scored :</ion-col>
@@ -448,27 +543,48 @@
                     </ion-row>
                 </div>
             </div>
-            <br>
-            <ion-row>
-                <ion-col col-4>
-                    <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-up" [class.gray-color]="liked[i] == 0" ></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="liked[i] == 0">{{post.likes}}</div>
+            <ion-row style="height: 23px;margin: inherit;text-align: center">
+                <ion-col col-1 style="padding: 3px;height: 100%">
+                <div style="border-radius: 20px;background-color:#FFC107;width: 100%;height: 100%">             
+                    <ion-icon style="padding-bottom: 2px;font-size: .9em" name="thumbs-up" color="white"></ion-icon>
+                </div>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes > 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you and {{post.likes - 1}}&nbsp;others</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green"> you liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
+                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="post.likes == 0 && !liked[i]"></ion-col>
+
+                <ion-col style="text-align: right;padding-top: 2px">
+                    <ion-note color="pink" *ngIf="post.dislikes != 0">{{post.dislikes}}&nbsp;Dislikes</ion-note>
+                    <ion-note *ngIf="post.comments != 0">{{post.comments}}&nbsp;Comments</ion-note>
+                </ion-col>
+            </ion-row>
+            <ion-row style="border: 1px solid #f5f5f5; margin: inherit">
+                <ion-col>
+                    <button (click)="likePost(post.$key,i)" color="primary" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button (click)="dislikePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="thumbs-down"  [class.gray-color]="disliked[i] == 0"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div [class.gray-color]="disliked[i] == 0">{{post.dislikes}}</div>
+                <ion-col>
+                    <button (click)="dislikePost(post.$key,i)" color="pink" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em;padding-top:3px" name="thumbs-down" [class.gray-color]="disliked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="disliked[i] == false" style="font-size: 1.2rem;font-weight:500">Dislike</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <button ion-button icon-center full clear class="scorebutton">
-                        <ion-icon name="chatboxes"></ion-icon>
-                        <span style="width: 5px"></span>
-                        <div>{{post.comments}} </div>
+                <ion-col>
+                    <button ion-button color="teal" icon-center full clear class="scorebutton">
+                        <ion-icon style="font-size: 1.4em" name="chatboxes"></ion-icon>
+                        &nbsp;
+                        <div style="font-size: 1.2rem;font-weight:500">Comment</div>
                     </button>
                 </ion-col>
             </ion-row>

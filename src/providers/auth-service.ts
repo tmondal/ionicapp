@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
+import { ToastController} from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import { AngularFire } from 'angularfire2';
-import { ToastController} from 'ionic-angular';
 import { File } from 'ionic-native';
 import * as firebase from 'firebase';
 
@@ -19,10 +19,11 @@ export class AuthService {
     profile: any;
     following: any;
     loading: any;
+    progress: any;
     constructor(
       public af: AngularFire,
       public toastCtrl: ToastController,
-      public loadingCtrl: LoadingController
+      public loadingCtrl: LoadingController,
     ) {
 
       af.auth.subscribe(user=>{
@@ -80,92 +81,101 @@ export class AuthService {
       }).take(1);
     }
 
-    updateCoverphoto(covernativepath){
-      this.loading = this.loadingCtrl.create({content: "Wait image uploading.."});
-      this.loading.present();
-      // See cordova File plugin documentation.Get the file and store to firebase storage 
+    updateProfilephoto(imagesrc){
 
-      (<any>window).resolveLocalFileSystemURL(covernativepath, (res) =>{
-        res.file((resFile)=>{
-          this.showToast("File selected with native path given");
-          let reader = new FileReader();
-          reader.readAsArrayBuffer(resFile);
-          reader.onloadend = (evt: any) =>{
-            let imgBlob = new Blob([evt.target.result],{type: 'image/jpeg'});
-            this.showToast("blob created");
-            // Now store the blob(i.e raw data. One kind of file)
-            this.imageRef = this.storageRef.child(`/${this.auth.uid}/cover.jpg`);
-            this.showToast("image ref created");
-            this.imageRef.put(imgBlob).then((res)=>{
-              this.showToast("blob sent");
-              this.coverimageurl = res.downloadURL;
-              // update database accordingly
-              this.af.database.object('/users/' + this.auth.uid).update({coverimage: this.coverimageurl});
-              this.loading.dismiss().then(()=>{
-                this.showToast('Success: coverphoto updated :)');              
-              });   
-            }).catch((err)=>{
-              this.loading.dismiss().then(()=>{
-                alert('Failed to update cover photo. May be large size and slow network:(');
-              });
-            })
+      // First put image to Storage and get url of the image
+      if(imagesrc) {
+        this.loading = this.loadingCtrl.create({content: "Wait image uploading.."});
+        this.loading.present();
+
+        this.imageRef = this.storageRef.child(`/${this.auth.uid}/profile.jpg`);
+        this.showToast("Storage ref created..");
+
+        let uploadTask = this.imageRef.putString(imagesrc,'base64');
+        this.showToast("putString called..");
+        uploadTask.on('state_changed',
+
+          (snapshot) => {
+            this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            
+          }, (error) => {
+            this.loading.dismiss().then(()=>{
+              this.showToast("Error occured during data send to server..");
+            });
+          },(success) =>{
+            this.profileimageurl = uploadTask.snapshot.downloadURL;
+            this.af.database.object('/users/' + this.auth.uid).update({profileimage: this.profileimageurl});
+            this.loading.dismiss().then(()=>{
+              this.showToast('Success: profile photo updated :)');              
+            });
           }
-        })
-      })
+        );
+      }else{
+        alert("You should not see this message. If you see then Bad designer.");
+      }
     }
-    updateProfilephoto(profilenativepath){
 
-      this.loading = this.loadingCtrl.create({content: "Wait image uploading.."});
-      this.loading.present();
+    updateCoverphoto(imagesrc){
 
-      (<any>window).resolveLocalFileSystemURL(profilenativepath, (res) =>{
-        res.file((resFile)=>{
-          this.showToast("File selected with native path given");
-          let reader = new FileReader();
-          reader.readAsArrayBuffer(resFile);
-          reader.onloadend = (evt: any) =>{
-            let imgBlob = new Blob([evt.target.result],{type: 'image/jpeg'});
-            this.showToast("blob created");
-            // Now store the blob(i.e raw data. One kind of file)
-            this.imageRef = this.storageRef.child(`/${this.auth.uid}/profile.jpg`);
-            this.imageRef.put(imgBlob).then((res)=>{
-              this.showToast("blob sent");
-              this.profileimageurl = res.downloadURL;
-              this.showToast('Success: profilephoto updated :)');
-              // update database accordingly
-              this.af.database.object('/users/' + this.auth.uid).update({profileimage: this.profileimageurl}); 
-              this.loading.dismiss().then(()=>{
-                this.showToast('Success: profile photo updated :)');              
-              });
-            }).catch((err)=>{
-              this.loading.dismiss().then(()=>{
-                alert('Failed to update profile photo. May be large size and slow network:(');
-              });
-            })
+      // First put image to Storage and get url of the image
+      if(imagesrc) {
+        this.loading = this.loadingCtrl.create({content: "Wait image uploading.."});
+        this.loading.present();
+
+        this.imageRef = this.storageRef.child(`/${this.auth.uid}/cover.jpg`);
+        this.showToast("Storage ref created..");
+
+        let uploadTask = this.imageRef.putString(imagesrc,'base64');
+        this.showToast("putString called..");
+        uploadTask.on('state_changed',
+
+          (snapshot) => {
+            this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            
+          }, (error) => {
+            this.loading.dismiss().then(()=>{
+              this.showToast("Error occured during data send to server..");
+            });
+          },(success) =>{
+            this.coverimageurl = uploadTask.snapshot.downloadURL;
+            this.af.database.object('/users/' + this.auth.uid).update({coverimage: this.coverimageurl});
+            this.loading.dismiss().then(()=>{
+              this.showToast('Success: cover photo updated :)');              
+            });
           }
-        })
-      }) 
+        );
+      }else{
+        alert("You should not see this message. If you see then Bad designer.");
+      }
     }
+
     showToast(message){
       let toast = this.toastCtrl.create({
         message: message,
-        duration: 10000
+        duration: 3000
       });
       toast.present();
     }
+    updateLocation(lat,lng){
+      this.af.database.object('/users/' + this.auth.uid).update({lattitude: lat,longitude: lng})
+        .then(
+          success => this.showToast("Success: Location updated."),
+          error => this.showToast("Failed to update location.")
+         );
+    }
     updateName(name){
-      this.af.database.object('/users/' + this.auth.uid).update({name: name}).then((success)=>{
-        this.showToast("Success: Name updated");
-      },(error)=>{
-        this.showToast("Faild to update name. Try again!");
-      });
+      this.af.database.object('/users/' + this.auth.uid).update({name: name})
+        .then(
+          success => this.showToast("Success: Name updated"),
+          error => this.showToast("Faild to update name. Try again!")
+        );
     }
     updateContactno(contactno){
-      this.af.database.object('/users/' + this.auth.uid).update({contactno: contactno}).then((success)=>{
-        this.showToast("Success: contact no updated");
-      },(error)=>{
-        this.showToast("Failed: contact no failed to update");
-      });
+      this.af.database.object('/users/' + this.auth.uid).update({contactno: contactno})
+        .then(
+          success => this.showToast("Success: contact no updated"),       
+          error => this.showToast("Failed: contact no failed to update")
+        );
     }
     updateCurrentClub(club){
       this.af.database.object('/users/' + this.auth.uid).update({currentclub: club}).then((success)=>{

@@ -24,13 +24,11 @@ export class HomePage implements OnInit{
   user: any;
   profileimage: any = null;
   currentuserId: any;
-  postsubscription: any;
-  usersubscription: any;
-  currentusersubscription: any;
-  imagesubscription: any;
   userimage: any = null;
   username: any = null;
   usertype: any;
+  lattitude: any = null;
+  longitude: any = null;
 
   posts: any[] = [];
   feed: any[] = [];
@@ -44,8 +42,10 @@ export class HomePage implements OnInit{
   clubs: any[] = [];
   players: any;
   iffollowing: any[] = [];
-  countfollowers: any[] = [];
-  countfollowings:any[] = [];
+  likedislike: any;
+  countlikedislike: any;
+  feedsubscription: any;
+
   constructor(
   	public navCtrl: NavController,
   	public modalCtrl: ModalController,
@@ -57,8 +57,7 @@ export class HomePage implements OnInit{
 
   ngOnInit(){
 
-    this.postservice.getFeed().subscribe(feed =>{
-      console.log(feed);
+    this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
       this.length = feed.length - 1;
       for (let i = this.length,k=0; i >= 0; i--,k++) {
         this.posts[k] = feed[i];
@@ -96,12 +95,6 @@ export class HomePage implements OnInit{
       for (let i = 0; i <= clubs.length - 1; i++) {
         this.authservice.checkIffollowing(clubs[i].$key).subscribe(user =>{
           this.iffollowing[i] = user.following;
-        })
-        this.authservice.getFollowers(clubs[i].$key).subscribe(users=>{
-          this.countfollowers[i] = users.length;
-        });
-        this.authservice.getFollowings(clubs[i].$key).subscribe(users=>{
-          this.countfollowings[i] = users.length;
         });
       }
       console.log(this.clubs);
@@ -110,11 +103,14 @@ export class HomePage implements OnInit{
       this.players = players;
     });
    
-    this.currentusersubscription = this.authservice.getmyprofile().subscribe(user=>{
+    this.authservice.getmyprofile().subscribe(user=>{
       this.authuid = user.$key;
       this.usertype = user.usertype;
       this.username = user.name;
       this.profileimage = user.profileimage;
+      this.lattitude = user.lattitude;
+      this.longitude = user.longitude;
+
     });
   }
   ngOnDestroy(){
@@ -123,14 +119,13 @@ export class HomePage implements OnInit{
     authentiaction rule showing permission-denied . So i had to unsubscribe the /post link
     when home component destroys.
     */
-    // this.postsubscription.unsubscribe();
-    this.currentusersubscription.unsubscribe();
+    this.feedsubscription.unsubscribe();
+    // this.likedislike.unsubscribe();
+    // this.countlikedislike.unsubscribe();
   }
   
   doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
     this.postservice.getFeed().subscribe(feed =>{
-      console.log(feed);
       this.length = feed.length - 1;
       for (let i = this.length,k=0; i >= 0; i--,k++) {
         this.posts[k] = feed[i];
@@ -165,16 +160,9 @@ export class HomePage implements OnInit{
 
     this.authservice.getClubstofollow().subscribe(clubs =>{
       this.clubs = clubs;
-      console.log(clubs);
       for (let i = 0; i <= clubs.length - 1; i++) {
         this.authservice.checkIffollowing(clubs[i].$key).subscribe(user =>{
           this.iffollowing[i] = user.following;
-        })
-        this.authservice.getFollowers(clubs[i].$key).subscribe(users=>{
-          this.countfollowers[i] = users.length;
-        });
-        this.authservice.getFollowings(clubs[i].$key).subscribe(users=>{
-          this.countfollowings[i] = users.length;
         });
       }
     });
@@ -203,7 +191,9 @@ export class HomePage implements OnInit{
       participating: participating,
       postid: postid,
       userId: userId,
-      username: this.username
+      username: this.username,
+      lat: this.lattitude,
+      lng: this.longitude
     });
     modal.present();
   }
@@ -213,7 +203,9 @@ export class HomePage implements OnInit{
       participating: participating,
       postid: postid,
       userId: userId,
-      username: this.username
+      username: this.username,
+      lat: this.lattitude,
+      lng: this.longitude
     });
     modal.present();
   }
@@ -229,6 +221,7 @@ export class HomePage implements OnInit{
       ev: myEvent
     });
   }
+
   likePost(postid,i){
     
     // First see if previously liked or disliked .As every post does not have this
@@ -248,8 +241,9 @@ export class HomePage implements OnInit{
       }
 
       this.postservice.countLikesDislikes(postid).take(1).subscribe(post =>{
-
-        console.log("Likes: " + post.likes + "Dislikes: " + post.dislikes);
+        console.log("Like post: ");
+        console.log(post);
+        console.log("Likes: " + post.likes + " Dislikes: " + post.dislikes);
         this.likes = post.likes;
         this.dislikes = post.dislikes;
 
@@ -278,6 +272,7 @@ export class HomePage implements OnInit{
   dislikePost(postid,i){
 
     this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
+      
       if(user.liked === undefined) {
         this.liked[i] = false;
       }else{        
@@ -290,6 +285,10 @@ export class HomePage implements OnInit{
       }
 
       this.postservice.countLikesDislikes(postid).take(1).subscribe(post =>{
+
+        console.log("Dislike post: ");
+        console.log(post);
+        console.log("Likes: " + post.likes + " Dislikes: " + post.dislikes);
 
         this.likes = post.likes;
         this.dislikes = post.dislikes;
