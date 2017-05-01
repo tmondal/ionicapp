@@ -6,16 +6,63 @@ import { PostPage } from '../post/post';
 import { UserprofilePage } from '../userprofile/userprofile';
 import { PostmodalPage } from '../postmodal/postmodal';
 import { PostmoreoptPage } from '../postmoreopt/postmoreopt';
+import { PostcommentsPage } from '../postcomments/postcomments';
 
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
 import { AngularFire } from 'angularfire2';
 import * as moment from 'moment';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  keyframes
+} from '@angular/animations';
 
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
+  animations:[
+    trigger('like',[
+      state('lfalse',style({
+        color: 'gray',
+        transform: 'scale(1)'
+      })),
+      state('ltrue',style({
+        color: '#e040fb',
+        transform: 'scale(1)'
+      })),
+      transition('lfalse <=> ltrue',animate('1000ms ease-in',keyframes([
+        style({transform: 'scale(1)',offset: 0}),
+        style({transform: 'scale(1.5)',offset: .2}),
+        style({transform: 'scale(1.1)',offset: .4}),
+        style({transform: 'scale(1.3)',offset: .6}),
+        style({transform: 'scale(1)',offset: .8}),
+        style({transform: 'scale(1.1)',offset: 1}),
+      ]))),
+    ]),
+    trigger('dislike',[
+      state('dfalse',style({
+        color: 'gray',
+        transform: 'scale(1)'
+      })),
+      state('dtrue',style({
+        color: '#E91E63',
+        transform: 'scale(1)'
+      })),
+      transition('dfalse <=> dtrue',animate('1000ms ease-in',keyframes([
+        style({transform: 'scale(1)',offset: 0}),
+        style({transform: 'scale(1.5)',offset: .2}),
+        style({transform: 'scale(1.1)',offset: .4}),
+        style({transform: 'scale(1.3)',offset: .6}),
+        style({transform: 'scale(1)',offset: .8}),
+        style({transform: 'scale(1.1)',offset: 1}),
+      ]))),
+    ]),
+  ]
 })
 
 export class HomePage implements OnInit{
@@ -316,7 +363,14 @@ export class HomePage implements OnInit{
       });
     });
   }
-
+  commentPost(postid){
+    this.navCtrl.push(PostcommentsPage,{
+      postid: postid,
+      userid: this.authuid,
+      username: this.username,
+      profileimage: this.profileimage
+    });
+  }
   seeParticipants(postid){
     this.navCtrl.push(MypostPage,{
       postid: postid,

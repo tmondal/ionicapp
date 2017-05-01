@@ -1,0 +1,47 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>postcomments</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+	<ion-card *ngFor="let comment of comments,let i = index">
+		<ion-item>
+			<ion-avatar item-left>
+				<img [src]="comment.profileimage" *ngIf="comment.profileimage">
+			</ion-avatar>
+			<h2>{{comment.username}}</h2>
+			<p>{{comment.data}}</p>
+			<p>1 hour ago | <ion-icon name="thumbs-up"></ion-icon>100<button ion-button small clear>Like</button>|<button ion-button small clear>Reply</button></p>
+
+			<button ion-button clear (click)="getchildComments()">View previous 6 replies</button>
+<!-- 			<ion-avatar>
+				<img [src]="lastcomment[i].profileimage" *ngIf="lastcomment[i].profileimage" >
+			</ion-avatar> -->
+			<p><b>username</b> &nbsp; last comment data</p>
+			<!-- <p>{{lastcomment[i].username}} &nbsp; {{lastcomment[i].data}}</p> -->
+		</ion-item>
+	</ion-card>
+	<ion-card>
+		<ion-row style="height: 40px">
+			<ion-col col-2>
+				<ion-avatar>
+					<img style="height: 30px;width: 30px" [src]="profileimage" *ngIf="profileimage">
+				</ion-avatar>
+			</ion-col>
+			<ion-col>
+				<ion-textarea style="height: 100%;margin: 0px;" value="commentdata" [(ngModel)]="commentdata" placeholder="What you think ?"></ion-textarea>
+			</ion-col>
+			<ion-col col-2 *ngIf="commentdata">
+				<button (click)="addparentComment()" ion-button small >Add</button>
+			</ion-col>
+			<ion-col col-2 *ngIf="!commentdata">
+				<ion-icon name="happy"></ion-icon>
+			</ion-col>
+		</ion-row>
+	</ion-card>
+</ion-content>

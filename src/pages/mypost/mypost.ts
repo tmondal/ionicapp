@@ -25,8 +25,8 @@ export class MypostPage implements OnInit {
 		public authservice: AuthService,
 		public postservice: PostService
 	) {
-		this.postid = this.navParams.get("postid");
-		this.userId = this.navParams.get("userId");
+		this.postid = this.navParams.get('postid');
+		this.userId = this.navParams.get('userId');
 	}
 
 	ngOnInit(){

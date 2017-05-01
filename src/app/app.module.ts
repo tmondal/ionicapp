@@ -1,4 +1,7 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule ,ErrorHandler} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 // It's for reactive forms . For template driven form use 'FormsModule' 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -38,6 +41,7 @@ import { FollowersPage } from '../pages/followers/followers';
 import { FollowingsPage } from '../pages/followings/followings';
 import { GooglemapPage } from '../pages/googlemap/googlemap';
 import { GooglemapdistancePage } from '../pages/googlemapdistance/googlemapdistance';
+import { PostcommentsPage } from '../pages/postcomments/postcomments';
 
 import { AuthService } from '../providers/auth-service';
 import { PostService } from '../providers/post-service';
@@ -89,11 +93,14 @@ const AuthConfig = {
     FollowersPage,
     FollowingsPage,
     GooglemapPage,
-    GooglemapdistancePage
+    GooglemapdistancePage,
+    PostcommentsPage
   ],
   imports: [
     //FormsModule, for template driven form
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    BrowserModule,
     AngularFireModule.initializeApp(firebaseConfig,AuthConfig),
     IonicModule.forRoot(MyApp),
   ],
@@ -124,7 +131,8 @@ const AuthConfig = {
     FollowersPage,
     FollowingsPage,
     GooglemapPage,
-    GooglemapdistancePage
+    GooglemapdistancePage,
+    PostcommentsPage
   ],
   providers: [
       Camera,

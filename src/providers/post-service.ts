@@ -14,6 +14,8 @@ export class PostService {
   posts: any;
   post: FirebaseObjectObservable<any>;
   postnode: any;
+  commentnode: any;
+  childcomment: any;
   currentuser: any;
   fireauth: any;
   storageimageRef: any;
@@ -35,6 +37,8 @@ export class PostService {
       }
     });
     this.postnode = this.af.database.list('/posts');
+    
+    this.childcomment = this.af.database.list('/post-comment-structure/');
     this.storageimageRef = firebase.storage().ref().child('images/');
     this.storagevideoRef = firebase.storage().ref().child('videos/');
   }
@@ -237,6 +241,45 @@ export class PostService {
         likedislikedata["userwise-feed/" + followers[i].$key +"/"+ postid + '/dislikes'] = dislikes;
       }
       this.af.database.object('/').update(likedislikedata);
+    });
+  }
+
+  // Comment Logics
+
+  addparentComment(postid,data){
+    this.commentnode = this.af.database.list('/postwise-comments/'+ postid);
+    let parentcommentid = this.commentnode.push().key;
+    this.af.database.object('/postwise-comments/'+postid+'/'+ parentcommentid).update(data);
+  }
+
+  addchildComment(postid,parentid,data){
+    this.commentnode = this.af.database.list('/postwise-comments/'+ postid);
+    let childcommentid = this.commentnode.push().key;
+    this.af.database.object('/post-comment-structure/'+parentid+'/'+childcommentid).update(data);
+  }
+
+  getparentComments(postid){
+    return this.af.database.list('/postwise-comments/'+postid);
+  }
+  getchildComments(postid,parentid){
+    return this.af.database.list('/post-comment-structure/'+parentid);
+  }
+  getlastparentComment(postid){
+    return this.af.database.list('/postwise-comments/'+postid,{
+      query: {
+        orderByChild: 'created_at',
+        endAt: Date.now(),
+        limitToFirst: 1
+      }
+    });
+  }
+  getlastchildComment(postid,parentid){
+    return this.af.database.list('/post-comment-structure/'+postid+'/'+parentid,{
+      query: {
+        orderByChild: 'created_at',
+        endAt: Date.now(),
+        limitToFirst: 1
+      }
     });
   }
 }
