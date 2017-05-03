@@ -248,10 +248,13 @@ export class PostService {
 
   // Comment Logics
 
-  addparentComment(postid,data){
+  addparentComment(postid,data,noofcomment){
     this.commentnode = this.af.database.list('/postwise-comments/'+ postid);
     let parentcommentid = this.commentnode.push().key;
-    this.af.database.object('/postwise-comments/'+postid+'/'+ parentcommentid).update(data);
+    let updatedata = {};
+    updatedata["userwise-feed/" + this.fireauth.uid +"/"+ postid + '/comments'] = noofcomment;
+    updatedata['/postwise-comments/'+postid+'/'+ parentcommentid] = data;
+    this.af.database.object('/').update(updatedata);
   }
 
 
@@ -282,10 +285,13 @@ export class PostService {
     });
   }
   
-  addchildComment(postid,parentid,data){
+  addchildComment(postid,parentid,data,noofcomment){
     this.commentnode = this.af.database.list('/postwise-comments/'+ postid);
     let childcommentid = this.commentnode.push().key;
-    this.af.database.object('/post-comment-structure/'+parentid+'/'+childcommentid).update(data);
+    let updatedata = {};
+    updatedata["userwise-feed/" + this.fireauth.uid +"/"+ postid + '/comments'] = noofcomment;
+    updatedata['/post-comment-structure/'+parentid+'/'+childcommentid] = data;
+    this.af.database.object('/').update(updatedata);
   }
   getchildComments(parentid){
     return this.af.database.list('/post-comment-structure/'+parentid);
@@ -298,5 +304,8 @@ export class PostService {
         limitToFirst: 1
       }
     });
+  }
+  getpostfromFeedbyid(postid){
+    return this.af.database.object('/userwise-feed/' + this.fireauth.uid +"/"+ postid);
   }
 }

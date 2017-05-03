@@ -21,6 +21,9 @@ export class PostcommentsPage implements OnInit {
 	childcomments: any[] = [0];
 	commentservice: any;
 	lastchildservice: any;
+	noofcomment: any;
+	childcommentservice: any;
+	noofcommentservice: any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -46,16 +49,24 @@ export class PostcommentsPage implements OnInit {
 					})
 			}
 			for (let i = 0; i <= comments.length - 1; i++) {
-				this.postservice.getchildComments(comments[i].$key)
+				this.childcommentservice = this.postservice.getchildComments(comments[i].$key)
 					.map(comments => comments.length).subscribe(length =>{
 						if (length > 0) {							
 							this.childcomments[i] = length;
 						}
 					})
 			}
+			// count no of comments of this post
+			this.noofcommentservice = this.postservice.getpostfromFeedbyid(this.postid).subscribe(noofcomment =>{
+				this.noofcomment = noofcomment.comments;
+				console.log("noofcomment: " + this.noofcomment);
+			})
+
 		})
 	}
 	ngOnDestroy(){
+		this.childcommentservice.unsubscribe();
+		this.noofcommentservice.unsubscribe();
 		this.commentservice.unsubscribe();
 		this.lastchildservice.unsubscribe();
 	}
@@ -69,7 +80,8 @@ export class PostcommentsPage implements OnInit {
 			postid: this.postid,
 			data: this.commentdata
 		}
-		this.postservice.addparentComment(this.postid,comment);
+		this.noofcomment += 1;
+		this.postservice.addparentComment(this.postid,comment,this.noofcomment);
 	}
 	gotocommentReplies(parentid){
 		this.navCtrl.push(CommentrepliesPage,{

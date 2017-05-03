@@ -17,6 +17,8 @@ export class CommentrepliesPage implements OnInit{
 	commentdata: any;
 	comments: any[] = [];
 	commentservice: any;
+	noofcomment: any;
+	noofcommentservice: any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -35,9 +37,15 @@ export class CommentrepliesPage implements OnInit{
 			.subscribe(comments =>{
 				this.comments = comments;
 			})
+
+		this.noofcommentservice = this.postservice.getpostfromFeedbyid(this.postid).subscribe(post =>{
+			this.noofcomment = post.comments;
+			console.log("comment: " + this.noofcomment);
+		})
 	}
 
 	ngOnDestroy(){
+		this.noofcommentservice.unsubscribe();
 		this.commentservice.unsubscribe();
 	}
 
@@ -50,7 +58,8 @@ export class CommentrepliesPage implements OnInit{
 			profileimage: this.profileimage,
 			data: this.commentdata
 		}
-		this.postservice.addchildComment(this.postid,this.parentid,comment);	
+		this.noofcomment += 1;
+		this.postservice.addchildComment(this.postid,this.parentid,comment,this.noofcomment);	
 	}
 
 }

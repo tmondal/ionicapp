@@ -90,6 +90,7 @@ export class HomePage implements OnInit{
   players: any;
   iffollowing: any[] = [];
   likedislike: any;
+  noofcomments: any[] = [0];
   countlikedislike: any;
   feedsubscription: any;
 
@@ -109,12 +110,6 @@ export class HomePage implements OnInit{
       for (let i = this.length,k=0; i >= 0; i--,k++) {
         this.posts[k] = feed[i];
       }
-
-      // for (let i =0; i <= this.length; i++) {
-      //   if (this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
-      //     this.postservice
-      //   }
-      // }
 
       // Format created_at time 
 
