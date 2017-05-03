@@ -1,0 +1,57 @@
+
+
+<ion-header>
+
+  <ion-navbar color="cyan">
+    <ion-title>Replies</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content style="backgorund: #f8f9fb">
+	<ion-grid *ngFor="let comment of comments,let i = index">
+		<ion-row>
+			<ion-col col-2>
+				<ion-avatar>
+					<img width="40px" height="40px" [src]="comment.profileimage" *ngIf="comment.profileimage">
+				</ion-avatar>
+			</ion-col>
+			<ion-col>
+				<h5 style="margin: 0px">{{comment.username}}</h5>
+				<p style="margin: 2px">{{comment.data}}</p>
+				<ion-row>
+					<ion-col>
+						<ion-note>1 hour ago</ion-note>
+					</ion-col>
+					<ion-col>
+						<ion-icon color="cyan" name="thumbs-up"></ion-icon>&nbsp;100
+					</ion-col>
+					<ion-col>
+						<button color="cyan">Like</button>
+					</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+</ion-content>
+<ion-footer>
+	<ion-grid>
+		<ion-row style="height: 40px">
+			<ion-col col-2>
+				<ion-avatar>
+					<img style="height: 30px;width: 30px" [src]="profileimage" *ngIf="profileimage">
+				</ion-avatar>
+			</ion-col>
+			<ion-col style="padding: 0px">
+				<ion-textarea style="margin-top: 10px" value="commentdata" [(ngModel)]="commentdata" placeholder="What you think ?"></ion-textarea>
+			</ion-col>
+			<ion-col col-2 *ngIf="commentdata" style="text-align: right" >
+				<ion-icon color="cyan" (click)="addchildComment()" name="send" style="font-size: 2.0em" ></ion-icon>
+			</ion-col>
+			<ion-col col-2 *ngIf="!commentdata" style="text-align: right">
+				<ion-icon color="cyan" name="happy" style="font-size: 2.0em" ></ion-icon>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+</ion-footer>

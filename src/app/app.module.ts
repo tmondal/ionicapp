@@ -42,6 +42,7 @@ import { FollowingsPage } from '../pages/followings/followings';
 import { GooglemapPage } from '../pages/googlemap/googlemap';
 import { GooglemapdistancePage } from '../pages/googlemapdistance/googlemapdistance';
 import { PostcommentsPage } from '../pages/postcomments/postcomments';
+import { CommentrepliesPage } from '../pages/commentreplies/commentreplies';
 
 import { AuthService } from '../providers/auth-service';
 import { PostService } from '../providers/post-service';
@@ -94,7 +95,8 @@ const AuthConfig = {
     FollowingsPage,
     GooglemapPage,
     GooglemapdistancePage,
-    PostcommentsPage
+    PostcommentsPage,
+    CommentrepliesPage
   ],
   imports: [
     //FormsModule, for template driven form
@@ -132,7 +134,8 @@ const AuthConfig = {
     FollowingsPage,
     GooglemapPage,
     GooglemapdistancePage,
-    PostcommentsPage
+    PostcommentsPage,
+    CommentrepliesPage
   ],
   providers: [
       Camera,

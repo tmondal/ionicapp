@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { CommentrepliesPage } from '../commentreplies/commentreplies';
 
 import { PostService } from '../../providers/post-service';
 
@@ -16,22 +17,19 @@ export class PostcommentsPage implements OnInit {
 	profileimage: any;
 	comments: any;
 	commentdata: any = null;
-	lastcomment: any[] = [];
+	lastcomment: any[] = [0];
+	childcomments: any[] = [0];
 	commentservice: any;
+	lastchildservice: any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
 		public postservice: PostService
 	) {
-		console.log("here");
 		this.postid = this.navParams.get("postid");
-		console.log(this.postid);
 		this.userid = this.navParams.get("userid");
-		console.log(this.userid);
 		this.username = this.navParams.get("username");
-		console.log(this.username);
 		this.profileimage = this.navParams.get("profileimage");
-		console.log(this.profileimage);
 	}
 
 	ngOnInit(){
@@ -39,11 +37,19 @@ export class PostcommentsPage implements OnInit {
 
 		this.commentservice = this.postservice.getparentComments(this.postid).subscribe(comments =>{
 			this.comments = comments;
-			for (var i = 0;i <= comments.length - 1;i++) {
-				this.postservice.getlastchildComment(comments[i].postid,comments[i].$key)
+			for (let i = 0;i <= comments.length - 1;i++) {
+				this.lastchildservice = this.postservice.getlastchildComment(comments[i].$key)
 					.subscribe(comment =>{
-						if (comment.length) {
-							this.lastcomment[i] = comment;
+						if (comment[0]) {							
+							this.lastcomment[i] = comment[0];
+						}
+					})
+			}
+			for (let i = 0; i <= comments.length - 1; i++) {
+				this.postservice.getchildComments(comments[i].$key)
+					.map(comments => comments.length).subscribe(length =>{
+						if (length > 0) {							
+							this.childcomments[i] = length;
 						}
 					})
 			}
@@ -51,11 +57,10 @@ export class PostcommentsPage implements OnInit {
 	}
 	ngOnDestroy(){
 		this.commentservice.unsubscribe();
+		this.lastchildservice.unsubscribe();
 	}
 	addparentComment(){
-		console.log("Call");
-		console.log(this.profileimage);
-		console.log(this.username);
+
 		let comment = {
 			created_at: Date.now(),
 			userid: this.userid,
@@ -64,20 +69,16 @@ export class PostcommentsPage implements OnInit {
 			postid: this.postid,
 			data: this.commentdata
 		}
-		// this.postservice.addparentComment(this.postid,comment);
-		this.navCtrl.pop();
+		this.postservice.addparentComment(this.postid,comment);
 	}
-	addchildComment(parentid){
-		let comment = {
-			created_at: Date.now(),
+	gotocommentReplies(parentid){
+		this.navCtrl.push(CommentrepliesPage,{
 			userid: this.userid,
 			username: this.username,
 			profileimage: this.profileimage,
 			postid: this.postid,
-			data: this.commentdata
-		}
-		this.navCtrl.pop();
-		this.postservice.addchildComment(this.postid,parentid,comment);	
+			parentid: parentid
+		})
 	}
 
 }

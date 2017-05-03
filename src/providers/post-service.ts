@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/count';
 import { File } from 'ionic-native';
 import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
 import { ToastController} from 'ionic-angular';
@@ -25,6 +26,7 @@ export class PostService {
   loading: any;
   progress: any = 0;
   followers: any[] = [];
+  noofchild: any = 0;
   constructor(
     public af: AngularFire,
     public toastCtrl: ToastController,
@@ -252,17 +254,23 @@ export class PostService {
     this.af.database.object('/postwise-comments/'+postid+'/'+ parentcommentid).update(data);
   }
 
-  addchildComment(postid,parentid,data){
-    this.commentnode = this.af.database.list('/postwise-comments/'+ postid);
-    let childcommentid = this.commentnode.push().key;
-    this.af.database.object('/post-comment-structure/'+parentid+'/'+childcommentid).update(data);
-  }
 
   getparentComments(postid){
     return this.af.database.list('/postwise-comments/'+postid);
   }
-  getchildComments(postid,parentid){
-    return this.af.database.list('/post-comment-structure/'+parentid);
+  getlengthofparentComments(postid){
+    let parent =  this.af.database.list('/postwise-comments/'+postid).count(()=>{
+      return true;
+    });
+    this.getparentComments(postid).map(comments =>{
+      comments.forEach(comment =>{
+
+        this.af.database.list('/post-comment-structure/' +comment.$key)
+          .map(comments => comments.length)
+          .subscribe(length => this.noofchild += length);
+      })
+    })
+    return parent + this.noofchild;
   }
   getlastparentComment(postid){
     return this.af.database.list('/postwise-comments/'+postid,{
@@ -273,8 +281,17 @@ export class PostService {
       }
     });
   }
-  getlastchildComment(postid,parentid){
-    return this.af.database.list('/post-comment-structure/'+postid+'/'+parentid,{
+  
+  addchildComment(postid,parentid,data){
+    this.commentnode = this.af.database.list('/postwise-comments/'+ postid);
+    let childcommentid = this.commentnode.push().key;
+    this.af.database.object('/post-comment-structure/'+parentid+'/'+childcommentid).update(data);
+  }
+  getchildComments(parentid){
+    return this.af.database.list('/post-comment-structure/'+parentid);
+  }
+  getlastchildComment(parentid){
+    return this.af.database.list('/post-comment-structure/'+parentid,{
       query: {
         orderByChild: 'created_at',
         endAt: Date.now(),

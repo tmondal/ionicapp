@@ -110,6 +110,12 @@ export class HomePage implements OnInit{
         this.posts[k] = feed[i];
       }
 
+      // for (let i =0; i <= this.length; i++) {
+      //   if (this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
+      //     this.postservice
+      //   }
+      // }
+
       // Format created_at time 
 
       for (let i = 0; i <= this.length; i++) {
@@ -135,6 +141,7 @@ export class HomePage implements OnInit{
           });
         }
       }
+
     });
 
     this.authservice.getClubstofollow().subscribe(clubs =>{
@@ -144,7 +151,6 @@ export class HomePage implements OnInit{
           this.iffollowing[i] = user.following;
         });
       }
-      console.log(this.clubs);
     });
     this.authservice.getPlayerstofollow().subscribe(players =>{
       this.players = players;

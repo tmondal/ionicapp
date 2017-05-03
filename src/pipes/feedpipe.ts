@@ -12,6 +12,6 @@ export class Feedpipe {
     Takes a value and makes it lowercase.
    */
    transform(value: any, args: any[] = null): any {
-      return Object.keys(value);
+      console.log(Object.keys(value));
    }
 }
