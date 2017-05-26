@@ -1,15 +1,15 @@
 
 <ion-header>
 
-  <ion-navbar color="teal">
-    <ion-title>postcomments</ion-title>
+  <ion-navbar color="yellow">
+    <ion-title>Postcomments</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content>
-	<ion-grid *ngFor="let comment of comments,let i = index">
+<ion-content id="content">
+	<ion-grid *ngFor="let comment of comments,let i = index" id="grid">
 		<ion-row>
 			<ion-col col-2>				
 				<ion-avatar>
@@ -17,29 +17,29 @@
 				</ion-avatar>
 			</ion-col>
 			<ion-col>
-				<h5 style="margin: 0px">{{comment.username}}</h5>
-				<p style="margin: 2px">{{comment.data}}</p>
+				<h5 color="yellow" style="margin: 0px">{{comment.username}}</h5>
+				<p color="white" style="margin: 2px">{{comment.data}}</p>
 				<ion-row>
 					<ion-col>
-						<ion-note>1 hour ago</ion-note>
+						<span color="red">1 hour ago</span>
 					</ion-col>
 					<ion-col col-3>
-						<ion-icon color="teal" name="thumbs-up"></ion-icon>&nbsp;100
+						<ion-icon color="yellow" name="thumbs-up"></ion-icon>&nbsp;100
 					</ion-col>
 					<ion-col col-2>
-						<button>Like</button>
+						<span color="yellow">Like</span>
 					</ion-col>
 					<ion-col col-3>
-						<button (click)="gotocommentReplies(comment.$key)" >Reply</button>
+						<span  color="yellow" (click)="gotocommentReplies(comment.$key)" >Reply</span>
 					</ion-col>
 				</ion-row>
-				<button *ngIf="lastcomment[i] && childcomments[i] > 1" (click)="gotocommentReplies(comment.$key)">View previous {{childcomments[i] - 1}} replies</button>
-				<ion-item *ngIf="lastcomment[i]" style="padding: 0px">
+				<button color="teal" ion-button full clear *ngIf="lastcomment[i] && childcomments[i] > 1" (click)="gotocommentReplies(comment.$key)">View previous {{childcomments[i] - 1}} replies</button>
+				<ion-item color="card" *ngIf="lastcomment[i]" style="padding: 0px">
 					<ion-avatar item-left style="margin: 8px 0px 0px">
 						<img style="height: 30px;width: 30px;border-radius: 0px" [src]="lastcomment[i].profileimage" *ngIf="lastcomment[i].profileimage" >
 					</ion-avatar>
 					<p style="margin: 0px">
-					<b>{{lastcomment[i].username}}</b>&nbsp;{{lastcomment[i].data}}</p>
+					<b><span color="yellow">{{lastcomment[i].username}}</span></b>&nbsp;<span color="white">{{lastcomment[i].data}}</span></p>
 				</ion-item>
 			</ion-col>
 		</ion-row>
@@ -47,20 +47,20 @@
 </ion-content>
 <ion-footer>
 	<ion-grid>
-		<ion-row style="height: 40px;background-color: #f5f5f5">
+		<ion-row style="height: 40px;background-color: #424242">
 			<ion-col col-2>
 				<ion-avatar>
 					<img style="height: 30px;width: 30px" [src]="profileimage" *ngIf="profileimage">
 				</ion-avatar>
 			</ion-col>
 			<ion-col style="padding: 0px">
-				<ion-textarea style="margin-top: 10px" value="commentdata" [(ngModel)]="commentdata" placeholder="What you think ?"></ion-textarea>
+				<ion-textarea style="margin-top: 10px;" value="commentdata" [(ngModel)]="commentdata" placeholder="What you think ?"></ion-textarea>
 			</ion-col>
 			<ion-col col-2 *ngIf="commentdata" style="text-align: right" >
-				<ion-icon color="teal" (click)="addparentComment()" name="send" style="font-size: 2.0em" ></ion-icon>
+				<ion-icon color="yellow" (click)="addparentComment()" name="send" style="font-size: 2.0em" ></ion-icon>
 			</ion-col>
 			<ion-col col-2 *ngIf="!commentdata" style="text-align: right">
-				<ion-icon color="teal" name="happy" style="font-size: 2.0em" ></ion-icon>
+				<ion-icon color="yellow" name="happy" style="font-size: 2.0em" ></ion-icon>
 			</ion-col>
 		</ion-row>
 	</ion-grid>

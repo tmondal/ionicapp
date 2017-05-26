@@ -50,7 +50,7 @@ import {
         transform: 'scale(1)'
       })),
       state('dtrue',style({
-        color: '#E91E63',
+        color: '#F44336',
         transform: 'scale(1)'
       })),
       transition('dfalse <=> dtrue',animate('1000ms ease-in',keyframes([
@@ -68,6 +68,7 @@ import {
 export class HomePage implements OnInit{
 
   authuid: any;
+  authid: any;
   user: any;
   profileimage: any = null;
   currentuserId: any;
@@ -83,16 +84,19 @@ export class HomePage implements OnInit{
   liked: any[] = [];
   disliked: any[] = [];
   length: any;
-  likes: any;
-  dislikes: any;
+  likes: any = 0;
+  dislikes: any = 0;
   items: any;
   clubs: any[] = [];
   players: any;
   iffollowing: any[] = [];
   likedislike: any;
   noofcomments: any[] = [0];
-  countlikedislike: any;
+  nooflikes: any[] = [0];
+  noofdislikes: any[] = [0];
+  likedislikeservice: any;
   feedsubscription: any;
+  noofcommentservice:any;
 
   constructor(
   	public navCtrl: NavController,
@@ -101,15 +105,20 @@ export class HomePage implements OnInit{
     private postservice: PostService,
     public authservice: AuthService,
     private af: AngularFire
-  ) {}
+  ) {
+    af.auth.subscribe(user=>{
+        if(user) {
+          this.authid = user.auth.uid;
+        }
+      });
+  }
 
   ngOnInit(){
 
     this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
       this.length = feed.length - 1;
-      for (let i = this.length,k=0; i >= 0; i--,k++) {
-        this.posts[k] = feed[i];
-      }
+      this.posts = feed;
+      this.posts.reverse();
 
       // Format created_at time 
 
@@ -117,9 +126,10 @@ export class HomePage implements OnInit{
         this.posttime[i] = moment(this.posts[i].created_at).fromNow();
       }
 
-      // Get like dislike
+      // Get liked disliked by current user
 
       for (let i = 0; i <= this.length; i++) {
+        
         if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
           this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
             if(user.liked == undefined) {
@@ -137,12 +147,43 @@ export class HomePage implements OnInit{
         }
       }
 
+      // count no of likes,dislikes and comments of corresponding posts
+      for (let i = 0; i <= this.length; i++) {
+
+        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
+          this.likedislikeservice = this.postservice.countLikesDislikesComments(this.posts[i].$key)
+            .subscribe(post =>{
+              if (post.likes != undefined) {            
+                this.nooflikes[i] = post.likes; 
+              }else{
+                this.nooflikes[i] = 0;
+              }
+              if (post.dislikes != undefined) {
+                this.noofdislikes[i] = post.dislikes;
+              }else{
+                this.noofdislikes[i] = 0;
+              }
+              if (post.comments != undefined) {
+                this.noofcomments[i] = post.comments;
+              }else{
+                this.noofcomments[i] = 0;
+              }
+          });
+        }
+      }
     });
 
     this.authservice.getClubstofollow().subscribe(clubs =>{
       this.clubs = clubs;
       for (let i = 0; i <= clubs.length - 1; i++) {
-        this.authservice.checkIffollowing(clubs[i].$key).subscribe(user =>{
+        let temp = clubs[i].$key;
+        this.authservice.checkIffollowing(temp).subscribe(user =>{
+          if (user.following) {
+            this.clubs.splice(i,1);
+          }
+          if (this.authid == temp) {
+            this.clubs.splice(i,1);
+          }
           this.iffollowing[i] = user.following;
         });
       }
@@ -168,16 +209,16 @@ export class HomePage implements OnInit{
     when home component destroys.
     */
     this.feedsubscription.unsubscribe();
+    this.noofcommentservice.unsubscribe();
     // this.likedislike.unsubscribe();
     // this.countlikedislike.unsubscribe();
   }
   
   doRefresh(refresher) {
-    this.postservice.getFeed().subscribe(feed =>{
+    this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
       this.length = feed.length - 1;
-      for (let i = this.length,k=0; i >= 0; i--,k++) {
-        this.posts[k] = feed[i];
-      }
+      this.posts = feed;
+      this.posts.reverse();
 
       // Format created_at time 
 
@@ -185,7 +226,7 @@ export class HomePage implements OnInit{
         this.posttime[i] = moment(this.posts[i].created_at).fromNow();
       }
 
-      // Get like dislike
+      // Get liked disliked by current user
 
       for (let i = 0; i <= this.length; i++) {
         if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
@@ -204,18 +245,52 @@ export class HomePage implements OnInit{
           });
         }
       }
+
+      // count no of likes,dislikes and comments of corresponding posts
+      for (let i = 0; i <= this.length; i++) {
+
+        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
+
+          this.likedislikeservice = this.postservice.countLikesDislikesComments(this.posts[i].$key)
+            .subscribe(post =>{
+              if (post.likes != undefined) {            
+                this.nooflikes[i] = post.likes; 
+              }else{
+                this.nooflikes[i] = 0;
+              }
+              if (post.dislikes != undefined) {
+                this.noofdislikes[i] = post.dislikes;
+              }else{
+                this.noofdislikes[i] = 0;
+              }
+              if (post.comments != undefined) {
+                this.noofcomments[i] = post.comments;
+              }else{
+                this.noofcomments[i] = 0;
+              }
+          });
+        }
+      }
     });
+
 
     this.authservice.getClubstofollow().subscribe(clubs =>{
       this.clubs = clubs;
       for (let i = 0; i <= clubs.length - 1; i++) {
-        this.authservice.checkIffollowing(clubs[i].$key).subscribe(user =>{
+        let temp = clubs[i].$key;
+        this.authservice.checkIffollowing(temp).subscribe(user =>{
+          if (user.following) {
+            this.clubs.splice(i,1);
+          }
+          if (this.authid == temp) {
+            this.clubs.splice(i,1);
+          }
           this.iffollowing[i] = user.following;
         });
       }
     });
-    
-    setTimeout(() => {
+
+    setTimeout(() => {      
       refresher.complete();
     }, 2000);
   }
@@ -288,25 +363,20 @@ export class HomePage implements OnInit{
         this.disliked[i] = user.disliked;
       }
 
-      this.postservice.countLikesDislikes(postid).take(1).subscribe(post =>{
-        console.log("Like post: ");
-        console.log(post);
-        console.log("Likes: " + post.likes + " Dislikes: " + post.dislikes);
-        this.likes = post.likes;
-        this.dislikes = post.dislikes;
-
-        if((!this.liked[i]) && (!this.disliked[i])) {
+      if((!this.liked[i]) && (!this.disliked[i])) {
           this.liked[i] = true;
-          this.likes += 1; 
+          this.nooflikes[i] += 1;
+          console.log("here");
+          console.log(this.nooflikes[i]); 
           this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-          this.postservice.updateLikesDislikes(postid,this.likes,this.dislikes);
+          this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
         }else if(!this.liked[i] && this.disliked[i]){
           this.liked[i] = true;
           this.disliked[i] = false;
-          this.likes += 1;
-          this.dislikes -= 1;
+          this.nooflikes[i] += 1;
+          this.noofdislikes[i] -= 1;
           this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-          this.postservice.updateLikesDislikes(postid,this.likes,this.dislikes);
+          this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
         }
         else if(this.liked[i]) {
           alert("Don't press multiple times it hurts server :)");
@@ -314,7 +384,6 @@ export class HomePage implements OnInit{
         else{
           alert("Bad engineer. Can't handle all cases :(");
         }
-      });
     });
   }
   dislikePost(postid,i){
@@ -331,29 +400,19 @@ export class HomePage implements OnInit{
       }else{        
         this.disliked[i] = user.disliked;
       }
-
-      this.postservice.countLikesDislikes(postid).take(1).subscribe(post =>{
-
-        console.log("Dislike post: ");
-        console.log(post);
-        console.log("Likes: " + post.likes + " Dislikes: " + post.dislikes);
-
-        this.likes = post.likes;
-        this.dislikes = post.dislikes;
-        
-        if((!this.disliked[i]) && (!this.liked[i])) {
+      if((!this.disliked[i]) && (!this.liked[i])) {
           this.disliked[i] = true;
-          this.dislikes += 1;
+          this.noofdislikes[i] += 1;
           this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-          this.postservice.updateLikesDislikes(postid,this.likes,this.dislikes);
+          this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
         }
         else if(!this.disliked[i] && this.liked[i] ) {
           this.liked[i] = false;
           this.disliked[i] = true;
-          this.likes -=1;
-          this.dislikes +=1;
+          this.nooflikes[i] -=1;
+          this.noofdislikes[i] +=1;
           this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-          this.postservice.updateLikesDislikes(postid,this.likes,this.dislikes);
+          this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
         }
         else if(this.disliked[i]) {
           alert("No matter how much you hate \n You can press only one time :)");
@@ -361,7 +420,7 @@ export class HomePage implements OnInit{
         else{
           alert("You seeing this because \n The worst programmer designed it :)");
         }
-      });
+     
     });
   }
   commentPost(postid){
@@ -379,5 +438,3 @@ export class HomePage implements OnInit{
     });
   }
 }
-
-

@@ -33,19 +33,22 @@ export class CommentrepliesPage implements OnInit{
 	}
 
 	ngOnInit(){
-		this.commentservice = this.postservice.getchildComments(this.parentid)
+		this.commentservice = this.postservice.getchildComments(this.postid,this.parentid)
 			.subscribe(comments =>{
 				this.comments = comments;
 			})
 
-		this.noofcommentservice = this.postservice.getpostfromFeedbyid(this.postid).subscribe(post =>{
-			this.noofcomment = post.comments;
-			console.log("comment: " + this.noofcomment);
+		this.postservice.countLikesDislikesComments(this.postid).subscribe(post =>{
+			if (post.comments != undefined) {				
+				this.noofcomment = post.comments;
+			}else{
+				this.noofcomment = 0;
+			}
 		})
 	}
 
 	ngOnDestroy(){
-		this.noofcommentservice.unsubscribe();
+		// this.noofcommentservice.unsubscribe();
 		this.commentservice.unsubscribe();
 	}
 
@@ -59,6 +62,7 @@ export class CommentrepliesPage implements OnInit{
 			data: this.commentdata
 		}
 		this.noofcomment += 1;
+		this.commentdata = '';
 		this.postservice.addchildComment(this.postid,this.parentid,comment,this.noofcomment);	
 	}
 

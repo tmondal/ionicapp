@@ -1,36 +1,17 @@
-// Ionic Variables and Theming. For more info, please see:
-// http://ionicframework.com/docs/v2/theming/
+
 $font-path: "../assets/fonts";
 
 @import "ionic.globals";
-
-
-// Shared Variables
-// --------------------------------------------------
-// To customize the look and feel of this app, you can override
-// the Sass variables found in Ionic's source scss files.
-// To view all the possible Ionic variables, see:
-// http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
-
-
-
-// Named Color Variables
-// --------------------------------------------------
-// Named colors makes it easy to reuse colors on various components.
-// It's highly recommended to change the default colors
-// to match your app's branding. Ionic uses a Sass map of
-// colors so you can add, rename and remove colors as needed.
-// The "primary" color is the only required color in the map.
 
 $colors: (
   primary:    #3F51B5,
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222,
-  background: #B2EBF2,
+  background: #212121,
   border: 	  #e0e0e0,
-  white:      #ffffff,
-  red:		  #F44336,
+  white:      #c3c3c3,
+  red:		  #E53935,
   pink:		  #E91E63,
   purple:	  #9C27B0,
   deeppurple: #673AB7,
@@ -45,7 +26,9 @@ $colors: (
   orange:  	  #FF9800,
   deeporange: #FF5722,
   bluegrey:   #607D8B,
-  black:      #000000
+  black:      #000000,
+  card:       #424242,
+  heading:    #FFFF00
 );
 
 

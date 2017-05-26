@@ -218,13 +218,11 @@ export class PostService {
 
   // Like Dislike logics
   getLikedDisliked(postid){
-    return this.af.database.object('/postwise-likedDisliked/' + postid + "/" + this.fireauth.uid);
+    return this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.fireauth.uid);
   }
-  countLikesDislikes(postid){
-    return this.af.database.object('/userwise-feed/' + this.fireauth.uid +"/"+ postid);
-  }
+  
   likeDislikePost(postid,liked,disliked){
-    this.af.database.object('/postwise-likedDisliked/' + postid + "/" + this.fireauth.uid).update({
+    this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.fireauth.uid).update({
       liked : liked,
       disliked: disliked
     });
@@ -233,79 +231,63 @@ export class PostService {
 
     let likedislikedata = {};
 
-    likedislikedata["posts/" + postid + '/likes'] = likes;
-    likedislikedata["posts/" + postid + '/dislikes'] = dislikes;
-    likedislikedata["userwise-feed/" + this.fireauth.uid +"/"+ postid + '/likes'] = likes;
-    likedislikedata["userwise-feed/" + this.fireauth.uid +"/"+ postid + '/dislikes'] = dislikes;
-    this.authservice.getFollowers(this.fireauth.uid).subscribe(followers =>{
-      for (let i = followers.length - 1; i >= 0; i--) {
-        likedislikedata["userwise-feed/" + followers[i].$key +"/"+ postid + '/likes'] = likes;
-        likedislikedata["userwise-feed/" + followers[i].$key +"/"+ postid + '/dislikes'] = dislikes;
-      }
-      this.af.database.object('/').update(likedislikedata);
-    });
+    likedislikedata["postwise-ldc-count/" + postid] = {likes: likes,dislikes: dislikes};
+    this.af.database.object('/').update(likedislikedata);
   }
 
   // Comment Logics
 
   addparentComment(postid,data,noofcomment){
-    this.commentnode = this.af.database.list('/postwise-comments/'+ postid);
+    this.commentnode = this.af.database.list('/postwise-parentcomments/'+ postid);
     let parentcommentid = this.commentnode.push().key;
     let updatedata = {};
-    updatedata["userwise-feed/" + this.fireauth.uid +"/"+ postid + '/comments'] = noofcomment;
-    updatedata['/postwise-comments/'+postid+'/'+ parentcommentid] = data;
+    updatedata["/postwise-ldc-count/" + postid+ "/comments"] = noofcomment;
+    updatedata["/postwise-parentcomments/"+postid+"/"+ parentcommentid] = data;
     this.af.database.object('/').update(updatedata);
   }
 
 
   getparentComments(postid){
-    return this.af.database.list('/postwise-comments/'+postid);
+    return this.af.database.list('/postwise-parentcomments/'+postid);
   }
-  getlengthofparentComments(postid){
-    let parent =  this.af.database.list('/postwise-comments/'+postid).count(()=>{
-      return true;
-    });
-    this.getparentComments(postid).map(comments =>{
-      comments.forEach(comment =>{
-
-        this.af.database.list('/post-comment-structure/' +comment.$key)
-          .map(comments => comments.length)
-          .subscribe(length => this.noofchild += length);
-      })
-    })
-    return parent + this.noofchild;
-  }
+  
   getlastparentComment(postid){
-    return this.af.database.list('/postwise-comments/'+postid,{
+    return this.af.database.list('/postwise-parentcomments/'+postid,{
       query: {
         orderByChild: 'created_at',
         endAt: Date.now(),
         limitToFirst: 1
       }
-    });
+    }).take(1);
   }
   
   addchildComment(postid,parentid,data,noofcomment){
-    this.commentnode = this.af.database.list('/postwise-comments/'+ postid);
+    this.commentnode = this.af.database.list('/post-comment-structure/'+postid+"/"+parentid);
     let childcommentid = this.commentnode.push().key;
+
     let updatedata = {};
-    updatedata["userwise-feed/" + this.fireauth.uid +"/"+ postid + '/comments'] = noofcomment;
-    updatedata['/post-comment-structure/'+parentid+'/'+childcommentid] = data;
+    updatedata['postwise-ldc-count/' + postid] = {comments: noofcomment};
+    updatedata['/post-comment-structure/'+postid+"/"+parentid+'/'+childcommentid] = data;
     this.af.database.object('/').update(updatedata);
   }
-  getchildComments(parentid){
-    return this.af.database.list('/post-comment-structure/'+parentid);
+  getchildComments(postid,parentid){
+    return this.af.database.list('/post-comment-structure/'+postid+"/"+parentid);
   }
-  getlastchildComment(parentid){
-    return this.af.database.list('/post-comment-structure/'+parentid,{
+  getlastchildComment(postid,parentid){
+    return this.af.database.list('/post-comment-structure/'+postid+"/"+parentid,{
       query: {
         orderByChild: 'created_at',
         endAt: Date.now(),
-        limitToFirst: 1
+        limitToFirst:1
       }
-    });
+    }).take(1);
   }
+
+  countLikesDislikesComments(postid){
+    return this.af.database.object('/postwise-ldc-count/'+postid).take(1);
+  }
+
   getpostfromFeedbyid(postid){
-    return this.af.database.object('/userwise-feed/' + this.fireauth.uid +"/"+ postid);
+    return this.af.database.object('/userwise-feed/' + this.fireauth.uid +"/"+ postid).take(1);
   }
 }

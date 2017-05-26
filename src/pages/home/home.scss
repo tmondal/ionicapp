@@ -5,9 +5,14 @@ page-home {
     font-weight: 100;
     padding: 0px 2.8em;
   }
-  
+  .card h2 {
+    color: #FFEB3B;
+  }
+  .item {
+    background-color: inherit;
+  }
   .home {
-    background: #f8f9fb;
+    background: #212121;
   }
   .home-card {
     padding: 0px;

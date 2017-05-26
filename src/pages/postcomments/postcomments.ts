@@ -36,12 +36,11 @@ export class PostcommentsPage implements OnInit {
 	}
 
 	ngOnInit(){
-		
 
 		this.commentservice = this.postservice.getparentComments(this.postid).subscribe(comments =>{
 			this.comments = comments;
 			for (let i = 0;i <= comments.length - 1;i++) {
-				this.lastchildservice = this.postservice.getlastchildComment(comments[i].$key)
+				this.postservice.getlastchildComment(this.postid,comments[i].$key)
 					.subscribe(comment =>{
 						if (comment[0]) {							
 							this.lastcomment[i] = comment[0];
@@ -49,26 +48,30 @@ export class PostcommentsPage implements OnInit {
 					})
 			}
 			for (let i = 0; i <= comments.length - 1; i++) {
-				this.childcommentservice = this.postservice.getchildComments(comments[i].$key)
+				this.postservice.getchildComments(this.postid,comments[i].$key)
 					.map(comments => comments.length).subscribe(length =>{
 						if (length > 0) {							
 							this.childcomments[i] = length;
 						}
 					})
 			}
-			// count no of comments of this post
-			this.noofcommentservice = this.postservice.getpostfromFeedbyid(this.postid).subscribe(noofcomment =>{
-				this.noofcomment = noofcomment.comments;
-				console.log("noofcomment: " + this.noofcomment);
-			})
+			// count all comments
+			this.postservice.countLikesDislikesComments(this.postid)
+				.subscribe(post=>{
+					if (post.comments != undefined) {						
+						this.noofcomment = post.comments;
+					}else{
+						this.noofcomment = 0;
+					}
+				})			
 
 		})
 	}
 	ngOnDestroy(){
-		this.childcommentservice.unsubscribe();
-		this.noofcommentservice.unsubscribe();
+		// this.childcommentservice.unsubscribe();
+		// this.noofcommentservice.unsubscribe();
 		this.commentservice.unsubscribe();
-		this.lastchildservice.unsubscribe();
+		// this.lastchildservice.unsubscribe();
 	}
 	addparentComment(){
 
@@ -81,6 +84,8 @@ export class PostcommentsPage implements OnInit {
 			data: this.commentdata
 		}
 		this.noofcomment += 1;
+		this.commentdata = '';
+		console.log("No of: " + this.noofcomment);
 		this.postservice.addparentComment(this.postid,comment,this.noofcomment);
 	}
 	gotocommentReplies(parentid){
@@ -94,3 +99,4 @@ export class PostcommentsPage implements OnInit {
 	}
 
 }
+

@@ -1,0 +1,34 @@
+<!--
+  Generated template for the Allclubs page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Allclubs</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-card *ngFor="let club of clubs,let i = index" style="box-shadow: 0px 0px 1px 0px">
+    <ion-row>
+        <ion-col col-2 style="padding: 0px;margin:auto">
+            <ion-avatar item-left style="padding: 5px">
+                <img [src]="club.profileimage" *ngIf="club.profileimage" style="height: 40px; width: 40px">
+            </ion-avatar>                                                     
+        </ion-col>
+        <ion-col (click)="onUsernameClick(club.$key)" style="padding: 0px;margin:auto"> 
+            <ion-item>
+            <button  ion-button full clear>{{club.name}}</button>
+            </ion-item>
+        </ion-col>
+        <ion-col col-4 style="margin: auto;text-align: right;padding: 0px">
+          <button ion-button *ngIf="!following[i]">Follow</button>
+        </ion-col>
+    </ion-row>
+  </ion-card>
+</ion-content>
