@@ -231,7 +231,9 @@ export class PostService {
 
     let likedislikedata = {};
 
-    likedislikedata["postwise-ldc-count/" + postid] = {likes: likes,dislikes: dislikes};
+    likedislikedata["/postwise-ldc-count/" + postid + "/likes"] = likes;
+    likedislikedata["/postwise-ldc-count/" + postid + "/dislikes"] = dislikes;
+
     this.af.database.object('/').update(likedislikedata);
   }
 
@@ -266,7 +268,7 @@ export class PostService {
     let childcommentid = this.commentnode.push().key;
 
     let updatedata = {};
-    updatedata['postwise-ldc-count/' + postid] = {comments: noofcomment};
+    updatedata['/postwise-ldc-count/' + postid + "/comments"] = noofcomment;
     updatedata['/post-comment-structure/'+postid+"/"+parentid+'/'+childcommentid] = data;
     this.af.database.object('/').update(updatedata);
   }
@@ -284,7 +286,7 @@ export class PostService {
   }
 
   countLikesDislikesComments(postid){
-    return this.af.database.object('/postwise-ldc-count/'+postid).take(1);
+    return this.af.database.object('/postwise-ldc-count/'+postid);
   }
 
   getpostfromFeedbyid(postid){

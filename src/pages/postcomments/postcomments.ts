@@ -48,7 +48,7 @@ export class PostcommentsPage implements OnInit {
 					})
 			}
 			for (let i = 0; i <= comments.length - 1; i++) {
-				this.postservice.getchildComments(this.postid,comments[i].$key)
+				this.postservice.getchildComments(this.postid,comments[i].$key).take(1)
 					.map(comments => comments.length).subscribe(length =>{
 						if (length > 0) {							
 							this.childcomments[i] = length;
@@ -56,7 +56,7 @@ export class PostcommentsPage implements OnInit {
 					})
 			}
 			// count all comments
-			this.postservice.countLikesDislikesComments(this.postid)
+			this.postservice.countLikesDislikesComments(this.postid).take(1)
 				.subscribe(post=>{
 					if (post.comments != undefined) {						
 						this.noofcomment = post.comments;

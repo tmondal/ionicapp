@@ -79,21 +79,16 @@ export class HomePage implements OnInit{
   longitude: any = null;
 
   posts: any[] = [];
-  feed: any[] = [];
   posttime: any[] = [];
   liked: any[] = [];
   disliked: any[] = [];
   length: any;
-  likes: any = 0;
-  dislikes: any = 0;
-  items: any;
   clubs: any[] = [];
   players: any;
   iffollowing: any[] = [];
-  likedislike: any;
-  noofcomments: any[] = [0];
-  nooflikes: any[] = [0];
-  noofdislikes: any[] = [0];
+  noofcomments: any[] = [];
+  nooflikes: any[] = [];
+  noofdislikes: any[] = [];
   likedislikeservice: any;
   feedsubscription: any;
   noofcommentservice:any;
@@ -117,8 +112,8 @@ export class HomePage implements OnInit{
 
     this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
       this.length = feed.length - 1;
+      feed.reverse();
       this.posts = feed;
-      this.posts.reverse();
 
       // Format created_at time 
 
@@ -130,47 +125,47 @@ export class HomePage implements OnInit{
 
       for (let i = 0; i <= this.length; i++) {
         
-        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
-          this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
-            if(user.liked == undefined) {
-              this.liked[i] = false;
-            }else{
-              this.liked[i] = user.liked;
-            }
-            if(user.disliked == undefined) {
-              this.disliked[i] = false;
-            }
-            else{
-              this.disliked[i] = user.disliked;
-            }
-          });
-        }
+        this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
+          if(user.liked == undefined) {
+            this.liked[i] = false;
+          }else{
+            this.liked[i] = user.liked;
+          }
+          if(user.disliked == undefined) {
+            this.disliked[i] = false;
+          }
+          else{
+            this.disliked[i] = user.disliked;
+          }
+        });
       }
+      console.log(this.liked);
+      console.log(this.disliked);
 
       // count no of likes,dislikes and comments of corresponding posts
       for (let i = 0; i <= this.length; i++) {
 
-        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
-          this.likedislikeservice = this.postservice.countLikesDislikesComments(this.posts[i].$key)
-            .subscribe(post =>{
-              if (post.likes != undefined) {            
-                this.nooflikes[i] = post.likes; 
-              }else{
-                this.nooflikes[i] = 0;
-              }
-              if (post.dislikes != undefined) {
-                this.noofdislikes[i] = post.dislikes;
-              }else{
-                this.noofdislikes[i] = 0;
-              }
-              if (post.comments != undefined) {
-                this.noofcomments[i] = post.comments;
-              }else{
-                this.noofcomments[i] = 0;
-              }
-          });
-        }
+        this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1)
+          .subscribe(post =>{
+            if (post.likes != undefined) {            
+              this.nooflikes[i] = post.likes; 
+            }else{
+              this.nooflikes[i] = 0;
+            }
+            if (post.dislikes != undefined) {
+              this.noofdislikes[i] = post.dislikes;
+            }else{
+              this.noofdislikes[i] = 0;
+            }
+            if (post.comments != undefined) {
+              this.noofcomments[i] = post.comments;
+            }else{
+              this.noofcomments[i] = 0;
+            }
+        });
       }
+      console.log(this.nooflikes);
+      console.log(this.noofdislikes);
     });
 
     this.authservice.getClubstofollow().subscribe(clubs =>{
@@ -209,16 +204,15 @@ export class HomePage implements OnInit{
     when home component destroys.
     */
     this.feedsubscription.unsubscribe();
-    this.noofcommentservice.unsubscribe();
-    // this.likedislike.unsubscribe();
+    // this.likedislikeservice.unsubscribe();
     // this.countlikedislike.unsubscribe();
   }
   
   doRefresh(refresher) {
     this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
       this.length = feed.length - 1;
+      feed.reverse();
       this.posts = feed;
-      this.posts.reverse();
 
       // Format created_at time 
 
@@ -229,47 +223,42 @@ export class HomePage implements OnInit{
       // Get liked disliked by current user
 
       for (let i = 0; i <= this.length; i++) {
-        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
-          this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
-            if(user.liked == undefined) {
-              this.liked[i] = false;
-            }else{
-              this.liked[i] = user.liked;
-            }
-            if(user.disliked == undefined) {
-              this.disliked[i] = false;
-            }
-            else{
-              this.disliked[i] = user.disliked;
-            }
-          });
-        }
+        this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
+          if(user.liked == undefined) {
+            this.liked[i] = false;
+          }else{
+            this.liked[i] = user.liked;
+          }
+          if(user.disliked == undefined) {
+            this.disliked[i] = false;
+          }
+          else{
+            this.disliked[i] = user.disliked;
+          }
+        });
       }
 
       // count no of likes,dislikes and comments of corresponding posts
       for (let i = 0; i <= this.length; i++) {
 
-        if(this.posts[i].posttype == 'image' || this.posts[i].posttype == 'score' || this.posts[i].posttype == 'youtube') {
-
-          this.likedislikeservice = this.postservice.countLikesDislikesComments(this.posts[i].$key)
-            .subscribe(post =>{
-              if (post.likes != undefined) {            
-                this.nooflikes[i] = post.likes; 
-              }else{
-                this.nooflikes[i] = 0;
-              }
-              if (post.dislikes != undefined) {
-                this.noofdislikes[i] = post.dislikes;
-              }else{
-                this.noofdislikes[i] = 0;
-              }
-              if (post.comments != undefined) {
-                this.noofcomments[i] = post.comments;
-              }else{
-                this.noofcomments[i] = 0;
-              }
-          });
-        }
+        this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1)
+          .subscribe(post =>{
+            if (post.likes != undefined) {            
+              this.nooflikes[i] = post.likes; 
+            }else{
+              this.nooflikes[i] = 0;
+            }
+            if (post.dislikes != undefined) {
+              this.noofdislikes[i] = post.dislikes;
+            }else{
+              this.noofdislikes[i] = 0;
+            }
+            if (post.comments != undefined) {
+              this.noofcomments[i] = post.comments;
+            }else{
+              this.noofcomments[i] = 0;
+            }
+        });
       }
     });
 
@@ -346,10 +335,10 @@ export class HomePage implements OnInit{
   }
 
   likePost(postid,i){
-    
+    console.log("Like called");
     // First see if previously liked or disliked .As every post does not have this
     // function we get explicitly by postid
-    console.log("Postid: " + postid);
+    console.log("Postid" + i +":"+ postid);
 
     this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
       if(user.liked === undefined) {
@@ -363,31 +352,47 @@ export class HomePage implements OnInit{
         this.disliked[i] = user.disliked;
       }
 
-      if((!this.liked[i]) && (!this.disliked[i])) {
-          this.liked[i] = true;
-          this.nooflikes[i] += 1;
-          console.log("here");
-          console.log(this.nooflikes[i]); 
-          this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-          this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-        }else if(!this.liked[i] && this.disliked[i]){
-          this.liked[i] = true;
-          this.disliked[i] = false;
-          this.nooflikes[i] += 1;
-          this.noofdislikes[i] -= 1;
-          this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-          this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-        }
-        else if(this.liked[i]) {
-          alert("Don't press multiple times it hurts server :)");
-        }
-        else{
-          alert("Bad engineer. Can't handle all cases :(");
-        }
+      this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1).subscribe(post =>{
+          if (post.likes != undefined) {
+            this.nooflikes[i] = post.likes;
+            console.log("likes : " + post.likes);
+          }else{
+            this.nooflikes[i] = 0;
+          }
+          if (post.dislikes != undefined) {
+            this.noofdislikes[i] = post.dislikes;
+            console.log("dislikes : " + post.dislikes);
+          }else{
+            this.noofdislikes[i] = 0;
+          }
+
+          if(!this.liked[i] && !this.disliked[i]) {
+            this.liked[i] = true;
+            this.nooflikes[i] += 1;
+            console.log("here");
+            console.log(this.nooflikes[i]); 
+            this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
+            this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+          }else if(!this.liked[i] && this.disliked[i]){
+            this.liked[i] = true;
+            this.disliked[i] = false;
+            this.nooflikes[i] += 1;
+            this.noofdislikes[i] -= 1;
+            this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
+            this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+          }else if (this.liked[i]) {
+            alert("Don't press multiple times it hurts server :)");
+          }
+          else{
+            alert("Bad engineer. Can't handle all cases :(");
+          }
+      });
+      
     });
   }
-  dislikePost(postid,i){
 
+  dislikePost(postid,i){
+    console.log("Dislike called");
     this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
       
       if(user.liked === undefined) {
@@ -400,27 +405,43 @@ export class HomePage implements OnInit{
       }else{        
         this.disliked[i] = user.disliked;
       }
-      if((!this.disliked[i]) && (!this.liked[i])) {
-          this.disliked[i] = true;
-          this.noofdislikes[i] += 1;
-          this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-          this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-        }
-        else if(!this.disliked[i] && this.liked[i] ) {
-          this.liked[i] = false;
-          this.disliked[i] = true;
-          this.nooflikes[i] -=1;
-          this.noofdislikes[i] +=1;
-          this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-          this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-        }
-        else if(this.disliked[i]) {
-          alert("No matter how much you hate \n You can press only one time :)");
-        }
-        else{
-          alert("You seeing this because \n The worst programmer designed it :)");
-        }
-     
+        
+      this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1).subscribe(post =>{
+          if (post.likes != undefined) {
+            this.nooflikes[i] = post.likes;
+            console.log("d likes: " + post.likes);
+          }else{
+            this.nooflikes[i] = 0;
+          }
+          if (post.dislikes != undefined) {
+            this.noofdislikes[i] = post.dislikes;
+            console.log("d dislikes: " + post.dislikes);
+          }else{
+            this.noofdislikes[i] = 0;
+          }
+
+          if(!this.disliked[i] && !this.liked[i]) {
+            this.liked[i] = false;
+            this.disliked[i] = true;
+            this.noofdislikes[i] += 1;
+            this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
+            this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+          }
+          else if(!this.disliked[i] && this.liked[i] ) {
+            this.liked[i] = false;
+            this.disliked[i] = true;
+            this.nooflikes[i] -=1;
+            this.noofdislikes[i] +=1;
+            this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
+            this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+          }else if (this.disliked[i]) {
+            alert("No matter how much you hate \n You can press only one time :)");
+          }        
+          else{
+            alert("You seeing this because \n The worst programmer designed it :)");
+          }
+      });
+      
     });
   }
   commentPost(postid){

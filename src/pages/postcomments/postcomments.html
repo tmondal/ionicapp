@@ -30,11 +30,11 @@
 						<span color="yellow">Like</span>
 					</ion-col>
 					<ion-col col-3>
-						<span  color="yellow" (click)="gotocommentReplies(comment.$key)" >Reply</span>
+						<span color="yellow" (click)="gotocommentReplies(comment.$key)" >Reply</span>
 					</ion-col>
 				</ion-row>
-				<button color="teal" ion-button full clear *ngIf="lastcomment[i] && childcomments[i] > 1" (click)="gotocommentReplies(comment.$key)">View previous {{childcomments[i] - 1}} replies</button>
-				<ion-item color="card" *ngIf="lastcomment[i]" style="padding: 0px">
+				<span color="teal" *ngIf="lastcomment[i] && childcomments[i] > 1" (click)="gotocommentReplies(comment.$key)">View previous {{childcomments[i] - 1}} replies</span>
+				<ion-item (click)="gotocommentReplies(comment.$key)" color="card" *ngIf="lastcomment[i]" style="padding: 0px">
 					<ion-avatar item-left style="margin: 8px 0px 0px">
 						<img style="height: 30px;width: 30px;border-radius: 0px" [src]="lastcomment[i].profileimage" *ngIf="lastcomment[i].profileimage" >
 					</ion-avatar>
