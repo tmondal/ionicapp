@@ -28,8 +28,8 @@ export class PostmodalPage implements OnInit{
 	eventdate: any;
 	eventvenue: any = null;
 	participating: Number = 0;
-	entryfee: any = 0;
-	prize: any = 0;
+	entryfee: any;
+	prize: any
 	rules: String[] = [];
 	rule: String;
 
@@ -225,8 +225,8 @@ export class PostmodalPage implements OnInit{
 			sporttype: this.sporttype,
 			eventdate: evtdate,
 			eventvenue: this.eventvenue,
-			entryfee: this.entryfee,
-			prize: this.prize,
+			entryfee: this.entryfee | 0,
+			prize: this.prize | 0,
 			participating: this.participating,
 			rules: this.rules
 		}

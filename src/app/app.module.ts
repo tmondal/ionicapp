@@ -43,6 +43,10 @@ import { GooglemapPage } from '../pages/googlemap/googlemap';
 import { GooglemapdistancePage } from '../pages/googlemapdistance/googlemapdistance';
 import { PostcommentsPage } from '../pages/postcomments/postcomments';
 import { CommentrepliesPage } from '../pages/commentreplies/commentreplies';
+import { NewleaguePage } from '../pages/newleague/newleague';
+import { TabsPage } from '../pages/tabs/tabs';
+import { ParticipatingPage } from '../pages/participating/participating';
+import { OrganizingPage } from '../pages/organizing/organizing';
 
 import { AuthService } from '../providers/auth-service';
 import { PostService } from '../providers/post-service';
@@ -96,7 +100,11 @@ const AuthConfig = {
     GooglemapPage,
     GooglemapdistancePage,
     PostcommentsPage,
-    CommentrepliesPage
+    CommentrepliesPage,
+    NewleaguePage,
+    TabsPage,
+    ParticipatingPage,
+    OrganizingPage
   ],
   imports: [
     //FormsModule, for template driven form
@@ -106,7 +114,9 @@ const AuthConfig = {
     AngularFireModule.initializeApp(firebaseConfig,AuthConfig),
     IonicModule.forRoot(MyApp),
   ],
+  
   bootstrap: [IonicApp],
+
   entryComponents: [
     MyApp,
     LoginPage,
@@ -135,7 +145,10 @@ const AuthConfig = {
     GooglemapPage,
     GooglemapdistancePage,
     PostcommentsPage,
-    CommentrepliesPage
+    CommentrepliesPage,
+    NewleaguePage,
+    TabsPage,ParticipatingPage,
+    OrganizingPage
   ],
   providers: [
       Camera,
