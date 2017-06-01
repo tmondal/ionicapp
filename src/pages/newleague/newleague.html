@@ -11,15 +11,77 @@
 </ion-header>
 
 
-<ion-content>
-	<ion-list no-lines>
-		<ion-row>
-			<ion-col>
-				<ion-label>League name :</ion-label>
-			</ion-col>
-			<ion-col>
-				<ion-input vlaue="league" placeholder="Enter leage name"></ion-input>
-			</ion-col>
-		</ion-row>
+<ion-content class="league">
+	<ion-card>
+		<ion-item color="card">
+			<ion-label color="yellow">League name :</ion-label>
+			<ion-input [(ngModel)]="leaguename" value="leaguename" placeholder="Enter leage name"></ion-input>	
+		</ion-item>
+	</ion-card>
+	<ion-card color="card">
+		<ion-card-header color="yellow">
+			Participating Clubs
+		</ion-card-header>
+		<ion-card-content>
+			<ion-item *ngFor="let team of teams,let i = index" color="card" class="league">
+				<p><b>{{team.name}}</b></p>
+				<p>{{team.email}}</p>
+				<ion-icon color="yellow" item-right (click)="removeTeam(i)" name="trash"></ion-icon>
+			</ion-item>
+		</ion-card-content>
+	</ion-card>
+	<!-- For custom searchbar see 'angular.io' input portion -->
+	<ion-searchbar
+		placeholder = "Search team for league.."
+		(ionInput)="onInput($event)"
+		(ionCancel)="onCancel($event)">
+	</ion-searchbar>
+	<ion-list>
+		<ion-item color="card" *ngFor="let user of users,let i = index">
+			<p color="white"><b>{{user.name}}</b></p>
+			<p color="white">{{user.email}}</p>
+			<button color="yellow" item-right ion-button small (click)="addUsertoTeam(user,i)">Add</button>
+		</ion-item>
 	</ion-list>
+	<ion-card color="card">
+		<ion-card-header color="yellow">Create Fixtures</ion-card-header>
+	</ion-card>
+	<ion-card color="card">
+		<ion-item color="yellow" *ngFor="let fixture of fixtures,let i = index" style="border-bottom: 1px black dotted">
+			<ion-label color="background">{{fixture.teamone}} vs {{fixture.teamtwo}} on {{fixture.eventdate}}</ion-label>
+			<ion-icon item-right color="background" name="trash" (click)="removeFixture(i)" ></ion-icon>
+		</ion-item>
+	</ion-card>
+	<ion-card color="card">
+		<ion-card-content>
+			<ion-item class="league">
+				<ion-label color="yellow">Team One</ion-label>
+				<ion-select [(ngModel)]="teamone" >
+					<ion-option *ngFor="let team of teams" value = {{team.name}}>
+						{{team.name}}
+					</ion-option>
+				</ion-select>
+			</ion-item>
+			<ion-item class="league">
+				<ion-label color="yellow">Team Two</ion-label>
+				<ion-select [(ngModel)]="teamtwo" >
+					<ion-option *ngFor="let team of teams" value = {{team.name}}>
+						{{team.name}}
+					</ion-option>
+				</ion-select>
+			</ion-item>
+			<ion-item class="league">
+				<ion-label color="yellow">Venue</ion-label>
+				<ion-input [(ngModel)]="venue" value="venue" placeholder="e.g. Field of {{teamone}}"></ion-input>
+			</ion-item>
+			<ion-item class="league">
+	  			<ion-label color="yellow">Date</ion-label>
+	  			<ion-datetime color="yellow" displayFormat="DD MMM, YY" pickerFormat="DDD MMM YYYY" [(ngModel)]="eventdate"></ion-datetime>
+	  			<ion-icon color="yellow" item-right name="calendar"></ion-icon>
+			</ion-item>
+			<button style="margin-top: 10px" color="yellow" ion-button block (click)="addFixture()" >Add fixture</button>
+		</ion-card-content>
+	</ion-card>
+	<button style="width: 97%; margin: 10px" (click)="publishLeague()"  color="orange" ion-button block outline>Publish the league</button>
+
 </ion-content>

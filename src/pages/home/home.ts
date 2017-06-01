@@ -21,7 +21,6 @@ import {
   keyframes
 } from '@angular/animations';
 
-
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
@@ -67,6 +66,7 @@ import {
 
 export class HomePage implements OnInit{
 
+  shownav: boolean = true;
   authuid: any;
   authid: any;
   user: any;
@@ -92,6 +92,7 @@ export class HomePage implements OnInit{
   likedislikeservice: any;
   feedsubscription: any;
   noofcommentservice:any;
+  
 
   constructor(
   	public navCtrl: NavController,

@@ -44,7 +44,13 @@ $colors: (
 // Material Design only Sass variables can go here
 
 $popover-md-width: 150px;
-
+$text-input-md-show-focus-highlight: false;
+$list-md-header-border-top: none;
+$searchbar-md-input-background-color: #424242;
+$searchbar-md-input-text-color: #FFEB3B;
+$searchbar-md-input-search-icon-color: #FFEB3B;
+$searchbar-md-input-clear-icon-color: #FFEB3B;
+$tabs-md-tab-min-height: 40px;
 
 // App Windows Variables
 // --------------------------------------------------

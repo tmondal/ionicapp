@@ -60,6 +60,15 @@ export class AuthService {
       this.profile =  this.af.database.object('/users/' + userId); 
       return this.profile.take(1);
     }
+    getuserbyName(name){
+      return this.af.database.list('/users/',{
+        query: {
+          orderByChild: 'name',
+          startAt: name,
+          endAt: name + "\uf8ff"
+        }
+      })
+    }
     getmyprofile(){
       this.profile =  this.af.database.object('/users/' + this.auth.uid);
       return this.profile.take(1);
@@ -92,7 +101,7 @@ export class AuthService {
         this.showToast("Storage ref created..");
 
         let uploadTask = this.imageRef.putString(imagesrc,'base64');
-        this.showToast("putString called..");
+        this.showToast("putstring called..");
         uploadTask.on('state_changed',
 
           (snapshot) => {
@@ -126,7 +135,7 @@ export class AuthService {
         this.showToast("Storage ref created..");
 
         let uploadTask = this.imageRef.putString(imagesrc,'base64');
-        this.showToast("putString called..");
+        this.showToast("putstring called..");
         uploadTask.on('state_changed',
 
           (snapshot) => {

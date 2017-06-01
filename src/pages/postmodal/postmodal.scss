@@ -1,6 +1,13 @@
 page-postmodal {
 
 	.container {
-		background-color: #f4f4f4;
+		background-color: #212121;
+		padding: 6px;
+	}
+	.item-md {
+		background-color: inherit;
+	}
+	.list-md .item-input:last-child{
+		border-bottom: none;
 	}
 }

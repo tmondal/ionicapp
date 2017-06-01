@@ -27,6 +27,7 @@ export class PostService {
   progress: any = 0;
   followers: any[] = [];
   noofchild: any = 0;
+  leaguenode: any;
   constructor(
     public af: AngularFire,
     public toastCtrl: ToastController,
@@ -60,7 +61,7 @@ export class PostService {
       this.showToast("Storage ref created..");
 
       let uploadTask = this.imageRef.putString(imagesrc,'base64');
-      this.showToast("putString called..");
+      this.showToast("putstring called..");
       uploadTask.on('state_changed',
 
         (snapshot) => {
@@ -108,7 +109,6 @@ export class PostService {
 
     // See cordova File plugin documentation .
     // get the file and store to firebase storage 
-    alert("Video path: " + nativepath);
     if(nativepath) { 
 
       alert("Video will be uploaded in background.\nOnce done we will let you know.");
@@ -166,7 +166,7 @@ export class PostService {
       this.af.database.object('/').update(updatedPostData);
     });
   }
-  
+
   showToast(message){
     let toast = this.toastCtrl.create({
       message: message,
@@ -174,11 +174,11 @@ export class PostService {
     });
     toast.present();
   }
-  
+
   getPost(id){
     return this.af.database.object('/posts/' + id).take(1);
   }
- 
+
   getFeed(){
     this.posts = this.af.database.list('/userwise-feed/' + this.fireauth.uid , {
       query: {
@@ -220,7 +220,7 @@ export class PostService {
   getLikedDisliked(postid){
     return this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.fireauth.uid);
   }
-  
+
   likeDislikePost(postid,liked,disliked){
     this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.fireauth.uid).update({
       liked : liked,
@@ -252,7 +252,7 @@ export class PostService {
   getparentComments(postid){
     return this.af.database.list('/postwise-parentcomments/'+postid);
   }
-  
+
   getlastparentComment(postid){
     return this.af.database.list('/postwise-parentcomments/'+postid,{
       query: {
@@ -262,7 +262,7 @@ export class PostService {
       }
     }).take(1);
   }
-  
+
   addchildComment(postid,parentid,data,noofcomment){
     this.commentnode = this.af.database.list('/post-comment-structure/'+postid+"/"+parentid);
     let childcommentid = this.commentnode.push().key;
@@ -291,5 +291,24 @@ export class PostService {
 
   getpostfromFeedbyid(postid){
     return this.af.database.object('/userwise-feed/' + this.fireauth.uid +"/"+ postid).take(1);
+  }
+
+  // league logic
+
+  createLeague(fixtures,leaguename,teams){
+    this.leaguenode = this.af.database.list(`/league-organized/${this.fireauth.uid}/`);
+    let key = this.leaguenode.push().key;
+    let updatedata = {};
+
+    updatedata[`/league-organized/${this.fireauth.uid}/` + key +'/leaguename'] =  leaguename;
+    updatedata[`/league-organized/${this.fireauth.uid}/` + key + '/fixtures'] = fixtures;
+
+    for (var i = teams.length - 1; i >= 0; i--) {
+      updatedata[`/league-participated/${teams[i].id}/` + key +'/leaguename'] = leaguename;
+    }
+    this.af.database.object('/').update(updatedata).then(
+      (success) => this.showToast("League successfully created."),
+      (error) => this.showToast("Error ! try again !!")
+    );
   }
 }

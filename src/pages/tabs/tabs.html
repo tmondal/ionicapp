@@ -1,5 +1,25 @@
-<ion-tabs tabsPlacement="top" color="primary">
-  <ion-tab [root]="tab1Root" tabTitle="Feed" tabIcon="home"></ion-tab>
-  <ion-tab [root]="tab2Root" tabTitle="Participating" tabIcon="walk"></ion-tab>
-  <ion-tab [root]="tab3Root" tabTitle="Organizing" tabIcon="calendar"></ion-tab>
-</ion-tabs>
+<!-- 
+<super-tabs color="background" [config]="{ sideMenu: 'left' }">
+  <super-tab [root]="tab1Root" title="Feed" icon="home"></super-tab>
+  <super-tab [root]="tab2Root" title="Participating" icon="walk"></super-tab>
+  <super-tab [root]="tab3Root" title="Organizing" icon="calendar"></super-tab>
+</super-tabs>
+ -->
+
+ <ion-header no-shadow no-border>
+  <ion-navbar color="dark">
+    <button ion-button menuToggle color="yellow">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Test</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content no-bounce>
+	<super-tabs [config]="{sideMenu:'left'}" toolbarColor="light" toolbarBackground="dark" badgeColor="yellow" indicatorColor="yellow" >
+
+		<super-tab [swipeBackEnabled]="false" [root]="tab1Root" title="Feed" icon="home"></super-tab>
+		<super-tab [root]="tab2Root" title="Participating" icon="walk"></super-tab>
+		<super-tab [root]="tab3Root" title="Organizing" icon="calendar"></super-tab>
+
+	</super-tabs>
+</ion-content>

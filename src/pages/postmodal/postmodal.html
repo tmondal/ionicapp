@@ -11,7 +11,7 @@
 
 <ion-content class="container">
 	<ion-list>
-		<ion-card>
+		<ion-card color="card">
 			<ion-item>
 				<ion-label> Post Type: </ion-label>
 				<ion-select [(ngModel)]="posttype">
@@ -24,7 +24,7 @@
 			    </ion-select>
 			</ion-item>
 		</ion-card>
-		<ion-card *ngIf = "(posttype != 'image') && (posttype != 'youtube') ">
+		<ion-card color="card" *ngIf = "(posttype != 'image') && (posttype != 'youtube') ">
 			<ion-item>
 				<ion-label> Sport Type: </ion-label>
 				<ion-select [(ngModel)]="sporttype">
@@ -37,7 +37,7 @@
 			    </ion-select>
 			</ion-item>
 		</ion-card>
-		<ion-card *ngIf="posttype == 'score' && sporttype == 'cricket'">
+		<ion-card color="card" *ngIf="posttype == 'score' && sporttype == 'cricket'">
 			<ion-item>
 				<ion-label>Cricket Type: </ion-label>
 				<ion-select [(ngModel)]="cricket">
@@ -50,31 +50,19 @@
 		<div [ngSwitch] = "posttype" >			
 			<!-- Tournament Post -->
 			<div *ngSwitchCase = "'tournament'">			
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>
 			  			<ion-label>Event Date </ion-label>
 			  			<ion-datetime displayFormat="DD MMM, YY" pickerFormat="DDD MMM YYYY" [(ngModel)]="eventdate"></ion-datetime>
 					</ion-item>
 				</ion-card>
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>
 			  			<ion-label>Event Venue </ion-label>
-			  			<ion-input value="eventvenue" [(ngModel)] = "eventvenue" placeholder="Default: our club ground.."></ion-input>
+			  			<ion-input value="eventvenue" [(ngModel)] = "eventvenue" placeholder="Our club ground.."></ion-input>
 					</ion-item>
 				</ion-card>
-				<!-- <ion-card>
-					<ion-item>
-						<ion-row>
-							<ion-col col-10>club/ground/achieve photo: </ion-col>
-							<ion-col col-2 style="padding-top: 25px">
-								<button (click)="selectGalleryImage()" style="background-color: white">
-									<ion-icon name="image"></ion-icon>
-								</button>
-							</ion-col>
-						</ion-row>
-					</ion-item>
-				</ion-card> -->
-				<ion-card>
+				<!-- <ion-card color="card">
 					<ion-item>
 						<ion-row>
 							<ion-col col-8 style="padding-left: 0px">
@@ -92,9 +80,16 @@
 							</ion-col>
 						</ion-row>
 					</ion-item>
+				</ion-card> -->
+				<ion-card color="card">
+					<ion-item>
+						<span style="color: white">Club/ground/achieve pic:</span>&nbsp;&nbsp;&nbsp;&nbsp;
+						<ion-icon (click)="capturePictureByCamera()" name="camera" color="purple"></ion-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<ion-icon (click)="selectGalleryImage()" name="image" color="purple"></ion-icon>
+					</ion-item>
 				</ion-card>
 
-				<ion-card>					
+				<ion-card color="card">					
 					<ion-item>
 						<ion-label>Entry Fee:</ion-label>
 						<ion-input  [(ngModel)] = "entryfee" placeholder="Default : 0"></ion-input>
@@ -104,7 +99,7 @@
 							<ion-input  [(ngModel)] = "prize" placeholder="Default : 0"></ion-input>
 					</ion-item>
 				</ion-card>
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>Rules:</ion-item>
 					<ol>
 						<li *ngFor= "let rule of rules,let i = index">					
@@ -129,10 +124,10 @@
 					</div>
 				</ion-card>
 				<br><br>
-				<ion-card>
+				<ion-card color="card">
 					<button (click)="tournamentSubmit()" color="purple" ion-button full>Post</button>
 				</ion-card>
-				<ion-card>
+				<ion-card color="card">
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
 				</ion-card>
 			</div>
@@ -140,31 +135,19 @@
 
 			<!-- Hiring Trial post start -->
 			<div *ngSwitchCase = "'hiring'">			
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>
 			  			<ion-label>Event Date </ion-label>
 			  			<ion-datetime displayFormat="DD MMM, YY" pickerFormat="DDD MMM YYYY" [(ngModel)]="eventdate"></ion-datetime>
 					</ion-item>
 				</ion-card>
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>
 			  			<ion-label>Event Venue </ion-label>
 			  			<ion-input value="eventvenue" [(ngModel)] = "eventvenue" placeholder="Default: our club ground.."></ion-input>
 					</ion-item>
 				</ion-card>
-				<!-- <ion-card>
-					<ion-item>
-						<ion-row>
-							<ion-col col-10>Upload club/achieve/ground photo : </ion-col>
-							<ion-col col-2 style="padding-top: 25px">
-								<button (click)="selectPhotoFromGallery()" style="background-color: white">
-									<ion-icon name="image"></ion-icon>
-								</button>
-							</ion-col>
-						</ion-row>
-					</ion-item>
-				</ion-card> -->
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>
 						<ion-row>
 							<ion-col col-10>club/ground/achieve pic: </ion-col>
@@ -181,7 +164,7 @@
 						</ion-row>
 					</ion-item>
 				</ion-card>
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>Criteria:</ion-item>
 					<ol>
 						<li *ngFor= "let criterion of criteria,let i = index">
@@ -208,10 +191,10 @@
 					</div>
 				</ion-card>
 				<br><br>
-				<ion-card>
+				<ion-card color="card">
 					<button (click)="hiringSubmit()" ion-button full>Post</button>
 				</ion-card>
-				<ion-card>
+				<ion-card color="card">
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
 				</ion-card>
 			</div>
@@ -219,7 +202,7 @@
 
 			<!-- Text and video or image post starts -->
 			<div *ngSwitchCase = "'image'">			
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>
 						<ion-row>
 							<ion-col col-10>Capture a picture: </ion-col>
@@ -232,9 +215,9 @@
 					</ion-item>
 				</ion-card>
 
-				<button ion-button clear full>OR</button>
+				<button color="card" ion-button clear full>OR</button>
 
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>
 						<ion-row>
 							<ion-col col-10>Record a video: </ion-col>
@@ -247,9 +230,9 @@
 					</ion-item>
 				</ion-card>
 
-				<button ion-button clear full>OR</button>
+				<button color="card" ion-button clear full>OR</button>
 
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>
 						<ion-row>
 							<ion-col col-10>Select image from gallery: </ion-col>
@@ -262,9 +245,9 @@
 					</ion-item>
 				</ion-card>
 
-				<button ion-button clear full>OR</button>
+				<button color="card" ion-button clear full>OR</button>
 
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>
 						<ion-row>
 							<ion-col col-10>Select video from gallery: </ion-col>
@@ -276,17 +259,17 @@
 						</ion-row>
 					</ion-item>
 				</ion-card>
-				<ion-card>
+				<ion-card color="card">
 					<ion-item>Title:</ion-item>
 					<ion-item>
 						<ion-input vlaue="imagetitle" [(ngModel)]="imagetitle" placeholder="Give an attractive title :)"></ion-input>
 					</ion-item>
 				</ion-card>
 				
-				<ion-card>
+				<ion-card color="card">
 					<button (click)="textAndImageVideoSubmit()" ion-button full>Post</button>
 				</ion-card>
-				<ion-card>
+				<ion-card color="card">
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
 				</ion-card>
 			</div>

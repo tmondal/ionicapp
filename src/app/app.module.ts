@@ -1,6 +1,9 @@
 import { NgModule ,ErrorHandler} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpModule } from '@angular/http';
+
+import { SuperTabsModule,SuperTabsController } from 'ionic2-super-tabs';
 
 
 // It's for reactive forms . For template driven form use 'FormsModule' 
@@ -70,7 +73,6 @@ const AuthConfig = {
 
 @NgModule({
   declarations: [
-    
     Feedpipe,
     Youtube,
     MyApp,
@@ -111,8 +113,10 @@ const AuthConfig = {
     ReactiveFormsModule,
     BrowserAnimationsModule,
     BrowserModule,
+    HttpModule,
     AngularFireModule.initializeApp(firebaseConfig,AuthConfig),
     IonicModule.forRoot(MyApp),
+    SuperTabsModule.forRoot()
   ],
   
   bootstrap: [IonicApp],
@@ -151,16 +155,16 @@ const AuthConfig = {
     OrganizingPage
   ],
   providers: [
-      Camera,
-      MediaCapture,
-      DatePicker,
-      GoogleMaps,
-      Geolocation,
-      AuthService,
-      PostService,
-      StorageService,
-      
-      {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Camera,
+    MediaCapture,
+    DatePicker,
+    GoogleMaps,
+    Geolocation,
+    AuthService,
+    PostService,
+    StorageService,
+    SuperTabsController,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
 export class AppModule {}
