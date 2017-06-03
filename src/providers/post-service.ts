@@ -297,14 +297,14 @@ export class PostService {
 
   createLeague(fixtures,leaguename,teams){
     this.leaguenode = this.af.database.list(`/league-organized/${this.fireauth.uid}/`);
-    let key = this.leaguenode.push().key;
+    let leagueid = this.leaguenode.push().key;
     let updatedata = {};
 
-    updatedata[`/league-organized/${this.fireauth.uid}/` + key +'/leaguename'] =  leaguename;
-    updatedata[`/league-organized/${this.fireauth.uid}/` + key + '/fixtures'] = fixtures;
+    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid +'/leaguename'] =  leaguename;
+    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/fixtures'] = fixtures;
 
     for (var i = teams.length - 1; i >= 0; i--) {
-      updatedata[`/league-participated/${teams[i].id}/` + key +'/leaguename'] = leaguename;
+      updatedata[`/league-participated/${teams[i].id}/` + leagueid +'/leaguename'] = leaguename;
     }
     this.af.database.object('/').update(updatedata).then(
       (success) => this.showToast("League successfully created."),

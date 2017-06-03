@@ -20,6 +20,9 @@ page-home {
     margin-top: 4px;
     width: 100%;
   }
+  .card-md {
+    border-radius: 0px;
+  }
   .post {
     margin: 0px;
     margin-top: 3px;
@@ -49,6 +52,20 @@ page-home {
   }
   .scroll-content {
     margin: 0px;
+  }
+
+  /* Show hide navbar */
+  .scroll-content{
+    top:-56px !important;
+    padding-top: 60px !important;
+  }
+  .hide-header{
+    transition : top 0.25s ease;
+    top: -56px;
+  }
+  .show-header{
+    transition : top 0.25s ease;
+    top: 0px;
   }
   
 }

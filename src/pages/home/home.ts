@@ -1,5 +1,12 @@
-import { Component ,OnInit } from '@angular/core';
-import { NavController,ModalController ,PopoverController} from 'ionic-angular';
+import { Component ,OnInit, ViewChild} from '@angular/core';
+import { ElementRef} from '@angular/core';
+import { 
+  NavController,
+  ModalController ,
+  PopoverController,
+  NavParams,
+  Content
+} from 'ionic-angular';
 
 import { MypostPage } from '../mypost/mypost';
 import { PostPage } from '../post/post';
@@ -66,6 +73,8 @@ import {
 
 export class HomePage implements OnInit{
 
+  @ViewChild(Content) content: Content;
+
   shownav: boolean = true;
   authuid: any;
   authid: any;
@@ -93,11 +102,21 @@ export class HomePage implements OnInit{
   feedsubscription: any;
   noofcommentservice:any;
   
+  start = 0;
+  threshold = 100;
+  slideHeaderPrevious = 0;
+  navbar: any;
+  tabbar: any;
+  showheader:boolean;
+  hideheader:boolean;
+  headercontent:any;
 
   constructor(
   	public navCtrl: NavController,
   	public modalCtrl: ModalController,
   	public popoverCtrl: PopoverController,
+    public navParams: NavParams,
+    public myElement: ElementRef,
     private postservice: PostService,
     public authservice: AuthService,
     private af: AngularFire
@@ -106,10 +125,34 @@ export class HomePage implements OnInit{
         if(user) {
           this.authid = user.auth.uid;
         }
-      });
+    });
+    this.showheader = true;
+    this.hideheader = false;
   }
 
   ngOnInit(){
+
+    // Ionic scroll element
+    this.navbar = this.myElement.nativeElement.getElementsByClassName('scroll-content')[0];
+    
+    this.navbar.addEventListener("scroll", () => {
+      if(this.navbar.scrollTop - this.start > this.threshold) {
+        this.showheader =false;
+        this.hideheader = true;
+        // document.querySelector(".tabbar")['style'].display = 'none';
+      } else {
+        this.showheader =true;
+        this.hideheader = false;
+        // document.querySelector(".tabbar")['style'].display = 'flex';
+      }
+      if (this.slideHeaderPrevious >= this.navbar.scrollTop - this.start) {
+        this.showheader =true;
+        this.hideheader = false;
+        // document.querySelector(".tabbar")['style'].display = 'flex';
+      }
+      this.slideHeaderPrevious = this.navbar.scrollTop - this.start;
+    });
+
 
     this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
       this.length = feed.length - 1;
@@ -140,8 +183,6 @@ export class HomePage implements OnInit{
           }
         });
       }
-      console.log(this.liked);
-      console.log(this.disliked);
 
       // count no of likes,dislikes and comments of corresponding posts
       for (let i = 0; i <= this.length; i++) {
@@ -165,8 +206,6 @@ export class HomePage implements OnInit{
             }
         });
       }
-      console.log(this.nooflikes);
-      console.log(this.noofdislikes);
     });
 
     this.authservice.getClubstofollow().subscribe(clubs =>{
@@ -294,8 +333,6 @@ export class HomePage implements OnInit{
     this.authservice.unfollowuser(this.clubs[i].$key);
   }
   onCreatePostClick(){
-    // let modal = this.modalCtrl.create(PostmodalPage);
-    // modal.present();
     this.navCtrl.push(PostmodalPage);
   }
   onRulesClick(rules,participating,postid,userId){

@@ -8,7 +8,7 @@ import { OrganizingPage } from '../organizing/organizing';
 
 @Component({
   selector: 'page-tabs',
-  templateUrl: 'tabs.html'
+  templateUrl: 'tabs.html',
 })
 export class TabsPage {
 
@@ -16,5 +16,8 @@ export class TabsPage {
 	tab2Root = ParticipatingPage;
 	tab3Root = OrganizingPage;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams) {}
+	constructor(
+		public navCtrl: NavController, 
+		public navParams: NavParams,
+	) {}
 }
