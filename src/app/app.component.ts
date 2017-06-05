@@ -7,6 +7,8 @@ import { AngularFire } from 'angularfire2';
 import { NewleaguePage } from '../pages/newleague/newleague';
 import { TabsPage } from '../pages/tabs/tabs';
 
+import { AuthService } from '../providers/auth-service';
+
 
 
 @Component({
@@ -18,11 +20,13 @@ export class MyApp {
 	@ViewChild(Nav) nav: Nav;
 
 	pages: Array<{title: string, component: any}>;
+	username: any;
+	profileimage: any;
 
-
-	constructor(platform: Platform, public af: AngularFire) {
+	constructor(platform: Platform, public af: AngularFire,public authservice: AuthService) {
 
 		const authObserver = af.auth.subscribe(user =>{
+
 			if(user) {
 				this.rootPage = TabsPage;
 				authObserver.unsubscribe();
@@ -30,6 +34,10 @@ export class MyApp {
 				this.rootPage = LoginPage;
 				authObserver.unsubscribe();
 			}
+			this.authservice.getuserbyId(user.uid).subscribe(user =>{
+				this.username = user.name;
+				this.profileimage = user.profileimage;
+			})
 		});
 
 		platform.ready().then(() => {

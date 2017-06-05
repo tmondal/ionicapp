@@ -20,12 +20,15 @@
 	    <img id="coverimage" [src]="coverimage" *ngIf="coverimage != null">
 	    <div class="card-title">{{name}}</div>
 	    <p class="card-subtitle">We care our players..</p>
-	    <ion-card class="profilepic">
-	    	<!-- profile photo -->
+	    <ion-avatar class="profilepic">
 	    	<img [src]="profileimage" *ngIf="profileimage != null">
-	    </ion-card>
+	    </ion-avatar>
 	</ion-card>
+
+
 	<!-- Place location or direction or distance from current user here -->
+
+
 	<ion-card>
 		<ion-item>					
 			Contact details:
@@ -91,34 +94,6 @@
 		      </ion-col>
 	    </ion-row>
  	</ion-card>
- 	<div>
-	  <ion-toolbar no-border-top style="margin-top: 5px">
-	    <ion-segment [(ngModel)]="clubprofile" style="background-color: #fff">
-	      
-	      <ion-segment-button value="moments"  class="middlenavbar" color="blue">
-	        Moments
-	      </ion-segment-button>
-	      <ion-segment-button value="followers"  class="middlenavbar">
-	        Followers
-	      </ion-segment-button>
-	      <ion-segment-button value="players"  class="middlenavbar">
-	        Players
-	      </ion-segment-button>
-	    </ion-segment>
-	  </ion-toolbar>
-	</div>
-	<div [ngSwitch]="clubprofile">
-
-		<div *ngSwitchCase="'moments'">      
-			<page-moments></page-moments>
-		</div>
-		<div *ngSwitchCase="'achievements'">
-			<page-followers></page-followers>
-		</div>
-		<div *ngSwitchCase="'players'">
-			<page-clubplayers></page-clubplayers>
-		</div>
-	</div>
 </ion-content>
 
 <!-- For players profile -->

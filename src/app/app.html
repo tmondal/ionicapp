@@ -1,27 +1,15 @@
-<!-- <ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-content>
-    <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
-      </button>
-    </ion-list>
-  </ion-content>
-
-</ion-menu>
-
-<ion-nav [root]="rootPage" #content ></ion-nav> -->
 
 <ion-split-pane>
   <ion-menu [content]="content">
-    <ion-content>
-      <ion-list>
-        <button ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)">{{ p.title }}</button>
+    <ion-content style="background-color: #212121">
+      <ion-item color="card" class="menuitem">
+        <ion-avatar item-left>
+          <img style="height: 60px; width: 60px" [src]="profileimage" *ngIf= "profileimage">
+        </ion-avatar>
+        <h2> {{username || "Forgot to edit name"}} </h2>
+      </ion-item>
+      <ion-list no-lines>
+        <button color="card" ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)">{{ p.title }}</button>
       </ion-list>
     </ion-content>
   </ion-menu>

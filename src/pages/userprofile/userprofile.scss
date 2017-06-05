@@ -16,24 +16,28 @@ page-userprofile{
 			margin-top:5px; 
 			padding: 0px;
 			width: 100%;
+			height: 200px;
+			box-shadow: none;
 		}
 		
 		.profilepic {
 			position: absolute;
-			top: 60%;
-			left: 2%;
-			width: 60px;
-			height:60px;
-			border-radius: 2px;
+			top: 50%;
+			left: 40%;
+			width: 80px;
+			height:80px;
+			border-radius: 50%;
 			border:2px solid white;
 		}
 		.profilepic{
 			img{
-				height: 60px;
+				height: 80px;
+				width: 80px;
+				border-radius: 50%;
 			}
 		}
 		#coverimage {
-			height: 150px;
+			height: 70%;
 		}
 
 		.card-title {

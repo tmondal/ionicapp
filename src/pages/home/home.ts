@@ -105,7 +105,7 @@ export class HomePage implements OnInit{
   start = 0;
   threshold = 100;
   slideHeaderPrevious = 0;
-  navbar: any;
+  scrollcontent: any;
   tabbar: any;
   showheader:boolean;
   hideheader:boolean;
@@ -133,24 +133,28 @@ export class HomePage implements OnInit{
   ngOnInit(){
 
     // Ionic scroll element
-    this.navbar = this.myElement.nativeElement.getElementsByClassName('scroll-content')[0];
+    this.scrollcontent = this.myElement.nativeElement.getElementsByClassName('scroll-content')[0];
     
-    this.navbar.addEventListener("scroll", () => {
-      if(this.navbar.scrollTop - this.start > this.threshold) {
+    this.scrollcontent.addEventListener("scroll", () => {
+      if(this.scrollcontent.scrollTop > this.threshold) {
+        document.querySelector(".tabbar")['style'].transition = "bottom .25s ease-in";
+        document.querySelector(".tabbar")['style'].bottom = "-56px";
         this.showheader =false;
         this.hideheader = true;
-        // document.querySelector(".tabbar")['style'].display = 'none';
       } else {
+        document.querySelector(".tabbar")['style'].transition = "bottom .30s ease-in";
+        document.querySelector(".tabbar")['style'].bottom = "0px";
         this.showheader =true;
         this.hideheader = false;
-        // document.querySelector(".tabbar")['style'].display = 'flex';
+
       }
-      if (this.slideHeaderPrevious >= this.navbar.scrollTop - this.start) {
+      if (this.slideHeaderPrevious >= this.scrollcontent.scrollTop) {
+        document.querySelector(".tabbar")['style'].transition = "bottom .30s ease-in";
+        document.querySelector(".tabbar")['style'].bottom = "0px";
         this.showheader =true;
         this.hideheader = false;
-        // document.querySelector(".tabbar")['style'].display = 'flex';
       }
-      this.slideHeaderPrevious = this.navbar.scrollTop - this.start;
+      this.slideHeaderPrevious = this.scrollcontent.scrollTop;
     });
 
 

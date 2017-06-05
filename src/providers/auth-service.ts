@@ -29,7 +29,6 @@ export class AuthService {
       af.auth.subscribe(user=>{
         if(user) {
           this.auth = user.auth;
-          console.log(user);
         }
       });
       this.storageRef = firebase.storage().ref().child('images/');
