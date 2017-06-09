@@ -1,35 +1,48 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 import { AuthService } from '../../providers/auth-service';
 import { PostService } from '../../providers/post-service';
 
 
-
+@IonicPage()
 @Component({
-  selector: 'page-newleague',
-  templateUrl: 'newleague.html'
+  selector: 'page-editleague',
+  templateUrl: 'editleague.html',
 })
-export class NewleaguePage {
+export class Editleague {
 
+	league: any;
+	leagueid: any;
 	leaguename: any;
 	sporttype: any;
-	fixtures: any[] = [];
 	teams: any[] = [];
+	removedteams: any[] = [];
 	users: any[] = [];
-	teamoneid: any;
-	teamtwoid: any;
-	eventdate: any;
+	fixtures: any[] = [];
+	teamone: any;
+	teamtwo: any;
 	venue: any;
+	eventdate: any;
 
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
 		public authservice: AuthService,
 		public postservice: PostService
-	) {}
-	
+	) {	
+		this.league = this.navParams.get("league");
+		this.fixtures = this.league.fixtures;
+		if (this.league.teams) {			
+			this.teams = this.league.teams;
+		}
+		this.leaguename = this.league.leaguename;
+		this.sporttype = this.league.sporttype;
+	}
+
 	removeTeam(i){
 		this.teams.splice(i,1);
+		this.removedteams.push(this.teams[i].id); 
 	}
 	onInput(ev:any){
 		let data = ev.target.value;
@@ -45,7 +58,7 @@ export class NewleaguePage {
 			this.users = [];
 		}
 	}
-
+	
 	addUsertoTeam(user,i){
 		let found = false;
 		for (let i = 0; i < this.teams.length; i++) {
@@ -66,46 +79,43 @@ export class NewleaguePage {
 			alert("Already a member.");
 		}
 	}
-
 	addFixture(){
-		if (this.teams[this.teamoneid].name && this.teams[this.teamtwoid].name && this.eventdate && this.venue) {
+		if (this.teamone && this.teamtwo && this.eventdate && this.venue) {
 			
 			let fixture = {
-				teamone: this.teams[this.teamoneid].name,
-				teamoneid: this.teams[this.teamoneid].id,
-				teamtwo: this.teams[this.teamtwoid].name,
-				teamtwoid: this.teams[this.teamtwoid].id,
+				teamone: this.teamone,
+				teamtwo: this.teamtwo,
 				eventdate: this.eventdate,
 				venue: this.venue
 			}
 			this.fixtures.push(fixture);
 		}else{
-			alert('Don\'t be lazy :) \n Please enter all field.');
+			alert('Don\'t be lazy! Just a joke :) \n Please enter all fields.');
 		}
 	}
 	removeFixture(i){
 		this.fixtures.splice(i,1);
 	}
 
-	publishLeague(){
+	updateLeague(){
 		if (!this.leaguename) {
-			alert("Please enter league name.");
+			alert("League name can't be emppty.");
 		}
 		else if (!this.sporttype) {
-			alert("Please mention sporttype.");
+			alert("Please change sporttype or keep as before.");
 		}
 		else if (!this.fixtures[0]) {
 			alert("Please create fixtures.");
 		}
 		else{
-			this.postservice.createLeague(this.fixtures,this.leaguename,this.sporttype,this.teams);
-			this.leaguename = '';
-			this.sporttype = '';
-			this.eventdate = '';
-			this.venue = '';
-			this.teams = [];
-			this.fixtures = [];
+			this.postservice.updateLeague(
+				this.league.$key,
+				this.leaguename,
+				this.sporttype,
+				this.teams,
+				this.fixtures,
+				this.removedteams
+			);
 		}
-		
 	}
 }

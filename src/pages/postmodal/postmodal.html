@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-toolbar color="purple">
+  <ion-toolbar color="background">
     <ion-buttons start>
-      <button ion-button color="white" (click)="onDismiss()">Cancel</button>
+      <button ion-button (click)="onDismiss()" color="white">Cancel</button>
     </ion-buttons>
     <ion-title>
       Add an Event
@@ -57,75 +57,83 @@
 					</ion-item>
 				</ion-card>
 				<ion-card color="card">
-					<ion-item>
-			  			<ion-label>Event Venue </ion-label>
-			  			<ion-input value="eventvenue" [(ngModel)] = "eventvenue" placeholder="Our club ground.."></ion-input>
-					</ion-item>
+					<ion-row>
+						<ion-col col-4 class="colfour">
+			  				<ion-label class="postlabel">Event Venue </ion-label>
+			  			</ion-col>
+			  			<ion-col>
+			  				<ion-input class="datainput" value="eventvenue" [(ngModel)] = "eventvenue" placeholder="Our club ground.."></ion-input>
+			  			</ion-col>
+					</ion-row>
 				</ion-card>
-				<!-- <ion-card color="card">
-					<ion-item>
-						<ion-row>
-							<ion-col col-8 style="padding-left: 0px">
-								<p style="font-size:1.5rem;font-weight:100">club/ground/achieve pic:</p>
-							</ion-col>
-							<ion-col col>
-								<button style="background-color: white" (click)="capturePictureByCamera()" >
-								 	<ion-icon name="camera" color="purple"></ion-icon>
-								</button>
-							</ion-col>
-							<ion-col col>
-								<button style="background-color: white" (click)="selectGalleryImage()">
-								 	<ion-icon name="image" color="purple"></ion-icon>
-								</button>
-							</ion-col>
-						</ion-row>
-					</ion-item>
-				</ion-card> -->
 				<ion-card color="card">
 					<ion-item>
-						<span style="color: white">Club/ground/achieve pic:</span>&nbsp;&nbsp;&nbsp;&nbsp;
-						<ion-icon (click)="capturePictureByCamera()" name="camera" color="purple"></ion-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<ion-icon (click)="selectGalleryImage()" name="image" color="purple"></ion-icon>
+						<ion-row>
+							<ion-col col-6>
+								<span style="color: yellow">Club ground achieve picture:</span>
+							</ion-col>
+							<ion-col class="iconcolumn">
+								<ion-icon class="icon-color" (click)="capturePictureByCamera()" name="camera"></ion-icon>
+							</ion-col>
+							<ion-col class="iconcolumn">
+								<ion-icon class="icon-color" (click)="selectGalleryImage()" name="image"></ion-icon>
+							</ion-col>
+						</ion-row>
 					</ion-item>
 				</ion-card>
 
 				<ion-card color="card">					
-					<ion-item>
-						<ion-label>Entry Fee:</ion-label>
-						<ion-input  [(ngModel)] = "entryfee" placeholder="Default : 0"></ion-input>
-					</ion-item>					
-					<ion-item>
-							<ion-label>1st Prize:</ion-label>
-							<ion-input  [(ngModel)] = "prize" placeholder="Default : 0"></ion-input>
-					</ion-item>
+					<ion-row>
+						<ion-col col-4 class="colfour">
+							<ion-label class="postlabel">Entry Fee:</ion-label>
+						</ion-col>
+						<ion-col>
+							<ion-input class="datainput" [(ngModel)]="entryfee" placeholder="Default : 0"></ion-input>
+						</ion-col>
+					</ion-row>					
+					<ion-row>
+						<ion-col col-4 class="colfour">
+							<ion-label class="postlabel">1st Prize:</ion-label>
+						</ion-col>
+						<ion-col>
+							<ion-input class="datainput" [(ngModel)]="prize" placeholder="Default : 0"></ion-input>
+						</ion-col>
+					</ion-row>
 				</ion-card>
 				<ion-card color="card">
-					<ion-item>Rules:</ion-item>
-					<ol>
-						<li *ngFor= "let rule of rules,let i = index">					
+					<ion-card-header color="yellow">How happy for the event</ion-card-header>
+					<ion-card-content>
+						<ion-textarea style="background: black" value="centuarea" [(ngModel)]="centuarea" placeholder="We are extreamly happy to organize this event in our club. We wish it to be a great tournament with your participation :)"></ion-textarea>
+					</ion-card-content>
+				</ion-card>
+				<ion-card color="card">
+					<ion-card-header style="color: yellow">Add Rules:</ion-card-header>
+					<ion-card-content>
+						<ion-list *ngFor= "let rule of rules,let i = index" style="padding-left: 10px;background: black">				
 							<ion-row>
-								<ion-col col-10>
-									{{rule}}
+								<ion-col col-10 style="margin: auto">
+									{{i+1}}. &nbsp;&nbsp; {{rule}}
 								</ion-col>
-								<ion-col col-2>
-									<ion-icon name="trash"  (click)="onRuleDel(i)"></ion-icon>
+								<ion-col col-2 style="margin: auto">
+									<ion-icon name="trash" color="red" (click)="onRuleDel(i)"></ion-icon>
 								</ion-col>
 							</ion-row>
-						</li>
-					</ol>
+							
+						</ion-list>
+					</ion-card-content>
 					<ion-item>
-						<ion-input value="rule" [(ngModel)] = "rule" placeholder="Write a rule.."></ion-input>
+						<ion-input style="background: black" value="rule" [(ngModel)] = "rule" placeholder="Write a rule.."></ion-input>
 					</ion-item>
-					<div style="float: right">
-						<button ion-button color="purple" (click)="onRuleAdd()">
+					<div style="float: right;margin-top: 5px">
+						<button ion-button class="post-button" (click)="onRuleAdd()">
 							<ion-icon name="add-circle"></ion-icon>
-							<span style="width: 5px"></span>Add
+							&nbsp; Add
 						</button>
 					</div>
 				</ion-card>
 				<br><br>
 				<ion-card color="card">
-					<button (click)="tournamentSubmit()" color="purple" ion-button full>Post</button>
+					<button class="post-button" (click)="tournamentSubmit()" ion-button full>Post</button>
 				</ion-card>
 				<ion-card color="card">
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
@@ -144,55 +152,57 @@
 				<ion-card color="card">
 					<ion-item>
 			  			<ion-label>Event Venue </ion-label>
-			  			<ion-input value="eventvenue" [(ngModel)] = "eventvenue" placeholder="Default: our club ground.."></ion-input>
+			  			<ion-input class="datainput" value="eventvenue" [(ngModel)] = "eventvenue" placeholder="Default: our club ground.."></ion-input>
 					</ion-item>
 				</ion-card>
 				<ion-card color="card">
 					<ion-item>
 						<ion-row>
-							<ion-col col-10>club/ground/achieve pic: </ion-col>
-							<ion-col col>
-								<button style="background-color: white" (click)="capturePictureByCamera()" >
-								 	<ion-icon name="camera"></ion-icon>
-								</button>
+							<ion-col col-6>
+								<span style="color: yellow">Club ground achieve picture:</span>
 							</ion-col>
-							<ion-col col>
-								<button style="background-color: white" (click)="selectGalleryImage()">
-								 	<ion-icon name="image"></ion-icon>
-								</button>
+							<ion-col class="iconcolumn">
+								<ion-icon class="icon-color" (click)="capturePictureByCamera()" name="camera"></ion-icon>
+							</ion-col>
+							<ion-col class="iconcolumn">
+								<ion-icon class="icon-color" (click)="selectGalleryImage()" name="image"></ion-icon>
 							</ion-col>
 						</ion-row>
 					</ion-item>
 				</ion-card>
 				<ion-card color="card">
-					<ion-item>Criteria:</ion-item>
-					<ol>
-						<li *ngFor= "let criterion of criteria,let i = index">
-							<ion-card>
-								<ion-row>
-									<ion-col col-10>
-										{{criterion}}
-									</ion-col>
-									<ion-col col-2>
-										<ion-icon name="trash"  (click)="onCriteriaDel(i)"></ion-icon>
-									</ion-col>
-								</ion-row>
-							</ion-card>
-						</li>
-					</ol>
+					<ion-card-header color="yellow">Some honest talk</ion-card-header>
+					<ion-card-content>
+						<ion-textarea style="background: black" value="honestarea" [(ngModel)]="honestarea" placeholder="The trial will be taken on First come first basis if many players wish to participate. So hurry up !!" ></ion-textarea>
+					</ion-card-content>
+				</ion-card>
+				<ion-card color="card">
+					<ion-card-header color="yellow">Add Criteria:</ion-card-header>
+					<ion-card-content>
+						<ion-list *ngFor= "let criterion of criteria,let i = index" style="padding-left: 10px;background: black">
+							<ion-row>
+								<ion-col col-10 style="margin: auto">
+									{{i+1}} &nbsp;&nbsp; {{criterion}}
+								</ion-col>
+								<ion-col col-2 style="margin: auto">
+									<ion-icon name="trash" color="red" (click)="onCriteriaDel(i)"></ion-icon>
+								</ion-col>
+							</ion-row>
+						</ion-list>
+					</ion-card-content>
 					<ion-item>
-						<ion-input value="criterion" [(ngModel)] = "criterion" placeholder="Write a criterion.."></ion-input>
+						<ion-input style="background: black" value="criterion" [(ngModel)] = "criterion" placeholder="Write a criterion.."></ion-input>
 					</ion-item>
-					<div style="float: right">
-						<button ion-button (click)="onCriteriaAdd()">
+					<div style="float: right;margin-top: 5px">
+						<button class="post-button" ion-button (click)="onCriteriaAdd()">
 							<ion-icon name="add-circle"></ion-icon>
-							<span style="width: 5px"></span>Add
+							&nbsp; Add
 						</button>
 					</div>
 				</ion-card>
 				<br><br>
 				<ion-card color="card">
-					<button (click)="hiringSubmit()" ion-button full>Post</button>
+					<button class="post-button" (click)="hiringSubmit()" ion-button full>Post</button>
 				</ion-card>
 				<ion-card color="card">
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
@@ -205,69 +215,69 @@
 				<ion-card color="card">
 					<ion-item>
 						<ion-row>
-							<ion-col col-10>Capture a picture: </ion-col>
-							<ion-col col-2>
-								<button style="background-color: white" (click)="capturePictureByCamera()" >
-								 	<ion-icon name="camera"></ion-icon>
-								</button>
+							<ion-col col-10 class="textcolumn">
+								<span style="color:yellow">Capture a picture:</span>
+							</ion-col>
+							<ion-col col-2 class="iconcolumn">
+								<ion-icon class="icon-color" (click)="capturePictureByCamera()" name="camera"></ion-icon>
 							</ion-col>
 						</ion-row>
 					</ion-item>
 				</ion-card>
 
-				<button color="card" ion-button clear full>OR</button>
+				<button color="yellow" ion-button clear full>OR</button>
 
 				<ion-card color="card">
 					<ion-item>
 						<ion-row>
-							<ion-col col-10>Record a video: </ion-col>
-							<ion-col col-2>
-								<button style="background-color: white" (click)="captureVideoByCamera()">
-								 	<ion-icon name="videocam"></ion-icon>
-								</button>
+							<ion-col col-10 class="textcolumn">
+								<span style="color: yellow">Record a video:</span>
+							</ion-col>
+							<ion-col col-2 class="iconcolumn">
+								<ion-icon class="icon-color" (click)="captureVideoByCamera()" name="videocam"></ion-icon>
 							</ion-col>
 						</ion-row>
 					</ion-item>
 				</ion-card>
 
-				<button color="card" ion-button clear full>OR</button>
+				<button color="yellow" ion-button clear full>OR</button>
 
 				<ion-card color="card">
 					<ion-item>
 						<ion-row>
-							<ion-col col-10>Select image from gallery: </ion-col>
-							<ion-col col-2>
-								<button (click)="selectGalleryImage()" style="background-color: white">
-									<ion-icon name="image"></ion-icon>
-								</button>
+							<ion-col col-10 class="textcolumn">
+								<span style="color: yellow">Select image from gallery:</span>
+							</ion-col>
+							<ion-col col-2 class="iconcolumn">
+								<ion-icon class="icon-color" (click)="selectGalleryImage()" name="image"></ion-icon>
 							</ion-col>
 						</ion-row>
 					</ion-item>
 				</ion-card>
 
-				<button color="card" ion-button clear full>OR</button>
+				<button color="yellow" ion-button clear full>OR</button>
 
 				<ion-card color="card">
 					<ion-item>
 						<ion-row>
-							<ion-col col-10>Select video from gallery: </ion-col>
-							<ion-col col-2>
-								<button (click)="selectGalleryVideo()" style="background-color: white">
-									<ion-icon name="image"></ion-icon>
-								</button>
+							<ion-col col-10 class="textcolumn">
+								<span style="color: yellow">Select video from gallery: </span>
+							</ion-col>
+							<ion-col col-2 class="iconcolumn">
+								<ion-icon class="icon-color" (click)="selectGalleryVideo()" name="image"></ion-icon>
 							</ion-col>
 						</ion-row>
 					</ion-item>
 				</ion-card>
 				<ion-card color="card">
-					<ion-item>Title:</ion-item>
-					<ion-item>
-						<ion-input vlaue="imagetitle" [(ngModel)]="imagetitle" placeholder="Give an attractive title :)"></ion-input>
-					</ion-item>
+					<ion-card-header color="yellow">Title:</ion-card-header>
+					<ion-card-content>
+						<ion-input style="background: black" vlaue="imagetitle" [(ngModel)]="imagetitle" placeholder="Give an attractive title :)"></ion-input>
+					</ion-card-content>
 				</ion-card>
 				
 				<ion-card color="card">
-					<button (click)="textAndImageVideoSubmit()" ion-button full>Post</button>
+					<button class="post-button" (click)="textAndImageVideoSubmit()" ion-button full>Post</button>
 				</ion-card>
 				<ion-card color="card">
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
@@ -305,7 +315,7 @@
 				<!-- place for Match result Post -->
 				<p color="danger">Not implemented yet..Sorry :(</p>
 				<ion-card>
-					<button (click)="resultSubmit()" ion-button full>Post</button>
+					<button class="post-button" (click)="resultSubmit()" ion-button full>Post</button>
 				</ion-card>
 				<ion-card>
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
@@ -316,22 +326,22 @@
 			<!-- Youtube post starts -->
 			<div *ngSwitchCase = "'youtube'">			
 				
-				<ion-card>
-					<ion-item>Paste link:</ion-item>
-					<ion-item>
-						<ion-input vlaue="youtubelink" [(ngModel)]="youtubelink"></ion-input>
-					</ion-item>
+				<ion-card color="card">
+					<ion-card-header color="yellow">Paste link:</ion-card-header>
+					<ion-card-content>
+						<ion-input style="background: black" vlaue="youtubelink" [(ngModel)]="youtubelink"></ion-input>
+					</ion-card-content>
 				</ion-card>
-				<ion-card>
-					<ion-item>Title:</ion-item>
-					<ion-item>
-						<ion-input vlaue="youtubetitle" [(ngModel)]="youtubetitle"></ion-input>
-					</ion-item>
+				<ion-card color="card">
+					<ion-card-header color="yellow">Title:</ion-card-header>
+					<ion-card-content>
+						<ion-input style="background: black" vlaue="youtubetitle" [(ngModel)]="youtubetitle" placeholder="Give a proper title."></ion-input>
+					</ion-card-content>
 				</ion-card>
-				<ion-card>
-					<button (click)="youtubeSubmit()" ion-button full>Post</button>
+				<ion-card color="card">
+					<button class="post-button" (click)="youtubeSubmit()" ion-button full>Post</button>
 				</ion-card>
-				<ion-card>
+				<ion-card color="card">
 					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
 				</ion-card>
 			</div>

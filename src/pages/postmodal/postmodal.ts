@@ -29,10 +29,12 @@ export class PostmodalPage implements OnInit{
 	eventvenue: any = null;
 	participating: Number = 0;
 	entryfee: any;
-	prize: any
+	prize: any;
+	centuarea: any;
 	rules: String[] = [];
 	rule: String;
 
+	honestarea: any;
 	criteria: String[] = [];
 	criterion: any;
 
@@ -228,6 +230,7 @@ export class PostmodalPage implements OnInit{
 			entryfee: this.entryfee | 0,
 			prize: this.prize | 0,
 			participating: this.participating,
+			centuarea: this.centuarea | 0,
 			rules: this.rules
 		}
 		if(this.posttype && this.sporttype && this.eventdate && this.userimage &&this.username && this.rules) {
@@ -291,6 +294,7 @@ export class PostmodalPage implements OnInit{
 			sporttype: this.sporttype,
 			eventdate: evtdate,
 			eventvenue: this.eventvenue,
+			honestarea: this.honestarea | 0,
 			criteria: this.criteria,
 			participating: this.participating
 		}

@@ -106,8 +106,11 @@
                 <!-- <img [src]="post.imageurl" *ngIf="post.imageurl"> -->
                 <div *ngIf="!post.imageurl" style="height: 100%;width: 100%;"></div>
             </ion-row>
-            <ion-card-content color="white">
-               We are extreamly happy to organize this event in our club. We wish it to be a great tournament with your participation. Cheers :)
+            <ion-card-content color="white" *ngIf="post.centuarea">
+                {{post.centuarea}}
+            </ion-card-content>
+            <ion-card-content color="white" *ngIf="!post.centuarea">
+               We are extreamly happy to organize this event in our club. We wish it to be a great tournament with your participation :)
             </ion-card-content>    
             
             <ion-row *ngIf="post.userId != authuid" style="padding: 5px 0px">
@@ -151,8 +154,10 @@
                 <!-- <img [src]="post.imageurl" *ngIf="post.imageurl"> -->
                 <div *ngIf="!post.imageurl" style="height: 100%;width: 100%;"></div>
             </ion-row>
-   
-            <ion-card-content color="white">
+            <ion-card-content color="white" *ngIf="post.honestarea">
+                {{post.honestarea}}
+            </ion-card-content>
+            <ion-card-content color="white" *ngIf="!post.honestarea">
                 The trial will be taken on First come first basis if many players wish to participate. So hurry up !!
             </ion-card-content>
             <ion-row *ngIf="post.userId != authuid">

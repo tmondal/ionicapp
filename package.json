@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^4.1.0",
     "@angular/platform-server": "^4.1.0",
     "@angular/router": "^4.1.0",
+    "@ionic-native/calendar": "^3.12.1",
     "@ionic-native/camera": "^3.4.4",
     "@ionic-native/core": "3.10.2",
     "@ionic-native/date-picker": "^3.4.4",

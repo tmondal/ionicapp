@@ -1,0 +1,22 @@
+
+
+<ion-header>
+
+  <ion-navbar color="black">
+  	<button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Manage league</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="league">
+
+	<ion-list>
+		<ion-list-header class="leagueheader"> Your Organized Leagues </ion-list-header>
+		<button color="card" ion-item *ngFor="let league of leagues,let i = index" (click)="openLeague(i)">{{ league.leaguename }}</button>
+	</ion-list>
+
+</ion-content>

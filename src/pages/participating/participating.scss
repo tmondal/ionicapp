@@ -1,5 +1,34 @@
 page-participating {
+
+
+	.col {
+		padding: 1px;
+	}
 	.participate {
-		background: #212121;
+		background-color: #212121;
+	}
+	.participateheader{
+		background-color: #424242;
+		color: yellow;
+	}
+	.participateitem {
+		background-color: #424242;
+		color: yellow;
+	}
+	.participatecard{
+		background-color: #212121;
+	}
+	.cardcontent {
+		background-color: #424242;
+		padding-left: 0px;
+		padding-right: 0px;
+		margin: 3px;
+	}
+	.participateicon {
+		font-size: 1.5em;
+		margin: 13px 0px 13px 0px;
+	}
+	.iconcol {
+		text-align: right;
 	}
 }

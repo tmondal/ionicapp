@@ -5,7 +5,7 @@
   	<button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Create league</ion-title>
+    <ion-title>Edit league</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -69,16 +69,16 @@
 		<ion-card-content>
 			<ion-item class="league">
 				<ion-label color="yellow">Team One</ion-label>
-				<ion-select [(ngModel)]="teamoneid" >
-					<ion-option *ngFor="let team of teams,let i = index" value = {{i}}>
+				<ion-select [(ngModel)]="teamone" >
+					<ion-option *ngFor="let team of teams" value = {{team.name}}>
 						{{team.name}}
 					</ion-option>
 				</ion-select>
 			</ion-item>
 			<ion-item class="league">
 				<ion-label color="yellow">Team Two</ion-label>
-				<ion-select [(ngModel)]="teamtwoid" >
-					<ion-option *ngFor="let team of teams,let j = index" value = {{j}}>
+				<ion-select [(ngModel)]="teamtwo" >
+					<ion-option *ngFor="let team of teams" value = {{team.name}}>
 						{{team.name}}
 					</ion-option>
 				</ion-select>
@@ -95,6 +95,6 @@
 			<button style="margin-top: 10px" color="yellow" ion-button block (click)="addFixture()" >Add fixture</button>
 		</ion-card-content>
 	</ion-card>
-	<button class="publish" (click)="publishLeague()"  color="orange" ion-button block outline>Publish the league</button>
+	<button class="publish" (click)="updateLeague()"  color="orange" ion-button block outline>Update the league</button>
 
 </ion-content>

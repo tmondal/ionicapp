@@ -106,7 +106,7 @@ const AuthConfig = {
     NewleaguePage,
     TabsPage,
     ParticipatingPage,
-    OrganizingPage
+    OrganizingPage,
   ],
   imports: [
     //FormsModule, for template driven form
@@ -152,7 +152,7 @@ const AuthConfig = {
     CommentrepliesPage,
     NewleaguePage,
     TabsPage,ParticipatingPage,
-    OrganizingPage
+    OrganizingPage,
   ],
   providers: [
     Camera,

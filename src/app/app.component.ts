@@ -1,11 +1,11 @@
 import { Component ,ViewChild} from '@angular/core';
 import { Platform,Nav} from 'ionic-angular';
 import { StatusBar,Splashscreen } from 'ionic-native';
-import { HomePage } from '../pages/home/home';
-import { LoginPage } from '../pages/login/login';
 import { AngularFire } from 'angularfire2';
-import { NewleaguePage } from '../pages/newleague/newleague';
+import { LoginPage } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
+import { NewleaguePage } from '../pages/newleague/newleague';
+
 
 import { AuthService } from '../providers/auth-service';
 
@@ -16,8 +16,8 @@ import { AuthService } from '../providers/auth-service';
 })
 export class MyApp {
 	
-	rootPage : any;
 	@ViewChild(Nav) nav: Nav;
+	rootPage : any;
 
 	pages: Array<{title: string, component: any}>;
 	username: any;
@@ -45,8 +45,9 @@ export class MyApp {
 		  Splashscreen.hide();
 		});
 		this.pages = [
-	    	{ title: 'Create League', component: NewleaguePage },
 	    	{ title: 'Feed', component: TabsPage },
+	    	{ title: 'League Create', component: NewleaguePage },
+	    	{ title: 'Manage League',component: 'Manageleague'}
 	  	]
 	}
 	openPage(page){

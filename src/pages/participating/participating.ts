@@ -1,22 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { PostService } from '../../providers/post-service';
 
-/*
-  Generated class for the Participating page.
+import { AngularFire } from 'angularfire2';
+import { Calendar } from '@ionic-native/calendar';
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-participating',
-  templateUrl: 'participating.html'
+  templateUrl: 'participating.html',
+  providers: [Calendar]
 })
-export class ParticipatingPage {
+export class ParticipatingPage implements OnInit{
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+	leagues: any;
+	userid: any;
+	tempfixture: any[] = [];
+	fixtures: any[] = [];
+	clicked: boolean[] = [false];
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ParticipatingPage');
-  }
+	constructor(
+		public navCtrl: NavController, 
+		public navParams: NavParams,
+		public postservice: PostService,
+		public af: AngularFire,
+		public calendar: Calendar
+	) {
+		this.af.auth.subscribe(user =>{
+			this.userid = user.uid;
+		})
+	}
 
+	ngOnInit(){
+		this.postservice.getParticipatingLeagues(this.userid).subscribe(leagues =>{
+			this.leagues = leagues;
+			for (let i = 0; i < leagues.length; i++) {
+				this.postservice.getmyFixtures(this.leagues[i].$key,this.leagues[i].leagueadminid)
+					.subscribe(fixtures =>{
+						for (let j = 0; j < fixtures.length; j++) {
+							if (fixtures[j].teamoneid == this.userid || fixtures[j].teamtwoid == this.userid) {
+								this.tempfixture.push(fixtures[j]);
+							}
+						}
+						this.fixtures.push(this.tempfixture);
+						this.tempfixture = [];
+					}
+				);
+			}
+		});
+	}
+
+	remindMe(date){
+		this.calendar.createCalendar('MyCalendar').then(
+		  (msg) => { console.log(msg); },
+		  (err) => { console.log(err); }
+		);
+	}
 }

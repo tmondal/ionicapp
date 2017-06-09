@@ -8,7 +8,7 @@
         </ion-avatar>
         <h2> {{username || "Forgot to edit name"}} </h2>
       </ion-item>
-      <ion-list no-lines>
+      <ion-list>
         <button color="card" ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)">{{ p.title }}</button>
       </ion-list>
     </ion-content>

@@ -295,20 +295,64 @@ export class PostService {
 
   // league logic
 
-  createLeague(fixtures,leaguename,teams){
+  createLeague(fixtures,leaguename,sporttype,teams){
     this.leaguenode = this.af.database.list(`/league-organized/${this.fireauth.uid}/`);
     let leagueid = this.leaguenode.push().key;
     let updatedata = {};
 
+    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/sporttype'] = sporttype;
     updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid +'/leaguename'] =  leaguename;
+    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/teams'] = teams;
+    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/fixtures'] = fixtures;
+
+
+    for (var i = teams.length - 1; i >= 0; i--) {
+      updatedata[`/league-participated/${teams[i].id}/` + leagueid +'/leaguename'] = leaguename;
+      updatedata[`/league-participated/${teams[i].id}/` + leagueid +'/leagueadminid'] = this.fireauth.uid;
+      
+    }
+    this.af.database.object('/').update(updatedata).then(
+      (success) => this.showToast("League successfully created."),
+      (error) => this.showToast("Error while creating ! try again !!")
+    );
+  }
+
+  // update a league
+  updateLeague(leagueid,leaguename,sporttype,teams,fixtures,removedids){
+    
+    for (var i = removedids.length - 1; i >= 0; i--) {
+      this.af.database.object("/league-participated/" + removedids[i] +"/" + leagueid).remove();
+    }
+
+    let updatedata = {};
+
+    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/sporttype'] = sporttype;
+    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid +'/leaguename'] =  leaguename;
+    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/teams'] = teams;
     updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/fixtures'] = fixtures;
 
     for (var i = teams.length - 1; i >= 0; i--) {
       updatedata[`/league-participated/${teams[i].id}/` + leagueid +'/leaguename'] = leaguename;
     }
     this.af.database.object('/').update(updatedata).then(
-      (success) => this.showToast("League successfully created."),
-      (error) => this.showToast("Error ! try again !!")
+      (success) => this.showToast("League successfully updated."),
+      (error) => this.showToast("Error while updating ! try again !!")
     );
+  }
+
+  // League that you organized
+  getOrganizedLeagues(userid){
+    return this.af.database.list("/league-organized/" + userid).take(1);
+  }
+
+  // League that you are a member
+  getParticipatingLeagues(userid){
+    return this.af.database.list("/league-participated/" + userid).take(1);
+  }
+  
+  // get your fixtures for a particular league
+  getmyFixtures(leagueid,leagueadminid){
+    return this.af.database
+      .list("/league-organized/" + leagueadminid +"/"+ leagueid +"/fixtures").take(1);
   }
 }

@@ -1,14 +1,40 @@
 <ion-header>
-    <ion-navbar style="background-color: #3F51B5">
-        <button ion-button menuToggle>
-          <ion-icon color="white" name="menu"></ion-icon>
-        </button>
-        <ion-title color="white">
-          Participating
-        </ion-title>
-    </ion-navbar>
+
+  <ion-navbar color="black">
+  	<button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Participating</ion-title>
+  </ion-navbar>
+
 </ion-header>
 
-<ion-content padding class="paricipate">
+
+<ion-content class="participate">
+
+	<ion-list>
+		<ion-list-header class="participateheader"> Your Participated Leagues </ion-list-header>
+		<ion-item class="participateitem" *ngFor="let league of leagues,let i = index">
+			{{ league.leaguename }}
+			<ion-card class="participatecard">
+				<ion-card-header class="participateheader">Your Fixtures</ion-card-header>
+				<ion-card-content *ngIf="fixtures[i]" class="cardcontent">
+					<ion-row *ngFor="let fixture of fixtures[i]">
+						<ion-col col-10>
+							<ion-label>
+								{{fixture.teamone}} vs {{fixture.teamtwo}} on {{fixture.eventdate}}
+							</ion-label>
+						</ion-col>
+						<ion-col *ngIf="!remembered" class="iconcol">
+							<ion-icon class="participateicon" name="calendar" (click)="remindMe(fixture.eventdate)"></ion-icon>
+						</ion-col>
+						<ion-col *ngIf="remembered" class="iconcol">
+							<ion-icon class="participateicon" name="calendar" (click)="forgetMe(fixture.eventdate)"></ion-icon>
+						</ion-col>
+					</ion-row>
+				</ion-card-content>
+			</ion-card>
+		</ion-item>
+	</ion-list>
 
 </ion-content>
