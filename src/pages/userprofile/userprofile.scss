@@ -1,83 +1,105 @@
 
 page-userprofile{
 
-	.card-background-page {
+	.userprofile {
+		background-color: #212121;
+	}
 
-		background: #f4f4f4;
+	.scroll-content {
+		padding: 0px;
+	}
 
-		.scroll-content {
-			padding: 0px;
-		}
+	ion-card {
+		position: relative;
+		text-align: center;
+		margin: 0px;
+		margin-top:5px; 
+		padding: 0px;
+		width: 100%;
+		/*height: 200px;*/
+		box-shadow: none;
+	}
+	
+	.parallaxheader {
+		width: 100%;
+		height: 150px;
+		text-align: center;
+	}
+	.coverimage {
+		height: 155px;
+		width: 100%;
+		filter:blur(1px);
+	}
 
-		ion-card {
-			position: relative;
-			text-align: center;
-			margin: 0px;
-			margin-top:5px; 
-			padding: 0px;
-			width: 100%;
-			height: 200px;
-			box-shadow: none;
-		}
-		
-		.profilepic {
-			position: absolute;
-			top: 50%;
-			left: 40%;
-			width: 80px;
-			height:80px;
-			border-radius: 50%;
-			border:2px solid white;
-		}
-		.profilepic{
-			img{
-				height: 80px;
-				width: 80px;
-				border-radius: 50%;
-			}
-		}
-		#coverimage {
-			height: 70%;
-		}
 
-		.card-title {
-			position: absolute;
-			top: 20%;
-			font-size: 2.0em;
-			width: 100%;
-			font-weight: bold;
-			color: #fff;
-		}
+	.parallaxcontent {
+		width: 100%;
+		background-color: #212121;
+	}
+	.card-title {
+		font-size: 1.5em;
+		text-align: center;
+		color: yellow;
+		top: 30%;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, -10%);
+	}
 
-		.card-subtitle {
-			font-size: 1.0em;
-			position: absolute;
-			top: 36%;
-			width: 100%;
-			color: #fff;
-		}
-
-		.followerfont ,.followingfont {
-			text-transform: none;
-			font-weight: 100;
-		}
-		.followfont,.unfollowfont{
-			text-transform: none;
-			font-weight: 100;
-			padding: 2px;
-		}
-		.followfont:hover{
-			background-color: #2196F3;
-			color: white;
-		}
-		.unfollowfont:hover{
-			background-color: red;
-			color: white;
-		}
-		.middlenavbar{
-			text-transform: none;
-		}
-
+	.card-subtitle {
+		font-size: 1.1em;
+		text-align: center;
+		color: yellow;
+		top: 35%;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, -10%);
+	}
+	
+	.profileimage {
+		border-radius: 50%;
+		border: 2px white solid;
+		height: 80px;
+		width: 80px;
+		z-index: 10;
+		position: relative;
+		left: 50%;
+		transform: translate(-50%,-100%);
+		text-align: center;
+	}
+	.generalcard {
+		background-color: #424242;
+	}
+	.cardheader {
+		color: #2196F3;
+	}
+	.cardcontent {
+		background-color: #212121;
+		color: yellow;
+	}
+	.listheader {
+		background-color: #424242;
+		color: #2196F3;
+	}
+	.followerfont ,.followingfont {
+		text-transform: none;
+		font-weight: 100;
+	}
+	.followfont,.unfollowfont{
+		text-transform: none;
+		font-weight: 100;
+		padding: 2px;
+	}
+	.followfont:hover{
+		background-color: #2196F3;
+		color: white;
+	}
+	.unfollowfont:hover{
+		background-color: red;
+		color: white;
+	}
+	.middlenavbar{
+		text-transform: none;
 	}
 
 }

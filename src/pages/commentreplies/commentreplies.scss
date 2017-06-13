@@ -2,10 +2,56 @@ page-commentreplies {
 
 	.card-md {
 		box-shadow: 0px 0px 1px 0px;
+	}
+	.text-input-md {
+		margin: auto;
+	}
 
+
+	#content {
+		background-color: #212121;
 	}
-	button {
-		background-color: white;
-		color: #00BCD4;
+	#grid {
+		background-color: #424242;
 	}
+	.smallicon {
+		font-size: 1.0em;
+	}
+	h5 {
+		margin: 0px;
+		color: orange;
+	}
+	.commentdata {
+		color: white;
+		background-color: #212121;
+		margin: 2px;
+		padding: 5px;
+	}
+	.likereplycol{
+		text-align: center;
+		margin-right: 0px;
+		margin-left: 0px;
+	}
+	.commentitem {
+		color: orange;
+		margin-right: 0px;
+	}
+	
+	textarea {
+		color: orange;
+	}
+	
+	.footerrow {
+		height: 40px;
+		background-color: #424242;
+	}
+	.footerimg {
+		height: 30px;
+		width: 30px
+	}
+	.footercol {
+		margin: auto;
+		text-align: center;
+	}
+
 }

@@ -21,7 +21,7 @@
 				<ion-card-content *ngIf="fixtures[i]" class="cardcontent">
 					<ion-row *ngFor="let fixture of fixtures[i]">
 						<ion-col col-10>
-							<ion-label>
+							<ion-label class="contentlabel">
 								{{fixture.teamone}} vs {{fixture.teamtwo}} on {{fixture.eventdate}}
 							</ion-label>
 						</ion-col>

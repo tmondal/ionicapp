@@ -1,12 +1,10 @@
 import { Component , OnInit} from '@angular/core';
+import { ElementRef,Renderer } from '@angular/core';
 import { NavController, NavParams ,PopoverController} from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 import { AuthService } from '../../providers/auth-service';
+import { PostService } from '../../providers/post-service';
 import { EditProfilePage } from '../edit-profile/edit-profile'; 
-// import { AchievePage } from '../achieve/achieve';
-// import { ClubplayersPage } from '../clubplayers/clubplayers';
-// import { FollowersPage } from '../followers/followers';
-// import { FollowingsPage } from '../followings/followings';
 import { LoginPage } from '../login/login';
 @Component({
   selector: 'page-userprofile',
@@ -36,13 +34,23 @@ export class UserprofilePage implements OnInit{
 	clubprofile: String = "moments";
 	playerprofile: String = "moments";
 
-	
+	scrollcontent: any;
+	parallaxheader: any;
+	parallaxcontent: any;
+
+	myposts: any;
+	myleagues: any;
+	participate: any;
+
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
 		public popoverCtrl: PopoverController,
 		public af: AngularFire,
-		public authservice: AuthService
+		public authservice: AuthService,
+		public postservice: PostService,
+		public elementRef: ElementRef,
+		public renderer: Renderer
 	) {}
 	
 	ngOnInit(){
@@ -69,9 +77,19 @@ export class UserprofilePage implements OnInit{
 			this.contactno = user.contactno;
 			this.currentclub = user.currentclub;
 			this.useremail = user.email;
+			console.log(user.email);
 			this.coverimage = user.coverimage;
 			this.profileimage = user.profileimage;
 		});
+		this.postservice.getOrganizedLeagues(this.userId).subscribe(leagues =>{
+			this.myleagues = leagues;
+		});
+		this.postservice.getParticipatingLeagues(this.userId).subscribe(leagues =>{
+			this.participate = leagues;
+		});
+		this.postservice.getFeedbyId(this.userId).subscribe(posts =>{
+			this.myposts = posts;
+		})
 	}
 	
 	ngOnDestroy(){

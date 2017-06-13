@@ -32,8 +32,7 @@ export class LoginPage {
 			password: ["",[Validators.required , Validators.minLength(6)]]
 		});
 	}
-
-
+	
 	onloginClick(){
 
 		this.loading = this.loadingCtrl.create({content: "Requesting server..."});

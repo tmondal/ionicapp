@@ -11,8 +11,8 @@ import * as firebase from 'firebase';
 @Injectable()
 export class PostService {
 
-  // feed: FirebaseListObservable<any[]>;
   posts: any;
+  feed: any;
   post: FirebaseObjectObservable<any>;
   postnode: any;
   commentnode: any;
@@ -185,10 +185,18 @@ export class PostService {
         orderByChild: 'created_at',
         endAt: Date.now()
       }
-    });
+    }).take(1);
     return this.posts;
   }
-
+  getFeedbyId(userid){
+    this.feed = this.af.database.list('/userwise-feed/' + userid , {
+      query: {
+        orderByChild: 'created_at',
+        endAt: Date.now()
+      }
+    }).take(1);
+    return this.feed;
+  }
   // participation logics
   getParticipated(postid: any){
     return this.af.database.object('/postwise-participator/' + postid + "/" + this.fireauth.uid);

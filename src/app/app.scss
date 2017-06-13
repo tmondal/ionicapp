@@ -34,12 +34,17 @@ ion-app.md {
 .item-md.item-block .item-inner {
 	border-bottom : none;
 }
-.menuitem {
+.menutop {
 	height: 200px;
 }
-
+.menuitem {
+	background-color: #212121;
+}
+.menubutton{
+	color: white;
+	font-size: medium;
+}
 .tabbar {
-	/*top: 50px;*/
 	height: 56px;
 }
 .scroll-content {

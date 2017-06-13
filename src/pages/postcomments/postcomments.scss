@@ -1,23 +1,73 @@
 page-postcomments {
 
+
 	.card-md {
 		box-shadow: 0px 0px 1px 0px;
 
 	}
-	button {
-		background-color: white;
-		color: #009688;
+	.text-input-md {
+		margin: auto;
 	}
-	.item-md.item-block .item-inner{
-		border-bottom: none;
-	}
+
+
+
 	#content {
 		background-color: #212121;
 	}
 	#grid {
 		background-color: #424242;
 	}
+	.smallicon {
+		font-size: 1.0em;
+	}
+	h5 {
+		margin: 0px;
+		color: yellow;
+	}
+	.commentdata {
+		color: white;
+		background-color: #212121;
+		margin: 2px;
+		padding: 5px;
+	}
+	.likereplycol{
+		text-align: center;
+	}
+	.commentitem {
+		color: yellow;
+	}
+	.replies {
+		color: orange;
+		text-decoration: underline;
+	}
+	
 	textarea {
-		color: #FFEB3B;
+		color: yellow;
+	}
+	.replyavatar {
+		margin: 8px 0px 0px;
+	}
+	.replyimg {
+		height: 30px;
+		width: 30px;
+		border-radius: 0px
+	}
+	.lastdata {
+		margin: 0px;
+		padding: 5px;
+		background-color: #212121;
+	}
+
+	.footerrow {
+		height: 40px;
+		background-color: #424242;
+	}
+	.footerimg {
+		height: 30px;
+		width: 30px
+	}
+	.footercol {
+		margin: auto;
+		text-align: center;
 	}
 }

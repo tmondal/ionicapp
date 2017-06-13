@@ -36,8 +36,8 @@
                 </ion-col>
                 <ion-col col-10 (click)="onCreatePostClick()"> 
                     <ion-item>
-                    <button color="yellow" ion-button full clear style="text-transform: none" >
-                         Give a challenge to all club and player..
+                    <button color="yellow" ion-button full clear style="text-transform: none;font-size: small" >
+                        Give a challenge to all club and player..
                     </button>
                     </ion-item>
                 </ion-col>
@@ -110,7 +110,7 @@
                 {{post.centuarea}}
             </ion-card-content>
             <ion-card-content color="white" *ngIf="!post.centuarea">
-               We are extreamly happy to organize this event in our club. We wish it to be a great tournament with your participation :)
+               We are extreamly happy to organize this event in our club. We wish it will be a great tournament with your participation :)
             </ion-card-content>    
             
             <ion-row *ngIf="post.userId != authuid" style="padding: 5px 0px">
@@ -127,7 +127,7 @@
                     </button>
                 </ion-col>
                 <ion-col center text-center>
-                    <button color="yellow" ion-button full clear icon-right (click)="onRulesClick(post.rules,post.participating,post.$key,post.userId)">
+                    <button color="yellow" ion-button block outline icon-right (click)="onRulesClick(post.rules,post.participating,post.$key,post.userId)">
                         Rules
                         <ion-icon name="arrow-round-forward"></ion-icon>
                     </button>
@@ -158,7 +158,7 @@
                 {{post.honestarea}}
             </ion-card-content>
             <ion-card-content color="white" *ngIf="!post.honestarea">
-                The trial will be taken on First come first basis if many players wish to participate. So hurry up !!
+                The trial will be taken on <b>First come first</b> basis if many players wish to participate. So hurry up !!
             </ion-card-content>
             <ion-row *ngIf="post.userId != authuid">
                 <ion-col col-4>

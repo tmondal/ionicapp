@@ -8,7 +8,7 @@ page-participating {
 		background-color: #212121;
 	}
 	.participateheader{
-		background-color: #424242;
+		background-color: inherit;
 		color: yellow;
 	}
 	.participateitem {
@@ -20,8 +20,7 @@ page-participating {
 	}
 	.cardcontent {
 		background-color: #424242;
-		padding-left: 0px;
-		padding-right: 0px;
+		padding: 0px;
 		margin: 3px;
 	}
 	.participateicon {
@@ -29,6 +28,15 @@ page-participating {
 		margin: 13px 0px 13px 0px;
 	}
 	.iconcol {
-		text-align: right;
+		text-align: center;
+	}
+	.label {
+		margin: 2px;
+		margin-right: 0px;
+		padding: 13px 0px 13px 5px;
+	}
+	.contentlabel {
+		color: white;
+		background-color: #212121;
 	}
 }

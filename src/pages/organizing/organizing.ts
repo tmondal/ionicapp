@@ -13,10 +13,7 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class OrganizingPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad OrganizingPage');
-  }
+	userservice: any;
+	constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
 }

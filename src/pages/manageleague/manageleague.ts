@@ -14,22 +14,25 @@ export class Manageleague implements OnInit{
 
 	leagues: any;
 	userid: any;
+	userservice: any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
 		public postservice: PostService,
 		public af: AngularFire
 	) {
-		this.af.auth.subscribe(user =>{
+		this.userservice = this.af.auth.subscribe(user =>{
 			this.userid = user.uid;
-		})
+		});
 	}
 
 	ngOnInit(){
 		this.postservice.getOrganizedLeagues(this.userid).subscribe(leagues =>{
 			this.leagues = leagues;
-			console.log(leagues);
 		})
+	}
+	ngOnDestroy(){
+		this.userservice.unsubscribe();
 	}
 
 	openLeague(i){

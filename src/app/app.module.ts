@@ -18,7 +18,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { MyApp } from './app.component';
 import { Feedpipe } from '../pipes/feedpipe';
 import { Youtube } from '../pipes/youtube';
-
+import { Parallaxprofile } from '../components/parallaxprofile/parallaxprofile';
 import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
 import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
@@ -47,7 +47,6 @@ import { GooglemapdistancePage } from '../pages/googlemapdistance/googlemapdista
 import { PostcommentsPage } from '../pages/postcomments/postcomments';
 import { CommentrepliesPage } from '../pages/commentreplies/commentreplies';
 import { NewleaguePage } from '../pages/newleague/newleague';
-import { TabsPage } from '../pages/tabs/tabs';
 import { ParticipatingPage } from '../pages/participating/participating';
 import { OrganizingPage } from '../pages/organizing/organizing';
 
@@ -75,6 +74,7 @@ const AuthConfig = {
   declarations: [
     Feedpipe,
     Youtube,
+    Parallaxprofile,
     MyApp,
     LoginPage,
     SignupPage,
@@ -104,7 +104,6 @@ const AuthConfig = {
     PostcommentsPage,
     CommentrepliesPage,
     NewleaguePage,
-    TabsPage,
     ParticipatingPage,
     OrganizingPage,
   ],
@@ -151,7 +150,7 @@ const AuthConfig = {
     PostcommentsPage,
     CommentrepliesPage,
     NewleaguePage,
-    TabsPage,ParticipatingPage,
+    ParticipatingPage,
     OrganizingPage,
   ],
   providers: [

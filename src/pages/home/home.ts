@@ -137,20 +137,14 @@ export class HomePage implements OnInit{
     
     this.scrollcontent.addEventListener("scroll", () => {
       if(this.scrollcontent.scrollTop > this.threshold) {
-        document.querySelector(".tabbar")['style'].transition = "bottom .25s ease-in";
-        document.querySelector(".tabbar")['style'].bottom = "-56px";
         this.showheader =false;
         this.hideheader = true;
       } else {
-        document.querySelector(".tabbar")['style'].transition = "bottom .30s ease-in";
-        document.querySelector(".tabbar")['style'].bottom = "0px";
         this.showheader =true;
         this.hideheader = false;
 
       }
       if (this.slideHeaderPrevious >= this.scrollcontent.scrollTop) {
-        document.querySelector(".tabbar")['style'].transition = "bottom .30s ease-in";
-        document.querySelector(".tabbar")['style'].bottom = "0px";
         this.showheader =true;
         this.hideheader = false;
       }
@@ -377,10 +371,8 @@ export class HomePage implements OnInit{
   }
 
   likePost(postid,i){
-    console.log("Like called");
     // First see if previously liked or disliked .As every post does not have this
     // function we get explicitly by postid
-    console.log("Postid" + i +":"+ postid);
 
     this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
       if(user.liked === undefined) {
@@ -397,13 +389,11 @@ export class HomePage implements OnInit{
       this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1).subscribe(post =>{
           if (post.likes != undefined) {
             this.nooflikes[i] = post.likes;
-            console.log("likes : " + post.likes);
           }else{
             this.nooflikes[i] = 0;
           }
           if (post.dislikes != undefined) {
             this.noofdislikes[i] = post.dislikes;
-            console.log("dislikes : " + post.dislikes);
           }else{
             this.noofdislikes[i] = 0;
           }
@@ -411,8 +401,6 @@ export class HomePage implements OnInit{
           if(!this.liked[i] && !this.disliked[i]) {
             this.liked[i] = true;
             this.nooflikes[i] += 1;
-            console.log("here");
-            console.log(this.nooflikes[i]); 
             this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
             this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
           }else if(!this.liked[i] && this.disliked[i]){
@@ -434,7 +422,6 @@ export class HomePage implements OnInit{
   }
 
   dislikePost(postid,i){
-    console.log("Dislike called");
     this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
       
       if(user.liked === undefined) {
@@ -451,13 +438,11 @@ export class HomePage implements OnInit{
       this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1).subscribe(post =>{
           if (post.likes != undefined) {
             this.nooflikes[i] = post.likes;
-            console.log("d likes: " + post.likes);
           }else{
             this.nooflikes[i] = 0;
           }
           if (post.dislikes != undefined) {
             this.noofdislikes[i] = post.dislikes;
-            console.log("d dislikes: " + post.dislikes);
           }else{
             this.noofdislikes[i] = 0;
           }

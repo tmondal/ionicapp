@@ -17,7 +17,7 @@ export class ParticipatingPage implements OnInit{
 	tempfixture: any[] = [];
 	fixtures: any[] = [];
 	clicked: boolean[] = [false];
-
+	userservice: any;
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -25,9 +25,9 @@ export class ParticipatingPage implements OnInit{
 		public af: AngularFire,
 		public calendar: Calendar
 	) {
-		this.af.auth.subscribe(user =>{
+		this.userservice = this.af.auth.subscribe(user =>{
 			this.userid = user.uid;
-		})
+		});
 	}
 
 	ngOnInit(){
@@ -47,6 +47,10 @@ export class ParticipatingPage implements OnInit{
 				);
 			}
 		});
+	}
+
+	ngOnDestroy(){
+		this.userservice.unsubscribe();
 	}
 
 	remindMe(date){
