@@ -14,11 +14,11 @@ export class PostService {
   posts: any;
   feed: any;
   post: FirebaseObjectObservable<any>;
-  postnode: any;
+  feednode: any;
   commentnode: any;
   childcomment: any;
   currentuser: any;
-  fireauth: any;
+  authuid: any;
   storageimageRef: any;
   storagevideoRef: any;
   imageRef: any;
@@ -28,6 +28,7 @@ export class PostService {
   followers: any[] = [];
   noofchild: any = 0;
   leaguenode: any;
+  myfollowers: any;
   constructor(
     public af: AngularFire,
     public toastCtrl: ToastController,
@@ -36,10 +37,10 @@ export class PostService {
   ) {
     af.auth.subscribe(user=>{
       if(user) {
-        this.fireauth = user.auth;
+        this.authuid = user.auth.uid;
       }
     });
-    this.postnode = this.af.database.list('/posts');
+    this.feednode = this.af.database.list('/userwise-feed/' + this.authuid);
     
     this.childcomment = this.af.database.list('/post-comment-structure/');
     this.storageimageRef = firebase.storage().ref().child('images/');
@@ -47,11 +48,11 @@ export class PostService {
   }
 
 
-  cameraimagePost(post,userid,imagesrc){
+  cameraimagePost(post,imagesrc){
 
 
     let updatedpostdata = {};
-    let newpostkey = this.postnode.push().key;
+    let newpostkey = this.feednode.push().key;
     
     // First put image to Storage and get url of the image
     if(imagesrc) {
@@ -74,9 +75,8 @@ export class PostService {
         },(success) =>{
           post.imageurl = uploadTask.snapshot.downloadURL;
           this.showToast('Success: image sent to the server and got url:)');
-          updatedpostdata["posts/" + newpostkey] = post;
-          updatedpostdata["userwise-feed/" + userid +"/"+ newpostkey] = post;
-          this.authservice.getFollowers(userid).subscribe(followers =>{
+          updatedpostdata["userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
+          this.authservice.getFollowers(this.authuid).subscribe(followers =>{
             for (let i = followers.length - 1; i >= 0; i--) {
               updatedpostdata["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
             }
@@ -88,9 +88,8 @@ export class PostService {
     }
     else{
 
-      updatedpostdata["posts/" + newpostkey] = post;
-      updatedpostdata["userwise-feed/" + userid +"/"+ newpostkey] = post;
-      this.authservice.getFollowers(userid).subscribe(followers =>{
+      updatedpostdata["userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
+      this.authservice.getFollowers(this.authuid).subscribe(followers =>{
         for (let i = followers.length - 1; i >= 0; i--) {
           updatedpostdata["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
         }
@@ -102,10 +101,10 @@ export class PostService {
     }
   }
 
-  galleryvideoPost(post,userid,nativepath){
+  galleryvideoPost(post,nativepath){
     
     let updatedpostdata = {};
-    let newpostkey = this.postnode.push().key;
+    let newpostkey = this.feednode.push().key;
 
     // See cordova File plugin documentation .
     // get the file and store to firebase storage 
@@ -128,9 +127,8 @@ export class PostService {
               this.showToast("Blob sent");
               post.videourl = res.downloadURL;
               this.showToast('Success: video sent to the server and got url:)');
-              updatedpostdata["posts/" + newpostkey] = post;
-              updatedpostdata["userwise-feed/" + userid +"/"+ newpostkey] = post;
-              this.authservice.getFollowers(userid).subscribe(followers =>{
+              updatedpostdata["userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
+              this.authservice.getFollowers(this.authuid).subscribe(followers =>{
                 for (let i = followers.length - 1; i >= 0; i--) {
                   updatedpostdata["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
                 }
@@ -152,14 +150,13 @@ export class PostService {
     }
   }
 
-  simplePost(post,userid){ // No image. Simple post
+  simplePost(post){ // No image. Simple post
 
     let updatedPostData = {};
-    let newpostkey = this.postnode.push().key;
+    let newpostkey = this.feednode.push().key;
 
-    updatedPostData["posts/" + newpostkey] = post;
-    updatedPostData["userwise-feed/" + userid +"/"+ newpostkey] = post;
-    this.authservice.getFollowers(userid).subscribe(followers =>{
+    updatedPostData["userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
+    this.authservice.getFollowers(this.authuid).subscribe(followers =>{
       for (let i = followers.length - 1; i >= 0; i--) {
         updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
       }
@@ -175,12 +172,12 @@ export class PostService {
     toast.present();
   }
 
-  getPost(id){
-    return this.af.database.object('/posts/' + id).take(1);
-  }
+  // getPost(id){
+  //   return this.af.database.object('/posts/' + id).take(1);
+  // }
 
   getFeed(){
-    this.posts = this.af.database.list('/userwise-feed/' + this.fireauth.uid , {
+    this.posts = this.af.database.list('/userwise-feed/' + this.authuid , {
       query: {
         orderByChild: 'created_at',
         endAt: Date.now()
@@ -197,27 +194,45 @@ export class PostService {
     }).take(1);
     return this.feed;
   }
+
+  removePostfromFeedbyId(userid,postid){
+    if (userid != this.authuid) {      
+      this.af.database.object("/userwise-feed/"+this.authuid+"/"+postid).remove().then(
+        (success) => alert("The post is parmanently removed."),
+        (error) => alert("Could not remove. Try again!")
+      )
+    }else {
+      this.authservice.getFollowers(userid).subscribe(followers =>{
+        for (let i = followers.length - 1; i >= 0; i--) {
+          this.af.database.object("/userwise-feed/"+ followers[i].$key +"/"+postid).remove();
+          this.af.database.object('/postwise-participator/' + postid).remove();
+        }
+      });
+      this.af.database.object("/userwise-feed/"+userid+"/"+postid).remove().then(
+        (success) => alert("Post is parmanently removed from related feeds."),
+        (error) => alert("Something wrong. Try again!")
+      )
+    }
+  }
+
   // participation logics
   getParticipated(postid: any){
-    return this.af.database.object('/postwise-participator/' + postid + "/" + this.fireauth.uid);
+    return this.af.database.object('/postwise-participator/' + postid + "/" + this.authuid);
   }
   updateParticipated(postid: any,participated: boolean){
-    console.log(postid);
-    const item = this.af.database.object('/postwise-participator/' + postid + "/" + this.fireauth.uid);
-    item.update({participated: participated});
+    this.af.database.object('/postwise-participator/' + postid + "/" + this.authuid)
+      .update({participated: participated});
   }
   removeParticipated(postid: any,participated: boolean){
-    console.log(postid);
-    const item = this.af.database.object('/postwise-participator/' + postid + "/" + this.fireauth.uid);
-    item.remove();
+    this.af.database.object('/postwise-participator/' + postid + "/" + this.authuid).remove();
   }
-  getParticipating(postid: any){
-    return this.af.database.object('/posts/' + postid); 
-  }
+  // getParticipating(postid: any){
+  //   return this.af.database.object('/postwise-countparticipator/' + postid); 
+  // }
   updateParticipating(postid: any,participating: number){
     let updatedata = {};
-    updatedata['/posts/' + postid + '/participating'] = participating;
-    updatedata['/userwise-feed/' + this.fireauth.uid + "/" + postid + '/participating'] = participating;
+    updatedata['/postwise-countparticipator/' + postid + '/participating'] = participating;
+    updatedata['/userwise-feed/' + this.authuid + "/" + postid + '/participating'] = participating;
     this.af.database.object('/').update(updatedata);
   }
   getTotalparticipation(postid){
@@ -226,11 +241,11 @@ export class PostService {
 
   // Like Dislike logics
   getLikedDisliked(postid){
-    return this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.fireauth.uid);
+    return this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.authuid);
   }
 
   likeDislikePost(postid,liked,disliked){
-    this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.fireauth.uid).update({
+    this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.authuid).update({
       liked : liked,
       disliked: disliked
     });
@@ -298,25 +313,25 @@ export class PostService {
   }
 
   getpostfromFeedbyid(postid){
-    return this.af.database.object('/userwise-feed/' + this.fireauth.uid +"/"+ postid).take(1);
+    return this.af.database.object('/userwise-feed/' + this.authuid +"/"+ postid).take(1);
   }
 
   // league logic
 
   createLeague(fixtures,leaguename,sporttype,teams){
-    this.leaguenode = this.af.database.list(`/league-organized/${this.fireauth.uid}/`);
+    this.leaguenode = this.af.database.list(`/league-organized/${this.authuid}/`);
     let leagueid = this.leaguenode.push().key;
     let updatedata = {};
 
-    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/sporttype'] = sporttype;
-    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid +'/leaguename'] =  leaguename;
-    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/teams'] = teams;
-    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/fixtures'] = fixtures;
+    updatedata[`/league-organized/${this.authuid}/` + leagueid + '/sporttype'] = sporttype;
+    updatedata[`/league-organized/${this.authuid}/` + leagueid +'/leaguename'] =  leaguename;
+    updatedata[`/league-organized/${this.authuid}/` + leagueid + '/teams'] = teams;
+    updatedata[`/league-organized/${this.authuid}/` + leagueid + '/fixtures'] = fixtures;
 
 
     for (var i = teams.length - 1; i >= 0; i--) {
       updatedata[`/league-participated/${teams[i].id}/` + leagueid +'/leaguename'] = leaguename;
-      updatedata[`/league-participated/${teams[i].id}/` + leagueid +'/leagueadminid'] = this.fireauth.uid;
+      updatedata[`/league-participated/${teams[i].id}/` + leagueid +'/leagueadminid'] = this.authuid;
       
     }
     this.af.database.object('/').update(updatedata).then(
@@ -334,10 +349,10 @@ export class PostService {
 
     let updatedata = {};
 
-    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/sporttype'] = sporttype;
-    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid +'/leaguename'] =  leaguename;
-    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/teams'] = teams;
-    updatedata[`/league-organized/${this.fireauth.uid}/` + leagueid + '/fixtures'] = fixtures;
+    updatedata[`/league-organized/${this.authuid}/` + leagueid + '/sporttype'] = sporttype;
+    updatedata[`/league-organized/${this.authuid}/` + leagueid +'/leaguename'] =  leaguename;
+    updatedata[`/league-organized/${this.authuid}/` + leagueid + '/teams'] = teams;
+    updatedata[`/league-organized/${this.authuid}/` + leagueid + '/fixtures'] = fixtures;
 
     for (var i = teams.length - 1; i >= 0; i--) {
       updatedata[`/league-participated/${teams[i].id}/` + leagueid +'/leaguename'] = leaguename;

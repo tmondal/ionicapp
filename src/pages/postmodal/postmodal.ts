@@ -3,7 +3,13 @@ import { Camera ,CameraOptions} from '@ionic-native/camera';
 import { MediaCapture } from '@ionic-native/media-capture';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
-import { NavController, NavParams, ViewController, ToastController} from 'ionic-angular';
+import { 
+	NavController, 
+	NavParams, 
+	ViewController, 
+	ToastController
+} from 'ionic-angular';
+
 import { StorageService } from '../../providers/storage-service';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
@@ -81,7 +87,8 @@ export class PostmodalPage implements OnInit{
 		it got f***ed up when i logout
 		*/
 
-		// still causes 'uid' of null Type error. So got rid of it by 'user.$key'
+		// still causes 'uid' of null Type error. So got rid of it by 'user.$key' or 
+		// you can write this code inside constructor which also works (later realised)
 
 		// this.af.auth.subscribe(user =>{ 
 		// 	this.currentuserId = user.uid;
@@ -236,44 +243,44 @@ export class PostmodalPage implements OnInit{
 		if(this.posttype && this.sporttype && this.eventdate && this.userimage &&this.username && this.rules) {
 			this.viewCtrl.dismiss();
 			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+				this.postservice.cameraimagePost(post,this.cameraimagedata);
 			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+				this.postservice.cameraimagePost(post,this.galleryimagedata);
 			}else{
-				this.postservice.cameraimagePost(post,this.currentuserId,null);
+				this.postservice.cameraimagePost(post,null);
 			}
 		}
 		else if(this.posttype && this.sporttype && this.eventdate && !this.userimage &&this.username && this.rules){
 			alert("Please edit profile picture before next post.");
 			this.viewCtrl.dismiss();
 			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+				this.postservice.cameraimagePost(post,this.cameraimagedata);
 			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+				this.postservice.cameraimagePost(post,this.galleryimagedata);
 			}else{
-				this.postservice.cameraimagePost(post,this.currentuserId,null);
+				this.postservice.cameraimagePost(post,null);
 			}
 		}
 		else if(this.posttype && this.sporttype && this.eventdate && this.userimage && !this.username && this.rules) {
 			alert("Please edit your name before next post.");
 			this.viewCtrl.dismiss();
 			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+				this.postservice.cameraimagePost(post,this.cameraimagedata);
 			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+				this.postservice.cameraimagePost(post,this.galleryimagedata);
 			}else{
-				this.postservice.cameraimagePost(post,this.currentuserId,null);
+				this.postservice.cameraimagePost(post,null);
 			}
 		}
 		else if(this.posttype && this.sporttype && this.eventdate && !this.userimage && !this.username && this.rules) {
 			alert("Please edit your name and profile pic before next post.");
 			this.viewCtrl.dismiss();
 			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+				this.postservice.cameraimagePost(post,this.cameraimagedata);
 			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+				this.postservice.cameraimagePost(post,this.galleryimagedata);
 			}else{
-				this.postservice.cameraimagePost(post,this.currentuserId,null);
+				this.postservice.cameraimagePost(post,null);
 			}
 		}
 		else{
@@ -301,43 +308,43 @@ export class PostmodalPage implements OnInit{
 		if(this.posttype && this.sporttype && this.eventdate && this.userimage && this.username && this.criteria) {
 			this.viewCtrl.dismiss();
 			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+				this.postservice.cameraimagePost(post,this.cameraimagedata);
 			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+				this.postservice.cameraimagePost(post,this.galleryimagedata);
 			}else{
-				this.postservice.cameraimagePost(post,this.currentuserId,null);
+				this.postservice.cameraimagePost(post,null);
 			}
 		}else if (this.posttype && this.sporttype && this.eventdate && !this.userimage && this.username && this.criteria) {
 			alert("Please edit profile picture before next post.");
 			this.viewCtrl.dismiss();
 			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+				this.postservice.cameraimagePost(post,this.cameraimagedata);
 			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+				this.postservice.cameraimagePost(post,this.galleryimagedata);
 			}else{
-				this.postservice.cameraimagePost(post,this.currentuserId,null);
+				this.postservice.cameraimagePost(post,null);
 			}
 		}
 		else if (this.posttype && this.sporttype && this.eventdate && this.userimage && !this.username && this.criteria) {
 			alert("Please edit your name before next post.");
 			this.viewCtrl.dismiss();
 			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+				this.postservice.cameraimagePost(post,this.cameraimagedata);
 			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+				this.postservice.cameraimagePost(post,this.galleryimagedata);
 			}else{
-				this.postservice.cameraimagePost(post,this.currentuserId,null);
+				this.postservice.cameraimagePost(post,null);
 			}
 		}
 		else if (this.posttype && this.sporttype && this.eventdate && !this.userimage && !this.username && this.criteria) {
 			alert("Please edit your name and profile pic before next post.");
 			this.viewCtrl.dismiss();
 			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+				this.postservice.cameraimagePost(post,this.cameraimagedata);
 			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+				this.postservice.cameraimagePost(post,this.galleryimagedata);
 			}else{
-				this.postservice.cameraimagePost(post,this.currentuserId,null);
+				this.postservice.cameraimagePost(post,null);
 			}
 		}
 		else{
@@ -362,15 +369,15 @@ export class PostmodalPage implements OnInit{
 		if (this.imagetaken && !this.galleryimage && !this.galleryvideo) {
 			alert("You captured an image using camera.");
 			this.viewCtrl.dismiss();
-			this.postservice.cameraimagePost(post,this.currentuserId,this.cameraimagedata);
+			this.postservice.cameraimagePost(post,this.cameraimagedata);
 		}else if (this.galleryimage && !this.imagetaken && !this.galleryvideo) {
 			alert("You selected an image from gallery.");
 			this.viewCtrl.dismiss();
-			this.postservice.cameraimagePost(post,this.currentuserId,this.galleryimagedata);
+			this.postservice.cameraimagePost(post,this.galleryimagedata);
 		}else if (this.galleryvideo && !this.imagetaken && !this.galleryimage) {
 			alert("You selected a video from gallery.");
 			this.viewCtrl.dismiss();
-			this.postservice.galleryvideoPost(post,this.currentuserId,this.galleryvideodata);
+			this.postservice.galleryvideoPost(post,this.galleryvideodata);
 		}
 		else{
 			alert("You must select one option among all options..");
@@ -393,11 +400,11 @@ export class PostmodalPage implements OnInit{
 			comments: this.comments
 		}
 		if (this.youtubelink && this.youtubetitle) {
-			this.postservice.simplePost(post,this.currentuserId);
+			this.postservice.simplePost(post);
 			this.viewCtrl.dismiss();
 		}else if (this.youtubelink && !this.youtubetitle) {
 			alert("Proper title attract users to see the video.");
-			this.postservice.simplePost(post,this.currentuserId);
+			this.postservice.simplePost(post);
 			this.viewCtrl.dismiss();
 		}else if (!this.youtubelink && this.youtubetitle) {
 			alert("You must give a appropriate youtube link. ");

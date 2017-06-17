@@ -3,7 +3,7 @@ import { ElementRef} from '@angular/core';
 import { 
   NavController,
   ModalController ,
-  PopoverController,
+  AlertController,
   NavParams,
   Content
 } from 'ionic-angular';
@@ -12,8 +12,8 @@ import { MypostPage } from '../mypost/mypost';
 import { PostPage } from '../post/post';
 import { UserprofilePage } from '../userprofile/userprofile';
 import { PostmodalPage } from '../postmodal/postmodal';
-import { PostmoreoptPage } from '../postmoreopt/postmoreopt';
 import { PostcommentsPage } from '../postcomments/postcomments';
+import { AllclubsPage } from '../allclubs/allclubs';
 
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
@@ -98,6 +98,7 @@ export class HomePage implements OnInit{
   noofcomments: any[] = [];
   nooflikes: any[] = [];
   noofdislikes: any[] = [];
+  postmoreclicked: boolean[] = [false];
   likedislikeservice: any;
   feedsubscription: any;
   noofcommentservice:any;
@@ -114,7 +115,7 @@ export class HomePage implements OnInit{
   constructor(
   	public navCtrl: NavController,
   	public modalCtrl: ModalController,
-  	public popoverCtrl: PopoverController,
+  	public alertCtrl: AlertController,
     public navParams: NavParams,
     public myElement: ElementRef,
     private postservice: PostService,
@@ -221,9 +222,9 @@ export class HomePage implements OnInit{
         });
       }
     });
-    this.authservice.getPlayerstofollow().subscribe(players =>{
-      this.players = players;
-    });
+    // this.authservice.getPlayerstofollow().subscribe(players =>{
+    //   this.players = players;
+    // });
    
     this.authservice.getmyprofile().subscribe(user=>{
       this.authuid = user.$key;
@@ -234,6 +235,7 @@ export class HomePage implements OnInit{
       this.longitude = user.longitude;
 
     });
+
   }
   ngOnDestroy(){
     /*Took a day to figure it out . when i logout firebase showing permission denied at '/post'
@@ -317,19 +319,22 @@ export class HomePage implements OnInit{
       }
     });
 
-    setTimeout(() => {      
-      refresher.complete();
-    }, 2000);
+    if (refresher != 1) {
+      
+      setTimeout(() => {      
+        refresher.complete();
+      }, 1000);
+    }
   }
 
   follow(i){
     this.iffollowing[i] = true;
     this.authservice.followuser(this.clubs[i].$key);
   }
-  unfollow(i){
-    this.iffollowing[i] = false;
-    this.authservice.unfollowuser(this.clubs[i].$key);
+  clubstoFollow(){
+    this.navCtrl.push(AllclubsPage,{clubs: this.clubs});
   }
+
   onCreatePostClick(){
     this.navCtrl.push(PostmodalPage);
   }
@@ -363,13 +368,37 @@ export class HomePage implements OnInit{
   calluserdetails(){
    this.navCtrl.push(UserprofilePage,{userId: this.authuid});
   }
-  onMoreClick(myEvent){
-    let popover = this.popoverCtrl.create(PostmoreoptPage);
-    popover.present({
-      ev: myEvent
-    });
+
+  // More options for a post
+  onmoreClick(i){
+    this.postmoreclicked[i] = !this.postmoreclicked[i];
   }
 
+  removepost(userid,postid,i){
+    let confirm = this.alertCtrl.create({
+    title: 'Confirming',
+    message: 'The post will be parmanently removed. Are you sure ?',
+    buttons: [
+      {
+        text: 'No',
+        handler: () => { this.postmoreclicked[i] = false; }
+      },
+      {
+        text: 'Sure',
+        handler: () => {
+          this.postservice.removePostfromFeedbyId(userid,postid);
+          this.postmoreclicked[i] = false;
+          setTimeout(()=>{            
+            this.doRefresh(1);
+          },3000)
+        }
+      }
+    ]
+    });
+    confirm.present();
+  }
+
+  // Like logic 
   likePost(postid,i){
     // First see if previously liked or disliked .As every post does not have this
     // function we get explicitly by postid
@@ -453,6 +482,7 @@ export class HomePage implements OnInit{
             this.noofdislikes[i] += 1;
             this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
             this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+            this.doRefresh(1);
           }
           else if(!this.disliked[i] && this.liked[i] ) {
             this.liked[i] = false;
@@ -461,6 +491,7 @@ export class HomePage implements OnInit{
             this.noofdislikes[i] +=1;
             this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
             this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+            this.doRefresh(1);
           }else if (this.disliked[i]) {
             alert("No matter how much you hate \n You can press only one time :)");
           }        
@@ -485,4 +516,5 @@ export class HomePage implements OnInit{
       userId: this.authuid,
     });
   }
+
 }

@@ -1,45 +1,21 @@
 page-post {
 
-	.card-background-page {
-
-		background: #f4f4f4;
-		ion-card {
-			position: relative;
-			text-align: center;
-			padding: 0px;
-		}
-		
-		.logo {
-			position: absolute;
-			top: 50%;
-			width: 60px;
-			height:60px;
-			border-radius: 2px;
-			border:2px solid white;
-		}
-		.logo {
-			img{
-				height: 60px;
-			}
-		}
-
-		.card-title {
-			position: absolute;
-			top: 36%;
-			font-size: 2.0em;
-			width: 100%;
-			font-weight: bold;
-			color: #fff;
-		}
-
-		.card-subtitle {
-			font-size: 1.0em;
-			position: absolute;
-			top: 52%;
-			width: 100%;
-			color: #fff;
-		}
-
+	ion-card {
+		position: relative;
+		text-align: center;
+		padding: 0px;
 	}
-
+	.coverimg {
+		height: 150px;width: 100%;
+		filter: blur(1px);
+	}
+	.posttitle {
+		position: relative;
+		text-align: center;
+		font-size: 2.0em;
+		width: 100%;
+		font-weight: bold;
+		color: white;
+		top: -20%;
+	}
 }

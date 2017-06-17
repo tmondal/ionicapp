@@ -84,7 +84,7 @@ export class FootballscorePage implements OnInit{
 			alert("Please edit your name..");
 		}else{			
 			this.viewCtrl.dismiss();
-			this.postservice.simplePost(post,this.currentuserId);
+			this.postservice.simplePost(post);
 		}
 	}
 	onDismiss(){

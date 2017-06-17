@@ -1,11 +1,25 @@
 page-home {
 
 
-  .scorebutton {
-    text-transform: none;
-    font-weight: 100;
-    padding: 0px 2.8em;
+  @keyframes more {
+    0%{
+      height: 0px;
+    }
+    100% {
+      height: 50px;
+    }
   }
+  .morediv {
+    height: 50px;
+    text-align: center;background-color: orange;
+    animation: more .5s;
+  }
+  .moreitem {
+    height: inherit;
+    min-height: 0px;
+  }
+
+
   .card h2 {
     color: #FFEB3B;
   }
@@ -70,6 +84,55 @@ page-home {
     .scroll-content {
       margin-bottom: 0px;
     }
+  }
+
+  ion-scroll {
+    .scroll-content {
+      top: 0 !important;
+      padding-top: 0px !important;
+    }
+  }
+  .imagesize {
+    height: 200px;
+    width: 100%;
+  }
+  .seeparticipants {
+    text-transform: none;
+    margin-top: 20px;
+    color: #2196F3;
+  }
+  .countlikecommentrow {
+    height: 25px;
+    margin: inherit;
+    text-align: center;
+    margin-top:35px
+  }
+  .circlelike {
+    border-radius: 20px;background-color:#ff5722;width: 100%;height: 100%;
+  }
+  .circleicon {
+    padding-bottom: 2px;font-size: .8em;
+    color: white;
+  }
+  .countlike {
+    text-align: left;padding-top: 2px;
+  }
+  .countdislike {
+    text-align: right;padding-top: 2px;
+  }
+  .likedislikerow {
+    border: 1px solid #3a3a3a; margin: inherit;
+  }
+  .likebutton {
+    text-transform: none;
+    font-weight: 100;
+    padding: 0px 2.8em;
+  }
+  .likeicon {
+    font-size: 1.3em;padding-bottom:3px;
+  }
+  .liketext {
+    font-size:1.2rem;font-weight:500;
   }
   
 }

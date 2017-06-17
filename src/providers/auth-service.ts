@@ -192,6 +192,13 @@ export class AuthService {
         this.showToast("Failed: current club name not updated");
       }); 
     }
+    updateSportName(sport){
+      this.af.database.object('/users/' + this.auth.uid).update({sportname: sport}).then((success)=>{
+        this.showToast("Success: updated sport name");
+      },(error)=>{
+        this.showToast("Failed: sport name not updated");
+      });
+    }
     
     followuser(targetuserId: any){
       let followuserdata = {};

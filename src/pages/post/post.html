@@ -1,19 +1,20 @@
 
 
 <ion-header>
-	<ion-navbar style="background-color: #2196F3">
-		<ion-title>Post</ion-title>
+	<ion-navbar color="black">
+		<ion-title *ngIf="rules">See Rules</ion-title>
+		<ion-title *ngIf="criteria">See Criteria</ion-title>
 	</ion-navbar>
 </ion-header>
 
 
-<ion-content class="card-background-page">
-	<ion-card>
-	    <!-- image goes here -->
-	    <img style="height: 250px" [src]="coverimage" *ngIf="coverimage">
-	    <div class="card-title">{{username || "Forgot to edit name"}}</div>
-	    <p class="card-subtitle">We give importance to Talent</p>
-	</ion-card>
+<ion-content>
+	<div>
+	    <img class="coverimg" [src]="coverimage" *ngIf="coverimage">
+	</div>
+	<div class="posttitle">
+		{{username || "Forgot to edit name"}}
+	</div>
  	<ion-card>
 	 	<ion-row>
 	      <ion-col>

@@ -86,7 +86,7 @@ export class CricketscorePage implements OnInit{
 			alert("Let the game start ..\n Better select text/image post type..");
 		}else{			
 			this.viewCtrl.dismiss();
-			this.postservice.simplePost(post,this.currentuserId);
+			this.postservice.simplePost(post);
 		}
 	}
 	testScore(){
@@ -121,7 +121,7 @@ export class CricketscorePage implements OnInit{
 			alert("Let the game start ..\n Better select text/image post type..");
 		}else{			
 			this.viewCtrl.dismiss();
-			this.postservice.simplePost(post,this.currentuserId);
+			this.postservice.simplePost(post);
 		}
 	
 	}

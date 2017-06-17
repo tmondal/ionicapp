@@ -7,6 +7,7 @@ page-userprofile{
 
 	.scroll-content {
 		padding: 0px;
+		margin-top: 56px;
 	}
 
 	ion-card {
@@ -81,6 +82,9 @@ page-userprofile{
 		background-color: #424242;
 		color: #2196F3;
 	}
+	.postitem {
+		background-color: #424242;
+	}
 	.followerfont ,.followingfont {
 		text-transform: none;
 		font-weight: 100;
@@ -101,5 +105,27 @@ page-userprofile{
 	.middlenavbar{
 		text-transform: none;
 	}
+	.playercoverdiv {
+		width: 100%;
+		height: 150px;
+	}
+	.playercoverimg {
+		z-index: 1;
+		width: 100%;
+		height: inherit;
+		filter: blur(1px);
+	}
 
+	.playerprofilediv {		
+		text-align: center;
+	}
+	.playerprofileimg {
+		border-radius: 50%;
+		width: 100px;
+		height: 100px;
+		border: 2px white solid;
+		position: relative;
+		margin-top: -70px;
+		z-index: 10;
+	}
 }

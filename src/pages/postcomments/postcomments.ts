@@ -68,10 +68,7 @@ export class PostcommentsPage implements OnInit {
 		})
 	}
 	ngOnDestroy(){
-		// this.childcommentservice.unsubscribe();
-		// this.noofcommentservice.unsubscribe();
 		this.commentservice.unsubscribe();
-		// this.lastchildservice.unsubscribe();
 	}
 	addparentComment(){
 

@@ -24,7 +24,7 @@ export class BadmintonscorePage implements OnInit{
 	}
 	ngOnInit(){		
 		this.af.auth.subscribe(user =>{
-				this.currentuserId = user.uid;
+			this.currentuserId = user.uid;
 		});
 	}
 	onDismiss(){

@@ -1,4 +1,5 @@
 
+
 <ion-header [class.show-header] = "showheader == true && hideheader == false" [class.hide-header] = "hideheader == true && showheader == false" >
     <ion-navbar style="background-color: #212121">
         <button ion-button menuToggle>
@@ -44,25 +45,25 @@
             </ion-row>
         </div>
     </ion-card>
-
+    <ion-card color="card">
+        
+    </ion-card>
     <ion-card style="height: 220px" color="background">
-        <ion-row>
-            <ion-col>
-            <ion-card-header color="yellow">
-                Clubs to follow:
-            </ion-card-header>
+        <ion-card-header>
+            <ion-row>
+            <ion-col style="color: yellow">
+                Clubs to follow
             </ion-col>
-            <ion-col>
-            <ion-card-header style="float: right">
-                <span color="yellow">View all</span>
-            </ion-card-header>
+            <ion-col style="text-align: right;color: yellow" (click)="clubstoFollow()">
+                View all
             </ion-col>
         </ion-row>
-        <ion-scroll scrollX="true" style="height: 180px;" >
+        </ion-card-header>
+        <ion-scroll scrollX="true" style="height: 170px;" >
             <ion-card color="card" class="scroll-item" *ngFor="let club of clubs, let i = index" style="height: 100%; width: 100px">
-                <ion-label style="margin: 0px">
+                <!-- <ion-label style="margin: 0px">
                     <ion-icon name="more" style="float: right; padding-top: 5px; padding-right: 10px" (click)="onMoreClick($event)"></ion-icon>
-                </ion-label>
+                </ion-label> -->
 
                 <ion-row style="height: 60px">
                     <button ion-button full clear style="height: 100%">                        
@@ -88,23 +89,33 @@
     <ion-list *ngFor="let post of posts, let i = index">
 
         <ion-card *ngIf="post.posttype == 'tournament'" color="card">
+            <div *ngIf="postmoreclicked[i]" class="morediv">
+                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                    <ion-icon name="close-circle"></ion-icon>
+                    Remove it
+                </ion-item>
+            </div>
             <ion-item>
                 <ion-avatar item-left>
-                    <!-- <img [src]="post.userimage" *ngIf="post.userimage"> -->
+                    <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
-                <ion-icon color="yellow" name="more" item-right (click)="onMoreClick($event)"></ion-icon>
+                <ion-icon  (click)="onmoreClick(i)" color="yellow" name="more" item-right></ion-icon>
+
                 <h2 (click)="onUsernameClick(post.userId)">
                     {{post.username || "Forgot to edit name"}}
                 </h2>
-                <p><ion-icon name="pin" color="pink"></ion-icon>&nbsp;<span color="orange">Kolkata</span>&nbsp;&nbsp;&nbsp;<span color="red">{{posttime[i]}}</span></p>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span color="red">{{posttime[i]}}</span>
+                </p>
             </ion-item>
 
             <ion-card-content color="white" style="opacity: 0.6px">
                 Organising a <b>{{post.sporttype}}</b> tournament on <b>{{post.eventdate}}</b> at {{post.eventvenue || "our club ground"}}
             </ion-card-content>
-            <ion-row style="height: 200px; width: 100%;">
-                <!-- <img [src]="post.imageurl" *ngIf="post.imageurl"> -->
-                <div *ngIf="!post.imageurl" style="height: 100%;width: 100%;"></div>
+            <ion-row>
+                <img [src]="post.imageurl" *ngIf="post.imageurl" style="height: 100%; width: 100%;">
+                <div *ngIf="!post.imageurl" style="height: 200px;width: 100%;"></div>
             </ion-row>
             <ion-card-content color="white" *ngIf="post.centuarea">
                 {{post.centuarea}}
@@ -137,22 +148,32 @@
         </ion-card>
 
         <ion-card *ngIf="post.posttype == 'hiring'" color="card">
+
+            <div *ngIf="postmoreclicked[i]" class="morediv">
+                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                    <ion-icon name="close-circle"></ion-icon>
+                    Remove it from feed
+                </ion-item>
+            </div>
             <ion-item>
                 <ion-avatar item-left>
-                    <!-- <img [src]="post.userimage" *ngIf="post.userimage"> -->
+                    <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
-                <ion-icon color="yellow" name="more" item-right (click)="onMoreClick($event)"></ion-icon>
+                <ion-icon color="yellow" name="more" item-right (click)="onmoreClick(i)"></ion-icon>
                 <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
 
-                <p><ion-icon name="pin" color="pink"></ion-icon>&nbsp;<span color="orange">Kolkata</span>&nbsp;&nbsp;&nbsp;<span color="red">{{posttime[i]}}</span></p>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span color="red">{{posttime[i]}}</span>
+                </p>
             </ion-item>
             <ion-card-content color="white">
                 Organising a <b>{{post.sporttype}} Trial for Hiring</b> Players on <b>{{post.eventdate}}</b><br>
                 Be present at {{post.eventvenue || "our club ground"}}
             </ion-card-content>
-            <ion-row style="height: 200px; width: 100%;">          
-                <!-- <img [src]="post.imageurl" *ngIf="post.imageurl"> -->
-                <div *ngIf="!post.imageurl" style="height: 100%;width: 100%;"></div>
+            <ion-row>          
+                <img [src]="post.imageurl" *ngIf="post.imageurl" style="height: 100%; width: 100%;">
+                <div *ngIf="!post.imageurl" style="height: 200px;width: 100%;"></div>
             </ion-row>
             <ion-card-content color="white" *ngIf="post.honestarea">
                 {{post.honestarea}}
@@ -184,21 +205,31 @@
         </ion-card>
         
 
-        <ion-card *ngIf="post.posttype == 'image'" color="card"> 
+        <ion-card *ngIf="post.posttype == 'image'" color="card">
+
+            <div *ngIf="postmoreclicked[i]" class="morediv">
+                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                    <ion-icon name="close-circle"></ion-icon>
+                    Remove it
+                </ion-item>
+            </div> 
             <ion-item>
                 <ion-avatar item-left>
                     <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
-                <ion-icon color="yellow" name="more" color="yellow" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
+                <ion-icon color="yellow" name="more" color="yellow" item-right (click)="onmoreClick(i)"></ion-icon>
 
-                <p><ion-icon name="pin" color="pink"></ion-icon>&nbsp;<span color="orange">Kolkata</span>&nbsp;&nbsp;&nbsp;<span color="red">{{posttime[i]}}</span></p>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span color="red">{{posttime[i]}}</span>
+                </p>
             </ion-item>
             <ion-card-content color="white">
                 {{post.title}}
             </ion-card-content>
-            <ion-row style="height: 200px; width: 100%">                
-                <img [src] ="post.imageurl" *ngIf="post.imageurl" >
+            <ion-row>                
+                <img [src] ="post.imageurl" *ngIf="post.imageurl" style="height: 100%; width: 100%">
                 <video width="100%" height="200px" autoplay *ngIf="post.videourl" controls>
                     <!-- <source [src]="post.videourl" type="video/mp4"> -->
                 </video>
@@ -256,15 +287,25 @@
                 </ion-col>
             </ion-row>
         </ion-card>
-        <ion-card *ngIf="post.posttype == 'youtube'" color="card"> 
+        <ion-card *ngIf="post.posttype == 'youtube'" color="card">
+
+            <div *ngIf="postmoreclicked[i]" class="morediv">
+                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                    <ion-icon name="close-circle"></ion-icon>
+                    Remove it
+                </ion-item>
+            </div> 
             <ion-item>
                 <ion-avatar item-left>
                     <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
-                <ion-icon color="yellow" name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
+                <ion-icon color="yellow" name="more" item-right (click)="onmoreClick(i)"></ion-icon>
 
-                <p><ion-icon name="pin" color="pink"></ion-icon>&nbsp;<span color="orange">Kolkata</span>&nbsp;&nbsp;&nbsp;<span color="red">{{posttime[i]}}</span></p>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span color="red">{{posttime[i]}}</span>
+                </p>
             </ion-item>
             <ion-card-content color="white">
                 {{post.title}}
@@ -326,51 +367,69 @@
         </ion-card>
 
         <ion-card *ngIf="post.posttype == 'score' && post.sporttype == 'cricket' && post.crickettype == 'odi'" color="card">
+
+            <div *ngIf="postmoreclicked[i]" class="morediv">
+                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                    <ion-icon name="close-circle"></ion-icon>
+                    Remove it
+                </ion-item>
+            </div>
             <ion-item>
                 <ion-avatar item-left>
                    <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
-                <ion-icon color="yellow" name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
+                <ion-icon color="yellow" name="more" item-right (click)="onmoreClick(i)"></ion-icon>
 
-                <p><ion-icon name="pin" color="pink"></ion-icon>&nbsp;<span color="orange">Kolkata</span>&nbsp;&nbsp;&nbsp;<span color="red">{{posttime[i]}}</span></p>
+                <h2 (click)="onUsernameClick(post.userId)">
+                    {{post.username || "Forgot to edit name"}}
+                </h2>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span>{{posttime[i]}}</span>
+                </p>
             </ion-item>
             <ion-card-header color="heading">
                  Cricket Score Update:
             </ion-card-header>
-            <ion-card-content color="teal">
-                <ion-label style="text-transform: capitalize; text-align:center;">{{post.teamone}} vs {{post.teamtwo}}</ion-label>
-            </ion-card-content>
-            <ion-card-content *ngIf="post.tosswon == 'teamone'" color="red">
-                {{post.teamone}} won toss and elected {{post.elected}} first 
-            </ion-card-content>
-            <ion-card-content *ngIf="post.tosswon == 'teamtwo'" color="red">
-                {{post.teamtwo}} won toss and elected {{post.elected}} first
-            </ion-card-content>
-            <button color="yellow" *ngIf="(post.tosswon == 'teamone' && post.elected == 'batting') || (post.tosswon == 'teamtwo' && post.elected == 'bowling')" ion-button clear full style="text-transform: none">
-                {{post.teamone}} <span style="width: 5px"></span>
-                <ion-icon name="happy"></ion-icon>
-            </button>
-            <button color="yellow" *ngIf="(post.tosswon == 'teamtwo' && post.elected == 'batting') || (post.tosswon == 'teamone' && post.elected == 'bowling')" ion-button clear full style="text-transform: none">
-                {{post.teamtwo}} <span style="width: 5px"></span>
-                <ion-icon name="happy"></ion-icon>
-            </button>
-            <ion-row>
+            <div style="text-align: center" >
+                <p style="text-transform: capitalize;color: #2196F3">
+                    {{post.teamone}} vs {{post.teamtwo}}
+                </p>
+            </div>
+            <div *ngIf="post.tosswon == 'teamone'" style="text-align: center">
+                <p style="color: #2196F3">{{post.teamone}} won toss and elected {{post.elected}} first</p> 
+            </div>
+            <div *ngIf="post.tosswon == 'teamtwo'" style="text-align: center">
+                <p style="color: #2196F3">{{post.teamtwo}} won toss and elected {{post.elected}} first</p>
+            </div>
+            <div *ngIf="(post.tosswon == 'teamone' && post.elected == 'batting') || (post.tosswon == 'teamtwo' && post.elected == 'bowling')" style="text-align: center;margin-top: 10px">
+                <p style="color: yellow">
+                    Scorecard of {{post.teamone}} <span style="width: 5px"></span>
+                    <ion-icon name="happy"></ion-icon>
+                </p>
+            </div>
+            <div *ngIf="(post.tosswon == 'teamtwo' && post.elected == 'batting') || (post.tosswon == 'teamone' && post.elected == 'bowling')" style="text-align: center;margin-top: 10px">
+                <p style="color: yellow">
+                    Scorecard of {{post.teamtwo}} <span style="width: 5px"></span>
+                    <ion-icon name="happy"></ion-icon>
+                </p>
+            </div>
+            <ion-row style="background-color: black;margin-right: 5px;margin-left: 5px">
                 <ion-col col-3></ion-col>
-                <ion-col col-5>Runs Scored :</ion-col>
-                <ion-col col-3>{{post.runsscored}} </ion-col>
+                <ion-col col-5><ion-item color="white">Runs Scored</ion-item></ion-col>
+                <ion-col col-3><ion-item color="white">{{post.runsscored}}</ion-item></ion-col>
                 <ion-col col-1></ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row style="background-color: black;margin-right: 5px;margin-left: 5px">
                 <ion-col col-3></ion-col>
-                <ion-col col-5>Wicket Lost :</ion-col>
-                <ion-col col-3>{{post.wickets}} </ion-col>
+                <ion-col col-5><ion-item color="white">Wicket Lost</ion-item></ion-col>
+                <ion-col col-3><ion-item color="white">{{post.wickets}}</ion-item></ion-col>
                 <ion-col col-1></ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row style="background-color: black;margin-right: 5px;margin-left: 5px">
                 <ion-col col-3></ion-col>
-                <ion-col col-5>Overs Bowled :</ion-col>
-                <ion-col col-3>{{post.overs}} </ion-col>
+                <ion-col col-5><ion-item color="white">Overs Bowled</ion-item></ion-col>
+                <ion-col col-3><ion-item color="white">{{post.overs}}</ion-item></ion-col>
                 <ion-col col-1></ion-col>
             </ion-row>
             <ion-row style="height: 23px;margin: inherit;text-align: center;margin-top:35px">
@@ -427,34 +486,45 @@
         </ion-card>
 
         <ion-card *ngIf="post.posttype == 'score' && post.sporttype == 'cricket' && post.crickettype == 'test'" color="card">
+
+            <div *ngIf="postmoreclicked[i]" class="morediv">
+                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                    <ion-icon name="close-circle"></ion-icon>
+                    Remove it
+                </ion-item>
+            </div>
             <ion-item>
                 <ion-avatar item-left>
                    <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
-                <ion-icon color="yellow" name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
+                <ion-icon color="yellow" name="more" item-right (click)="onmoreClick(i)"></ion-icon>
 
-                <p><ion-icon name="pin" color="pink"></ion-icon>&nbsp;<span color="orange">Kolkata</span>&nbsp;&nbsp;&nbsp;<span color="red">{{posttime[i]}}</span></p>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span color="red">{{posttime[i]}}</span>
+                </p>
             </ion-item>
             <ion-card-header color="heading">
                  Test cricket Score Update:
             </ion-card-header>
-            <ion-card-content color="teal">
+            <div style="color: #2196F3;text-align: center">
                 <b>{{post.testno}}</b> between <b>{{post.teamone}}</b> and <b>{{post.teamtwo}}</b>
-            </ion-card-content>
-            
-            <button color="yellow" ion-button full clear style="text-transform: none" *ngIf="post.battingteam == 'teamone'">{{post.inningsno}} of {{post.teamone}} </button>
-            <button color="yellow" ion-button full clear style="text-transform: none" *ngIf="post.battingteam == 'teamtwo'">{{post.inningsno}} of {{post.teamtwo}} </button>
-            <ion-row>
+            </div>
+            <div style="text-align: center">
+                <p style="color: #2196F3" *ngIf="post.battingteam == 'teamone'">{{post.inningsno}} of {{post.teamone}} </p>
+                <p style="color: #2196F3" *ngIf="post.battingteam == 'teamtwo'">{{post.inningsno}} of {{post.teamtwo}} </p>
+            </div>
+            <ion-row style="background-color: black;margin-left: 5px;margin-right: 5px">
                 <ion-col col-3></ion-col>
-                <ion-col col-5>Runs Scored :</ion-col>
-                <ion-col col-3>{{post.runsscored}} </ion-col>
+                <ion-col col-5><ion-item color="white">Runs Scored</ion-item></ion-col>
+                <ion-col col-3><ion-item color="white">{{post.runsscored}}</ion-item></ion-col>
                 <ion-col col-1></ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row style="background-color: black; margin-left: 5px;margin-right: 5px">
                 <ion-col col-3></ion-col>
-                <ion-col col-5>Wicket Lost :</ion-col>
-                <ion-col col-3>{{post.wickets}} </ion-col>
+                <ion-col col-5><ion-item color="white">Wicket Lost</ion-item></ion-col>
+                <ion-col col-3><ion-item color="white">{{post.wickets}}</ion-item></ion-col>
                 <ion-col col-1></ion-col>
             </ion-row>
             <ion-row style="height: 23px;margin: inherit;text-align: center;margin-top:35px">
@@ -510,59 +580,78 @@
             </ion-row>
         </ion-card>
         <ion-card *ngIf="post.posttype == 'score' && post.sporttype == 'football'" color="card">
+
+            <div *ngIf="postmoreclicked[i]" class="morediv">
+                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                    <ion-icon name="close-circle"></ion-icon>
+                    Remove it
+                </ion-item>
+            </div>
             <ion-item>
                 <ion-avatar item-left>
                    <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
-                <ion-icon color="yellow" name="more" item-right (click)="onMoreClick($event)"></ion-icon>
+                <ion-icon color="yellow" name="more" item-right (click)="onmoreClick(i)"></ion-icon>
                 <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
 
-                <p><ion-icon name="pin" color="pink"></ion-icon>&nbsp;<span color="orange">Kolkata</span>&nbsp;&nbsp;&nbsp;<span color="red">{{posttime[i]}}</span></p>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span color="red">{{posttime[i]}}</span>
+                </p>
             </ion-item>
             <ion-card-header color="heading">
-                 Football Score Update:
+                 Football Score Update
             </ion-card-header>
-            <ion-item>
-                <ion-row color="orange" style="font-weight: 400">
-                    <ion-col><span color="yellow">{{post.teamone}}</span></ion-col>
-                    <ion-col col-2><span color="yellow">vs</span></ion-col> 
-                    <ion-col><span color="yellow">{{post.teamtwo}}</span></ion-col>
-                </ion-row>
-            </ion-item>
-            <div style="border: 1px solid #3a3a3a; margin: 5px">
+            
+            <ion-row color="orange" style="font-weight: 400;text-align: center;text-transform: capitalize">
+                <ion-col>
+                    <ion-label color="blue">{{post.teamone}}</ion-label>
+                </ion-col>
+                <ion-col col-2>
+                    <ion-label color="blue">VS</ion-label>
+                </ion-col> 
+                <ion-col>
+                    <ion-label color="blue">{{post.teamtwo}}</ion-label>
+                </ion-col>
+            </ion-row>
+            
+            <div style="border: 1px solid #3a3a3a; margin: 5px;padding: 6px;background-color: black">
                 <div>
                     <ion-row color="orange" style="font-weight: 100">
-                        <ion-col col-4 style="padding-left: 11px">Goal Scored :</ion-col>
-                        <ion-col col-2>{{post.goalone}} </ion-col>
-                        <ion-col col-4 style="padding-left: 11px">Goal Scored :</ion-col>
-                        <ion-col col-2>{{post.goaltwo}}</ion-col>
+                        <ion-col col-4><ion-item color="white">Goal Scored</ion-item></ion-col>
+                        <ion-col col-2><ion-item color="white">{{post.goalone}}</ion-item></ion-col>
+                        <ion-col col-4><ion-item color="white">Goal Scored</ion-item></ion-col>
+                        <ion-col col-2><ion-item color="white">{{post.goaltwo}}</ion-item></ion-col>
                     </ion-row>
                 </div>
                 <div>
                     <ion-row style="font-weight: 100">
-                        <ion-col col-4 style="padding-left: 11px">Yellow Card :</ion-col>
-                        <ion-col col-2>{{post.yellocardone}}</ion-col>
-                        <ion-col col-4 style="padding-left: 11px">Yellow Card :</ion-col>
-                        <ion-col col-2>{{post.yellowcardtwo}}</ion-col>
+                        <ion-col col-4><ion-item color="white">Yellow Card</ion-item></ion-col>
+                        <ion-col col-2><ion-item color="white">{{post.yellocardone}}</ion-item></ion-col>
+                        <ion-col col-4><ion-item color="white">Yellow Card</ion-item></ion-col>
+                        <ion-col col-2><ion-item color="white">{{post.yellowcardtwo}}</ion-item></ion-col>
                     </ion-row>
                 </div>
                 <div>
                     <ion-row style="font-weight: 100">
-                        <ion-col col-4 style="padding-left: 11px">Red Card :</ion-col>
-                        <ion-col col-2>{{post.redcardone}}</ion-col>
-                        <ion-col col-4 style="padding-left: 11px">Red Card :</ion-col>
-                        <ion-col col-2>{{post.redcardtwo}}</ion-col>
+                        <ion-col col-4><ion-item color="white">Red Card</ion-item></ion-col>
+                        <ion-col col-2><ion-item color="white">{{post.redcardone}}</ion-item></ion-col>
+                        <ion-col col-4><ion-item color="white">Red Card</ion-item></ion-col>
+                        <ion-col col-2><ion-item color="white">{{post.redcardtwo}}</ion-item></ion-col>
                     </ion-row>
                 </div>
                 <div>
                     <ion-row style="font-weight: 100">
-                        <ion-col style="padding-left: 11px">Scorer :</ion-col>
-                        <ion-col>{{post.goalscorerone}}</ion-col>
-                        <ion-col style="padding-left: 11px">Scorer :</ion-col>
-                        <ion-col>{{post.goalscorertwo}}</ion-col>
+                        <ion-col><ion-item color="white">Scorer</ion-item></ion-col>
+                        <ion-col><ion-item color="white">Scorer</ion-item></ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><ion-item color="white">{{post.goalscorerone}}</ion-item></ion-col>
+                        <ion-col><ion-item color="white">{{post.goalscorertwo}}</ion-item></ion-col>
                     </ion-row>
                 </div>
             </div>
+
             <ion-row style="height: 23px;margin: inherit;text-align: center;margin-top:35px">
                 <ion-col col-1 style="padding: 3px;height: 100%">
                 <div style="border-radius: 20px;background-color:#ff5722;width: 100%;height: 100%">             

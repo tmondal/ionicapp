@@ -1,13 +1,13 @@
 
 <ion-header>
 	<ion-navbar color="black">
-		<ion-title>UserProfile</ion-title>
+		<ion-title>{{name}}</ion-title>
 		<ion-buttons end>
-			<button ion-button *ngIf="sameuser()" (click)="onEditProfile()" style="margin-right: 20px">
-	      	 <ion-icon name="create" color="white"></ion-icon>
+			<button ion-button *ngIf="sameuser()" (click)="onEditProfile()" style="margin-right: 30px;font-size: 1.3em">
+	      	 <ion-icon name="create" color="yellow"></ion-icon>
 	      	</button>
-			<button ion-button *ngIf="sameuser()" (click)="onLogout()" style="margin-right: 10px">
-				 <ion-icon name="log-out" color="white"></ion-icon>
+			<button ion-button *ngIf="sameuser()" (click)="onLogout()" style="margin-right: 10px;font-size: 1.3em">
+				 <ion-icon name="log-out" color="yellow"></ion-icon>
 			</button>
 	    </ion-buttons>
 	</ion-navbar>
@@ -110,17 +110,16 @@
 	<div class="myposts">
 		<ion-list>
 			<ion-list-header class="listheader">Our posts</ion-list-header>
-			<ion-item *ngFor="let post of myposts">
+			<ion-item *ngFor="let post of myposts" class="postitem">
 				<ion-avatar item-left>
                     <!-- <img [src]="post.userimage" *ngIf="post.userimage"> -->
                 </ion-avatar>
-                <ion-icon color="yellow" name="more" item-right (click)="onMoreClick($event)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">
+                <h2>
                     {{post.username || "Forgot to edit name"}}
                 </h2>
                 <p>
-                	<ion-icon name="pin" color="pink"></ion-icon>&nbsp;
-                	<span color="orange">Kolkata</span>
+                	<ion-icon name="time" color="#d2d2d2"></ion-icon>&nbsp;
+                	<span color="orange">{{post.created_at}}</span>
                 </p>
 			</ion-item>
 		</ion-list>
@@ -130,25 +129,28 @@
 
 <!-- For players profile -->
 <ion-content *ngIf="compareusertype()" class="userprofile">
-	<div class="parallaxheader">		
-		<img class="coverimage" [src]="coverimage" *ngIf="coverimage != null">
+
+	<div class="playercoverdiv">		
+		<img class="playercoverimg" [src]="coverimage" *ngIf="coverimage != null">
 	</div>
 
 
 	<!-- Place location or direction or distance from current user here -->
 
-	<div class="parallaxcontent">		
-		<img class="profileimage" [src]="profileimage" *ngIf="profileimage != null">
-	    <div class="card-title">{{name}}</div>
-	    <div class="card-subtitle">Playing for India is my goal..</div>
-		
+	<div class="playerprofilediv">		
+		<img class="playerprofileimg" [src]="profileimage" *ngIf="profileimage != null">
+	    <p style="color: yellow"><b>{{name}}</b></p>
+	    <p style="color: yellow">A {{sportname}} player</p>	
+	</div>
+	<div>
 		<ion-card color="card">
 		 	<button ion-button icon-left clear small color="blue" class="followingfont">
 	          <ion-icon name="people"></ion-icon>
 	          <ion-note>{{countfollowings}} Following</ion-note>
 	        </button>
-	 	</ion-card>
+	 	</ion-card>		
 	</div>
+
 	<div class="contact">		
 		<ion-card class="generalcard">
 			<ion-card-header class="cardheader">					
@@ -166,5 +168,6 @@
 			</ion-card-content>
 		</ion-card>
 	</div>
+	
 </ion-content>
 

@@ -17,12 +17,14 @@ export class EditProfilePage implements OnInit{
 	name: any = null;
 	contactno: any = null;
 	currentclub: any = null;
+	sportname: any;
 	authsubscription: any;
 	coverselected: boolean = false;
 	profileselected: boolean = false;
 	nameselected: boolean = false;
 	contactselected: boolean = false;
 	clubselected: boolean = false;
+	sportnameselected: boolean = false;
 	selectimagedata: any;
 	cameraimagedata: any;
 	imagetaken: boolean = false;
@@ -48,6 +50,7 @@ export class EditProfilePage implements OnInit{
 			this.name = user.name;
 			this.contactno = user.contactno;
 			this.currentclub = user.currentclub;
+			this.sportname = user.sportname;
 		});
 	}
 	// chooseCoverFile(){
@@ -249,12 +252,13 @@ export class EditProfilePage implements OnInit{
 		if(this.contactno) {			
 			this.authservice.updateContactno(this.contactno);
 		}else{
-			this.showToast("Kindly enter contact no <'!'> ");
+			this.showToast("Kindly enter contact no.");
 		}
 	}
 	oncontactCancel(){
 		this.contactselected = false;
 	}
+
 	clubTouched(){
 		this.clubselected = true;
 	}
@@ -263,12 +267,29 @@ export class EditProfilePage implements OnInit{
 		if(this.currentclub) {			
 			this.authservice.updateCurrentClub(this.currentclub);
 		}else{
-			this.showToast("Please give new club ('!')");
+			this.showToast("Please give new club.");
 		}
 	}
 	onclubCancel(){
 		this.clubselected = false;
 	}
+
+	sportnameTouched(){
+		this.sportnameselected = true;
+	}
+	onsportNamesubmit(){
+		this.sportnameselected = false;
+		if(this.sportname) {			
+			this.authservice.updateSportName(this.sportname);
+		}else{
+			this.showToast("Please enter sportname.");
+		}
+	}
+	onsportnameCancel(){
+		this.sportnameselected = false;
+	}
+
+
 	ngOnDestroy(){
 		this.authsubscription.unsubscribe();
 	}

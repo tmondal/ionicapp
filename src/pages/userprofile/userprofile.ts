@@ -14,13 +14,14 @@ export class UserprofilePage implements OnInit{
 
 	userId: any;
 
-	usertype: any = null;
-	name: any = null;
-	contactno: any = null;
-	currentclub: any = null;
-	useremail: any = null;
-	coverimage: any = null;
-	profileimage: any = null;
+	usertype: any;
+	name: any;
+	contactno: any;
+	currentclub: any;
+	useremail: any;
+	coverimage: any;
+	profileimage: any;
+	sportname: any;
 
 	authuid: any;
 	following: boolean;
@@ -76,8 +77,8 @@ export class UserprofilePage implements OnInit{
 			this.name = user.name;
 			this.contactno = user.contactno;
 			this.currentclub = user.currentclub;
+			this.sportname = user.sportname;
 			this.useremail = user.email;
-			console.log(user.email);
 			this.coverimage = user.coverimage;
 			this.profileimage = user.profileimage;
 		});

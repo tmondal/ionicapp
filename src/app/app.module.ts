@@ -49,6 +49,7 @@ import { CommentrepliesPage } from '../pages/commentreplies/commentreplies';
 import { NewleaguePage } from '../pages/newleague/newleague';
 import { ParticipatingPage } from '../pages/participating/participating';
 import { OrganizingPage } from '../pages/organizing/organizing';
+import { AllclubsPage } from '../pages/allclubs/allclubs';
 
 import { AuthService } from '../providers/auth-service';
 import { PostService } from '../providers/post-service';
@@ -106,6 +107,7 @@ const AuthConfig = {
     NewleaguePage,
     ParticipatingPage,
     OrganizingPage,
+    AllclubsPage
   ],
   imports: [
     //FormsModule, for template driven form
@@ -152,6 +154,7 @@ const AuthConfig = {
     NewleaguePage,
     ParticipatingPage,
     OrganizingPage,
+    AllclubsPage
   ],
   providers: [
     Camera,
