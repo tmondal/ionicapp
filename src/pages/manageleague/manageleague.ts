@@ -35,7 +35,10 @@ export class Manageleague implements OnInit{
 		this.userservice.unsubscribe();
 	}
 
-	openLeague(i){
+	editLeague(i){
 		this.navCtrl.push("Editleague",{league: this.leagues[i]});
+	}
+	editResults(i){
+		this.navCtrl.push("Matchresult",{league: this.leagues[i]});
 	}
 }

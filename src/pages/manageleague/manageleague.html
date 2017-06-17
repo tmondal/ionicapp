@@ -15,10 +15,15 @@
 <ion-content class="league">
 
 	<ion-card>
-		<ion-card-header class="leagueheader"> Your Organized Leagues </ion-card-header>
-    <ion-card-content>
-		  <button color="card" ion-item *ngFor="let league of leagues,let i = index" (click)="openLeague(i)">{{ league.leaguename }}</button>
+		<ion-card-header class="leagueheader">Edit your Leagues </ion-card-header>
+    <ion-card-content class="leaguecontent">
+		  <button color="black" ion-item *ngFor="let league of leagues,let i = index" (click)="editLeague(i)">{{ league.leaguename }}</button>
     </ion-card-content>
 	</ion-card>
-
+  <ion-card>
+    <ion-card-header class="leagueheader">Edit Leagues Results</ion-card-header>
+    <ion-card-content class="leaguecontent">
+      <button color="black" ion-item *ngFor="let league of leagues,let i = index" (click)="editResults(i)">{{ league.leaguename }}</button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -1,3 +1,32 @@
 page-matchresult {
 
+	.leaguename {
+		font-weight: 500;
+		font-size: 1.2em;
+		color: #2196B3;
+	}
+	.sporttype {
+		color: #2196B3;
+	}
+	.listheader {
+		color: yellow;
+		text-align: center;
+	}
+	.result {
+		background-color: #212121;
+	}
+	.datainput {
+		background-color: black;
+	}
+	.fixturediv {
+		margin-top: 2px;
+	}
+	.fixturerow {
+		background-color: #424242;
+		color: yellow;
+	}
+	.fixturecol {
+		text-align: center;
+		margin: auto;
+	}
 }

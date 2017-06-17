@@ -66,7 +66,7 @@ export class AuthService {
           startAt: name,
           endAt: name + "\uf8ff"
         }
-      })
+      }).take(1);
     }
     getmyprofile(){
       this.profile =  this.af.database.object('/users/' + this.auth.uid);

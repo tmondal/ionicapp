@@ -1,24 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { PostService } from '../../providers/post-service';
+import { AngularFire } from 'angularfire2';
 
-/**
- * Generated class for the Matchresult page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
+
+
 @IonicPage()
 @Component({
   selector: 'page-matchresult',
   templateUrl: 'matchresult.html',
 })
-export class Matchresult {
+export class Matchresult implements OnInit{
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+	league: any;
+	userid: any;
+	userservice: any;
+	fixtures: any[] = [];
+	teams: any[] = [];
+	leaguename: any;
+	sporttype: any;
+	uppertype: any;
+	teamonescore: any = 0;
+	teamtwoscore: any = 0;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad Matchresult');
-  }
+	constructor(
+		public navCtrl: NavController, 
+		public navParams: NavParams,
+		public postservice: PostService,
+		public af: AngularFire
+	) {
+		this.league = this.navParams.get("league");
+		this.fixtures = this.league.fixtures;
+		if (this.league.teams) {			
+			this.teams = this.league.teams;
+		}
+		this.leaguename = this.league.leaguename;
+		this.sporttype = this.league.sporttype;
+		this.uppertype = this.sporttype.toUpperCase();
+	}
+
+	ngOnInit(){}
+	ngOnDestroy(){}
+
 
 }

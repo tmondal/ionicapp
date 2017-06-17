@@ -12,6 +12,40 @@
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content class="result">
+	<ion-card>
+		<ion-item color="card">
+			<span class="leaguename">{{leaguename}}</span>
+			<span class="sporttype"> a {{sporttype}} league</span>
+		</ion-item>
+	</ion-card>
+	<ion-list *ngIf="uppertype == 'FOOTBALL'">
+		<ion-list-header color="card">
+			<ion-row>
+				<ion-col class="listheader">Fixture</ion-col>
+				<ion-col class="listheader">Match result</ion-col>
+			</ion-row>
+		</ion-list-header>
+		<div *ngFor="let fixture of fixtures,let i = index" class="fixturediv">
+			<ion-row class="fixturerow">
+				<ion-col class="fixturecol">
+					{{fixture.teamone}}<br>
+					VS<br>
+					{{fixture.teamtwo}}<br>
+					On<br>
+					{{fixture.eventdate}}<br>
+				</ion-col>
+				<ion-col>
+					<div>
+						<ion-label>{{fixture.teamone}} scored:</ion-label>
+						<ion-input class="datainput" [(ngModel)]="teamonescore" value="teamonescore" placeholder="put score of {{fixture.teamone}}"></ion-input>
+					</div>
+					<div>
+						<ion-label>{{fixture.teamtwo}} scored:</ion-label>
+						<ion-input class="datainput" [(ngModel)]="teamtwoscore" value="teamtwoscore" placeholder="put score of {{fixture.teamtwo}}"></ion-input>
+					</div>
+				</ion-col>
+			</ion-row>
+		</div>
+	</ion-list>
 </ion-content>

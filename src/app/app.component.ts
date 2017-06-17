@@ -52,8 +52,6 @@ export class MyApp {
 	    	{ title: 'Participating', icon: "walk",component: ParticipatingPage },
 	    	{ title: 'Create League', icon: "create", component: NewleaguePage },
 	    	{ title: 'Manage League', icon: "options",component: 'Manageleague'},
-	    	{ title: 'Update Result', icon: "medal",component: 'Matchresult'},
-
 	  	]
 	}
 	openPage(page){
