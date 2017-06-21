@@ -1,6 +1,6 @@
 
 <ion-split-pane>
-  <ion-menu [content]="content">
+  <ion-menu [content]="content" *ngIf="loggedIn">
     <ion-content style="background-color: #212121">
       <ion-item color="card" class="menutop">
         <ion-avatar item-left>

@@ -13,6 +13,7 @@ export class MyApp {
 	
 	@ViewChild(Nav) nav: Nav;
 	rootPage : any;
+	loggedIn: boolean = false;
 
 	pages: Array<{title: string,icon: string, component: any}>;
 	username: any;
@@ -21,6 +22,7 @@ export class MyApp {
 	constructor(platform: Platform, public af: AngularFire,public authservice: AuthService) {
 
 		this.af.auth.subscribe(user =>{
+			this.loggedIn = true;
 			if(user) {
 				this.rootPage = "Home";
 
@@ -29,6 +31,7 @@ export class MyApp {
 					this.profileimage = user.profileimage;
 				});
 			}else{
+				this.loggedIn = false;
 				this.rootPage = "Login";
 			}
 		});
