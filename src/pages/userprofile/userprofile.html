@@ -17,7 +17,7 @@
 <ion-content class="userprofile" *ngIf="!compareusertype()" parallaxprofile>
 
 	<div class="parallaxheader">		
-		<img class="coverimage" [src]="coverimage" *ngIf="coverimage != null">
+		<!-- <img class="coverimage" [src]="coverimage" *ngIf="coverimage"> -->
 	</div>
 
 
@@ -128,29 +128,93 @@
 </ion-content>
 
 <!-- For players profile -->
-<ion-content *ngIf="compareusertype()" class="userprofile">
+<ion-content *ngIf="compareusertype()" class="userprofile" parallaxprofile>
 
-	<div class="playercoverdiv">		
-		<img class="playercoverimg" [src]="coverimage" *ngIf="coverimage != null">
+	<div class="parallaxheader">		
+		<img class="coverimage" [src]="coverimage" *ngIf="coverimage != null">
 	</div>
 
 
 	<!-- Place location or direction or distance from current user here -->
+	<!-- <div class="parallaxcontent">		
+		<div class="playerprofilediv">		
+			<img class="playerprofileimg" [src]="profileimage" *ngIf="profileimage != null">
+		    <p style="color: yellow"><b>{{name}}</b></p>
+		    <p style="color: yellow">A {{sportname}} player</p>	
+		</div>
+		<div>
+			<ion-card color="card">
+			 	<button ion-button icon-left clear small color="blue" class="followingfont">
+		          <ion-icon name="people"></ion-icon>
+		          <ion-note>{{countfollowings}} Following</ion-note>
+		        </button>
+		 	</ion-card>		
+		</div>
 
-	<div class="playerprofilediv">		
-		<img class="playerprofileimg" [src]="profileimage" *ngIf="profileimage != null">
-	    <p style="color: yellow"><b>{{name}}</b></p>
-	    <p style="color: yellow">A {{sportname}} player</p>	
-	</div>
-	<div>
+		<div class="contact">		
+			<ion-card class="generalcard">
+				<ion-card-header class="cardheader">					
+					Contact details:
+				</ion-card-header>
+				<ion-card-content>
+					<ion-item class="cardcontent">
+						<ion-icon name="call"></ion-icon>&nbsp;&nbsp;
+						{{contactno}}
+					</ion-item>
+					<ion-item class="cardcontent">
+						<ion-icon name="mail"></ion-icon>&nbsp;&nbsp;
+						{{useremail}}
+					</ion-item>
+				</ion-card-content>
+			</ion-card>
+		</div>
+	</div> -->
+
+	<div class="parallaxcontent">		
+		<img class="profileimage" [src]="profileimage" *ngIf="profileimage != null">
+	    <div class="card-title">{{name}}</div>
+		
 		<ion-card color="card">
-		 	<button ion-button icon-left clear small color="blue" class="followingfont">
-	          <ion-icon name="people"></ion-icon>
-	          <ion-note>{{countfollowings}} Following</ion-note>
-	        </button>
-	 	</ion-card>		
+		 	<ion-row *ngIf="!sameuser()">
+		      <ion-col col-4>
+		        <button ion-button icon-left clear small color="blue" class="followerfont">
+		          <ion-icon name="people"></ion-icon>
+		          <ion-note>{{countfollowers}} Followers</ion-note>
+		        </button>
+		      </ion-col>
+		      <ion-col col-4>
+		        <button ion-button icon-left clear small color="blue" class="followingfont">
+		          <ion-icon name="people"></ion-icon>
+		          <ion-note>{{countfollowings}} Following</ion-note>
+		        </button>
+		      </ion-col>
+		      <ion-col col-4>
+		        <button *ngIf="!following" ion-button icon-left small outline color="blue" class="followfont" (click)= "follow()" >
+		          <ion-icon name="person"></ion-icon>
+		          Follow
+		        </button>
+		        <button *ngIf="following" ion-button icon-left small outline color="danger" class="unfollowfont" (click)= "unfollow()" >
+		          <ion-icon name="person"></ion-icon>
+		          Unfollow
+		        </button>
+		      </ion-col>
+		    </ion-row>
+		    <ion-row *ngIf="sameuser()">
+			    <ion-col col-6>
+			        <button ion-button icon-left clear small color="blue" class="followerfont">
+			          <ion-icon name="people"></ion-icon>
+			          <ion-note>{{countfollowers}} Followers</ion-note>
+			        </button>
+			      </ion-col>
+			      <ion-col col-6>
+			        <button ion-button icon-left clear small color="blue" class="followingfont">
+			          <ion-icon name="people"></ion-icon>
+			          <ion-note>{{countfollowings}} Following</ion-note>
+			        </button>
+			      </ion-col>
+		    </ion-row>
+	 	</ion-card>
 	</div>
-
 	<div class="contact">		
 		<ion-card class="generalcard">
 			<ion-card-header class="cardheader">					
@@ -158,11 +222,11 @@
 			</ion-card-header>
 			<ion-card-content>
 				<ion-item class="cardcontent">
-					<ion-icon name="call"></ion-icon>&nbsp;&nbsp;
+					<ion-icon name="call"></ion-icon>
 					{{contactno}}
 				</ion-item>
 				<ion-item class="cardcontent">
-					<ion-icon name="mail"></ion-icon>&nbsp;&nbsp;
+					<ion-icon name="mail"></ion-icon>
 					{{useremail}}
 				</ion-item>
 			</ion-card-content>

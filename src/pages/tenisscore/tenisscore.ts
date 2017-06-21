@@ -1,32 +1,19 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams ,ViewController} from 'ionic-angular';
-import { AngularFire } from 'angularfire2';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 
-
+@IonicPage()
 @Component({
   selector: 'page-tenisscore',
-  templateUrl: 'tenisscore.html'
+  templateUrl: 'tenisscore.html',
 })
-export class TenisscorePage {
+export class Tenisscore {
 
-	currentuserId: any;
-	constructor(
-		public navCtrl: NavController, 
-		public navParams: NavParams,
-		public viewCtrl: ViewController,
-		public af: AngularFire,
-	) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
 
-	ionViewDidLoad() {
-	console.log('ionViewDidLoad TenisscorePage');
-	}
-	ngOnInit(){
-		this.af.auth.subscribe(user =>{
-			this.currentuserId = user.uid;
-		});
-	}
-	onDismiss(){
-		this.viewCtrl.dismiss();
-	}
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad Tenisscore');
+  }
+
 }

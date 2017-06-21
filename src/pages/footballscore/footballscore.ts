@@ -1,15 +1,15 @@
-import { Component ,OnInit} from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { IonicPage,NavController, NavParams, ViewController } from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
-import * as moment from 'moment';
 
+@IonicPage()
 @Component({
   selector: 'page-footballscore',
-  templateUrl: 'footballscore.html'
+  templateUrl: 'footballscore.html',
 })
-export class FootballscorePage implements OnInit{
+export class Footballscore implements OnInit{
 
 	currentuserId: any;
 	username: any;

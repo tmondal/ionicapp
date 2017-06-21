@@ -1,19 +1,16 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage,NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { FormBuilder,FormGroup, Validators} from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
 import { AuthService } from '../../providers/auth-service';
-import { HomePage } from '../home/home';
-import { SignupPage } from '../signup/signup';
-import { ResetpasswordPage } from '../resetpassword/resetpassword';
 
 
-
+@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
-export class LoginPage {
+export class Login {
 
 	loading: any;
 	loginform: FormGroup;
@@ -46,7 +43,7 @@ export class LoginPage {
 		}else{			
 			this.authservice.loginUser(this.loginform.value.email ,this.loginform.value.password).then(userdata => {
 				this.loading.dismiss().then(()=>{
-					this.navCtrl.setRoot(HomePage);
+					this.navCtrl.setRoot("Home");
 				});
 			},(error) =>{
 				this.loading.dismiss().then(()=>{
@@ -68,9 +65,10 @@ export class LoginPage {
 		alert.present();
 	}
 	onsignupClick(){
-		this.navCtrl.push(SignupPage);
+		this.navCtrl.push("Signup");
 	}
 	forgotPassword(){
-		this.navCtrl.push(ResetpasswordPage);
+		this.navCtrl.push("Resetpassword");
 	}
 }
+

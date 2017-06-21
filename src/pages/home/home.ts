@@ -1,19 +1,13 @@
 import { Component ,OnInit, ViewChild} from '@angular/core';
 import { ElementRef} from '@angular/core';
 import { 
-  NavController,
-  ModalController ,
-  AlertController,
-  NavParams,
-  Content
+    IonicPage,
+    NavController,
+    ModalController ,
+    AlertController,
+    NavParams,
+    Content
 } from 'ionic-angular';
-
-import { MypostPage } from '../mypost/mypost';
-import { PostPage } from '../post/post';
-import { UserprofilePage } from '../userprofile/userprofile';
-import { PostmodalPage } from '../postmodal/postmodal';
-import { PostcommentsPage } from '../postcomments/postcomments';
-import { AllclubsPage } from '../allclubs/allclubs';
 
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
@@ -28,6 +22,9 @@ import {
   keyframes
 } from '@angular/animations';
 
+
+
+@IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
@@ -70,9 +67,7 @@ import {
     ]),
   ]
 })
-
-export class HomePage implements OnInit{
-
+export class Home implements OnInit{
   @ViewChild(Content) content: Content;
 
   shownav: boolean = true;
@@ -113,9 +108,9 @@ export class HomePage implements OnInit{
   headercontent:any;
 
   constructor(
-  	public navCtrl: NavController,
-  	public modalCtrl: ModalController,
-  	public alertCtrl: AlertController,
+      public navCtrl: NavController,
+      public modalCtrl: ModalController,
+      public alertCtrl: AlertController,
     public navParams: NavParams,
     public myElement: ElementRef,
     private postservice: PostService,
@@ -323,7 +318,7 @@ export class HomePage implements OnInit{
       
       setTimeout(() => {      
         refresher.complete();
-      }, 1000);
+      }, 500);
     }
   }
 
@@ -332,14 +327,14 @@ export class HomePage implements OnInit{
     this.authservice.followuser(this.clubs[i].$key);
   }
   clubstoFollow(){
-    this.navCtrl.push(AllclubsPage,{clubs: this.clubs});
+    this.navCtrl.push("Clubstofollow",{clubs: this.clubs});
   }
 
   onCreatePostClick(){
-    this.navCtrl.push(PostmodalPage);
+    this.navCtrl.push("Createpost");
   }
   onRulesClick(rules,participating,postid,userId){
-    let modal = this.modalCtrl.create(PostPage,{
+    let modal = this.modalCtrl.create("Post",{
       rules: rules,
       participating: participating,
       postid: postid,
@@ -351,7 +346,7 @@ export class HomePage implements OnInit{
     modal.present();
   }
   onCriteriaClick(criteria,participating,postid,userId){
-    let modal = this.modalCtrl.create(PostPage,{
+    let modal = this.modalCtrl.create("Post",{
       criteria: criteria,
       participating: participating,
       postid: postid,
@@ -363,10 +358,10 @@ export class HomePage implements OnInit{
     modal.present();
   }
   onUsernameClick(userId){
-    this.navCtrl.push(UserprofilePage,{userId: userId}); // Whoever gets pushed should get poped 
+    this.navCtrl.push("Userprofile",{userId: userId});
   }
   calluserdetails(){
-   this.navCtrl.push(UserprofilePage,{userId: this.authuid});
+   this.navCtrl.push("Userprofile",{userId: this.authuid});
   }
 
   // More options for a post
@@ -432,6 +427,7 @@ export class HomePage implements OnInit{
             this.nooflikes[i] += 1;
             this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
             this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+            this.doRefresh(1);
           }else if(!this.liked[i] && this.disliked[i]){
             this.liked[i] = true;
             this.disliked[i] = false;
@@ -439,6 +435,7 @@ export class HomePage implements OnInit{
             this.noofdislikes[i] -= 1;
             this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
             this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+            this.doRefresh(1);
           }else if (this.liked[i]) {
             alert("Don't press multiple times it hurts server :)");
           }
@@ -503,7 +500,7 @@ export class HomePage implements OnInit{
     });
   }
   commentPost(postid){
-    this.navCtrl.push(PostcommentsPage,{
+    this.navCtrl.push("Postcomments",{
       postid: postid,
       userid: this.authuid,
       username: this.username,
@@ -511,10 +508,9 @@ export class HomePage implements OnInit{
     });
   }
   seeParticipants(postid){
-    this.navCtrl.push(MypostPage,{
+    this.navCtrl.push("Mypost",{
       postid: postid,
       userId: this.authuid,
     });
   }
-
 }

@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage,NavController, NavParams } from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
-
 import { AngularFire } from 'angularfire2';
 import { Calendar } from '@ionic-native/calendar';
 
+
+
+@IonicPage()
 @Component({
   selector: 'page-participating',
   templateUrl: 'participating.html',
-  providers: [Calendar]
 })
-export class ParticipatingPage implements OnInit{
+export class Participating implements OnInit{
+
 
 	leagues: any;
 	userid: any;

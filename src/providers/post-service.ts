@@ -3,7 +3,7 @@ import { LoadingController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/count';
 import { File } from 'ionic-native';
-import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
+import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 import { ToastController} from 'ionic-angular';
 import { AuthService } from './auth-service';
 import * as firebase from 'firebase';
@@ -303,7 +303,7 @@ export class PostService {
       query: {
         orderByChild: 'created_at',
         endAt: Date.now(),
-        limitToFirst:1
+        limitToLast:1
       }
     }).take(1);
   }

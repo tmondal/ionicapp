@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams,ToastController } from 'ionic-angular';
+import { IonicPage,NavController, NavParams,ToastController } from 'ionic-angular';
 import * as firebase from 'firebase';
 
 
+
+@IonicPage()
 @Component({
   selector: 'page-resetpassword',
   templateUrl: 'resetpassword.html'
 })
-export class ResetpasswordPage {
+export class Resetpassword {
 
 	email: any;
 	constructor(

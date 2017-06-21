@@ -1,23 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { CommentrepliesPage } from '../commentreplies/commentreplies';
-
+import { IonicPage,NavController, NavParams } from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
+import * as moment from 'moment';
 
 
+@IonicPage()
 @Component({
   selector: 'page-postcomments',
   templateUrl: 'postcomments.html'
 })
-export class PostcommentsPage implements OnInit {
+export class Postcomments implements OnInit {
 
 	postid: any;
 	userid: any;
 	username: any;
 	profileimage: any;
-	comments: any;
+	comments: any[];
+	commenttime: any[]=[0];
 	commentdata: any = null;
 	lastcomment: any[] = [0];
+	lastcommenttime: any[]=[0];
 	childcomments: any[] = [0];
 	commentservice: any;
 	lastchildservice: any;
@@ -36,9 +38,18 @@ export class PostcommentsPage implements OnInit {
 	}
 
 	ngOnInit(){
-
+		this.doRefresh();
+	}
+	doRefresh(){
 		this.commentservice = this.postservice.getparentComments(this.postid).subscribe(comments =>{
 			this.comments = comments;
+
+			for (let i = 0;i<= comments.length - 1; i++) {
+				if (this.comments[i]) {					
+					this.commenttime[i] = moment(this.comments[i].created_at).fromNow();
+				}
+			}
+
 			for (let i = 0;i <= comments.length - 1;i++) {
 				this.postservice.getlastchildComment(this.postid,comments[i].$key)
 					.subscribe(comment =>{
@@ -82,11 +93,11 @@ export class PostcommentsPage implements OnInit {
 		}
 		this.noofcomment += 1;
 		this.commentdata = '';
-		console.log("No of: " + this.noofcomment);
 		this.postservice.addparentComment(this.postid,comment,this.noofcomment);
 	}
 	gotocommentReplies(parentid){
-		this.navCtrl.push(CommentrepliesPage,{
+		this.doRefresh();
+		this.navCtrl.push("Commentreply",{
 			userid: this.userid,
 			username: this.username,
 			profileimage: this.profileimage,
@@ -96,4 +107,5 @@ export class PostcommentsPage implements OnInit {
 	}
 
 }
+
 

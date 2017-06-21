@@ -1,15 +1,18 @@
+import { IonicPage, NavController, NavParams ,ViewController} from 'ionic-angular';
 import { Component,Input,OnInit } from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
-import * as moment from 'moment';
 
+
+
+
+@IonicPage()
 @Component({
   selector: 'page-cricketscore',
-  templateUrl: 'cricketscore.html'
+  templateUrl: 'cricketscore.html',
 })
-export class CricketscorePage implements OnInit{
+export class Cricketscore implements OnInit{
 
 	@Input() crickettype: any;
 

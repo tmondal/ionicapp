@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage,NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
-import { HomePage } from '../../pages/home/home';
 import { FormBuilder,FormGroup, Validators} from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
 
 
+
+@IonicPage()
 @Component({
   selector: 'page-signup',
   templateUrl: 'signup.html'
 })
-export class SignupPage {
+export class Signup {
 
 	signupform: FormGroup;
 
@@ -52,7 +53,7 @@ export class SignupPage {
 		}else{
 			this.authservice.signupUser(this.signupform.value.email, this.signupform.value.password,this.usertype).then(() =>{
 				this.loading.dismiss().then(()=>{
-					this.navCtrl.setRoot(HomePage);
+					this.navCtrl.setRoot("Home");
 				});
 			},(error) =>{
 				this.loading.dismiss().then(()=>{
@@ -79,3 +80,4 @@ export class SignupPage {
 	}
 
 }
+

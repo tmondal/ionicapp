@@ -1,16 +1,18 @@
 import { Component , OnInit} from '@angular/core';
 import { ElementRef,Renderer } from '@angular/core';
-import { NavController, NavParams ,PopoverController} from 'ionic-angular';
+import { IonicPage,NavController, NavParams ,PopoverController} from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 import { AuthService } from '../../providers/auth-service';
 import { PostService } from '../../providers/post-service';
-import { EditProfilePage } from '../edit-profile/edit-profile'; 
-import { LoginPage } from '../login/login';
+
+
+
+@IonicPage()
 @Component({
   selector: 'page-userprofile',
   templateUrl: 'userprofile.html'
 })
-export class UserprofilePage implements OnInit{
+export class Userprofile implements OnInit{
 
 	userId: any;
 
@@ -122,12 +124,12 @@ export class UserprofilePage implements OnInit{
   		this.authservice.unfollowuser(this.userId);
   	}
   	onEditProfile(){
-		this.navCtrl.push(EditProfilePage);
+		this.navCtrl.push("Editprofile");
 	}
   	onLogout(){
   		this.navCtrl.pop();
 		this.authservice.logoutUser().then(()=>{
-			this.navCtrl.setRoot(LoginPage);
+			this.navCtrl.setRoot("Login");
 		});
 	}
 }

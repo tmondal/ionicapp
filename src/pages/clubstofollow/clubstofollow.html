@@ -1,0 +1,28 @@
+
+<ion-header>
+
+  <ion-navbar color="black">
+    <ion-title>Clubs to Follow</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="content">
+  <ion-card *ngFor="let club of clubs,let i = index" class="clubstofollow">
+    <ion-row>
+        <ion-col col-2 style="padding: 0px;margin:auto">
+            <ion-avatar item-left style="padding: 5px">
+                <img [src]="club.profileimage" *ngIf="club.profileimage" style="height: 40px; width: 40px">
+            </ion-avatar>                                                     
+        </ion-col>
+        <ion-col (click)="onUsernameClick(club.$key)" style="padding: 0px;margin:auto;text-align: center"> 
+            {{club.name}}
+        </ion-col>
+        <ion-col col-4 style="margin: auto;text-align: center;border: 1px solid yellow;margin-right: 5px">
+          <span *ngIf="!following[i]">Follow</span>&nbsp;
+          <ion-icon name="add-circle" *ngIf="!following[i]"></ion-icon>
+        </ion-col>
+    </ion-row>
+  </ion-card>
+</ion-content>

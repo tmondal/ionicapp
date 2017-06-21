@@ -4,7 +4,6 @@ import { ToastController} from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import { AngularFire } from 'angularfire2';
-import { File } from 'ionic-native';
 import * as firebase from 'firebase';
 
 
@@ -69,8 +68,7 @@ export class AuthService {
       }).take(1);
     }
     getmyprofile(){
-      this.profile =  this.af.database.object('/users/' + this.auth.uid);
-      return this.profile.take(1);
+      return this.af.database.object('/users/' + this.auth.uid).take(1);
     }
     getClubstofollow(){
       return this.af.database.list('/users/',{

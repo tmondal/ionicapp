@@ -1,21 +1,27 @@
 page-post {
 
-	ion-card {
-		position: relative;
-		text-align: center;
-		padding: 0px;
+
+	.postcontent {
+		background-color: #212121;
 	}
-	.coverimg {
-		height: 150px;width: 100%;
-		filter: blur(1px);
-	}
-	.posttitle {
-		position: relative;
-		text-align: center;
-		font-size: 2.0em;
+	.parallaxheader {
 		width: 100%;
-		font-weight: bold;
-		color: white;
-		top: -20%;
+		height: 150px;
+		text-align: center;
+		/*background-color: #212121;*/
+	}
+	.coverimage {
+		height: 150px;
+		width: 100%;
+		filter:blur(1px);
+	}
+	.card-title {
+		font-size: 1.5em;
+		text-align: center;
+		color: yellow;
+		top: 15%;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, -10%);
 	}
 }

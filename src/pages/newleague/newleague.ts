@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage,NavController, NavParams } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { PostService } from '../../providers/post-service';
 
 
-
+@IonicPage()
 @Component({
   selector: 'page-newleague',
   templateUrl: 'newleague.html'
 })
-export class NewleaguePage {
+export class Newleague {
 
 	leaguename: any;
 	sporttype: any;
@@ -109,3 +109,4 @@ export class NewleaguePage {
 		
 	}
 }
+

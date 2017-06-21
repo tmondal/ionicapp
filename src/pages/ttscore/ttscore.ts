@@ -1,28 +1,20 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams , ViewController} from 'ionic-angular';
-import { AngularFire } from 'angularfire2';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 
+
+@IonicPage()
 @Component({
   selector: 'page-ttscore',
-  templateUrl: 'ttscore.html'
+  templateUrl: 'ttscore.html',
 })
-export class TtscorePage {
+export class Ttscore {
 
-	currentuserId: any;
-	constructor(
-		public navCtrl: NavController, 
-		public navParams: NavParams,
-		public viewCtrl: ViewController,
-		public af: AngularFire
-	) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
 
-	ngOnInit(){
-		this.af.auth.subscribe(user =>{
-			this.currentuserId = user.uid;
-		});
-	}
-	onDismiss(){
-		this.viewCtrl.dismiss();
-	}
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad Ttscore');
+  }
+
 }

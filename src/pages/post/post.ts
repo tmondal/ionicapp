@@ -1,16 +1,16 @@
 import { Component , OnInit} from '@angular/core';
-import { NavController, NavParams, ViewController, ModalController} from 'ionic-angular';
+import { IonicPage,NavController, NavParams, ViewController, ModalController} from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
-import { UserprofilePage } from '../../pages/userprofile/userprofile';
-import { GooglemapdistancePage } from '../../pages/googlemapdistance/googlemapdistance';
 
 
+
+@IonicPage()
 @Component({
   selector: 'page-post',
   templateUrl: 'post.html'
 })
-export class PostPage implements OnInit {
+export class Post implements OnInit {
 
 	rules: any;
 	criteria: any;
@@ -83,14 +83,19 @@ export class PostPage implements OnInit {
 	onAccept(){
 		this.participated = true;
 		this.participating += 1;
-		this.postservice.updateParticipated(this.postid,this.participated);
-		this.postservice.updateParticipating(this.postid,this.participating);
+		if (this.participating > 0) {			
+			this.postservice.updateParticipated(this.postid,this.participated);
+			this.postservice.updateParticipating(this.postid,this.participating);
+		}
 		this.viewCtrl.dismiss();
 	}
 	onDecline(){
 		this.participating -= 1;
 		this.participated = false;
-		this.postservice.removeParticipated(this.postid,this.participated);
-		this.postservice.updateParticipating(this.postid,this.participating);
+		if (this.participating >= 0) {			
+			this.postservice.removeParticipated(this.postid,this.participated);
+			this.postservice.updateParticipating(this.postid,this.participating);
+		}
 	}
 }
+

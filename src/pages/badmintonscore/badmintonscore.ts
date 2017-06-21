@@ -1,34 +1,24 @@
-import { Component , OnInit } from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
-import { AngularFire } from 'angularfire2';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-
-
+/**
+ * Generated class for the Badmintonscore page.
+ *
+ * See http://ionicframework.com/docs/components/#navigation for more info
+ * on Ionic pages and navigation.
+ */
+@IonicPage()
 @Component({
   selector: 'page-badmintonscore',
-  templateUrl: 'badmintonscore.html'
+  templateUrl: 'badmintonscore.html',
 })
-export class BadmintonscorePage implements OnInit{
+export class Badmintonscore {
 
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
 
-	currentuserId: any;
-	constructor(
-		public navCtrl: NavController, 
-		public navParams: NavParams,
-		public viewCtrl: ViewController,
-		public af: AngularFire
-	) {}
-
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad BadmintonscorePage');
-	}
-	ngOnInit(){		
-		this.af.auth.subscribe(user =>{
-			this.currentuserId = user.uid;
-		});
-	}
-	onDismiss(){
-		this.viewCtrl.dismiss();
-	}
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad Badmintonscore');
+  }
 
 }

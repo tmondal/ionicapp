@@ -1,17 +1,17 @@
 
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="black">
     <ion-title>Join The Community </ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-	<ion-card>
+<ion-content padding class="signup">
+	<ion-card color="card">
 	    <ion-item>
-			<ion-label> SignUp As: </ion-label>
+			<ion-label color="yellow"> SignUp As: </ion-label>
 			<ion-select [(ngModel)]="usertype">
 		      <ion-option value="club">Club</ion-option>
 		      <ion-option value="player">Player</ion-option>
@@ -20,20 +20,20 @@
 	</ion-card>
 	
 	<form [formGroup]="signupform" (ngSubmit)="oncreateUser()" novalidate>		
-		<ion-card *ngIf="usertype == 'player'">
+		<ion-card *ngIf="usertype == 'player'" color="card">
 		    <ion-item>
-				<ion-label floating>Enter email</ion-label>
-				<ion-input type="email" formControlName="email"></ion-input>
+				<ion-label color="yellow" floating>Enter email</ion-label>
+				<ion-input class="datainput" type="email" formControlName="email"></ion-input>
 		    </ion-item>
 		</ion-card>
 		<ion-item class="error" *ngIf="signupform.get('email').hasError('required') && signupform.get('email').touched && usertype == 'player'">
 	    	<ion-label color="danger">Email required ..</ion-label>
 	    </ion-item>
 
-		<ion-card *ngIf="usertype == 'club'">
+		<ion-card *ngIf="usertype == 'club'" color="card">
 		    <ion-item>
-				<ion-label floating>Enter club email</ion-label>
-				<ion-input type="email" formControlName="email"></ion-input>
+				<ion-label color="yellow" floating>Enter club email</ion-label>
+				<ion-input class="datainput" type="email" formControlName="email"></ion-input>
 		    </ion-item>
 		</ion-card>
 		<ion-item class="error" *ngIf="usertype == 'club' && signupform.get('email').hasError('required') && signupform.get('email').touched">
@@ -44,10 +44,10 @@
 	    	<ion-label color="danger">Not a valid formatted email</ion-label>
 	    </ion-item>
 
-		<ion-card *ngIf="usertype"> 
+		<ion-card *ngIf="usertype" color="card"> 
 		    <ion-item>
-				<ion-label floating>Enter password</ion-label>
-				<ion-input type="password" formControlName="password"></ion-input>
+				<ion-label color="yellow" floating>Enter password</ion-label>
+				<ion-input class="datainput" type="password" formControlName="password"></ion-input>
 		    </ion-item>
 		</ion-card>
 		<ion-item class="error" *ngIf="signupform.get('password').hasError('required') && signupform.get('password').touched" >
@@ -57,10 +57,10 @@
 	      <ion-label color="danger">Should be at least 6 characters..</ion-label>
 	    </ion-item>
 
-		<ion-card *ngIf="usertype"> 
+		<ion-card *ngIf="usertype" color="card"> 
 		    <ion-item>
-				<ion-label floating>Re-enter password</ion-label>
-				<ion-input type="password" formControlName="repassword"></ion-input>
+				<ion-label color="yellow" floating>Re-enter password</ion-label>
+				<ion-input class="datainput" type="password" formControlName="repassword"></ion-input>
 		    </ion-item>
 		</ion-card>
 		<ion-item *ngIf="!matchPassword() && signupform.get('repassword').touched">

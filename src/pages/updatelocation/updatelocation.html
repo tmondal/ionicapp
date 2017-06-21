@@ -1,0 +1,15 @@
+
+<ion-header>
+
+  <ion-navbar color="black">
+    <ion-title>Update location</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+	<div #map id="map" style="height:80%; width: 100%"></div>
+	<button style="margin: 25px 5px 10px" ion-button block (click)="updateLocation()">Update location</button>
+	<button style="margin: 0px 5px" ion-button block outline color="danger" (click)="oncancel()">Not now</button>
+</ion-content>

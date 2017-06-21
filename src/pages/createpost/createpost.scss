@@ -1,0 +1,65 @@
+page-createpost {
+
+	.col, col-1, col-2, col-10 {
+		padding: 0px;
+	}
+	
+	.container {
+		background-color: #212121;
+		padding: 6px;
+	}
+	.select-text {
+		color: orange;
+	}
+	.datetime-text {
+		color: orange;
+	}
+	.item-input ion-input, 
+	.item-input ion-textarea {
+		color: orange;
+	}
+	.item-md {
+		background-color: inherit;
+	}
+	.list-md .item-input:last-child{
+		border-bottom: none;
+	}
+	.item-input .label-md, 
+	.item-select .label-md, 
+	.item-datetime .label-md {
+		color: yellow;
+	}
+	.iconcolumn{
+		text-align: right;
+		margin: auto;
+	}
+	.icon-color {
+		color: yellow;
+		padding: 10px;
+		font-size: 1.5em;
+	}
+	.textcolumn {
+		text-align: left;
+		margin: auto;
+	}
+	.colfour {
+		text-align: left;
+		padding-left: 15px !important;
+	}
+	.postlabel {
+		color: yellow;
+	}
+	.eventvenue {
+		margin: 0;
+		padding: 4px;
+		color: yellow;
+	}
+	.datainput {
+		background-color: black;
+	}
+	
+	.post-button {
+		background-color: yellow;
+		color: black;
+	}
+}

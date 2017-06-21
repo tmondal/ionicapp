@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-/*
-  Generated class for the Organizing page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+@IonicPage()
 @Component({
   selector: 'page-organizing',
-  templateUrl: 'organizing.html'
+  templateUrl: 'organizing.html',
 })
-export class OrganizingPage {
+export class Organizing {
 
-	userservice: any;
-	constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad Organizing');
+  }
 
 }

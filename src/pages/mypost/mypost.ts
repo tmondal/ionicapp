@@ -1,15 +1,15 @@
 import { Component , OnInit} from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage,NavController, NavParams } from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
-import { UserprofilePage } from '../../pages/userprofile/userprofile';
 
 
+@IonicPage()
 @Component({
   selector: 'page-mypost',
   templateUrl: 'mypost.html'
 })
-export class MypostPage implements OnInit {
+export class Mypost implements OnInit {
 
 	postid: any;
 	users: any[] = [];
@@ -47,6 +47,7 @@ export class MypostPage implements OnInit {
 		this.totalservice.unsubscribe();
 	}
 	onUsernameClick(userId){
-    	this.navCtrl.push(UserprofilePage,{userId: userId});
+    	this.navCtrl.push("Userprofile",{userId: userId});
   	}
 }
+
