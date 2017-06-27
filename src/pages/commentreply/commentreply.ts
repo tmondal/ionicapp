@@ -20,6 +20,7 @@ export class Commentreply {
 	commentdata: any;
 	comments: any[] = [];
 	replytime: any[] = [];
+	ifliked: boolean[] = [false];
 	commentservice: any;
 	noofcomment: any;
 	noofcommentservice: any;
@@ -43,7 +44,19 @@ export class Commentreply {
 				for (let i = 0; i <= comments.length - 1; i++) {
 					this.replytime[i] = moment(this.comments[i].created_at).fromNow();
 				}
-			})
+				for (let i = 0;i <= this.comments.length - 1;i++) {
+					this.postservice.getchildcommentsLiked(this.postid,this.parentid,this.comments[i].$key)
+						.subscribe(liked =>{
+							if (liked.liked) {
+								this.ifliked[i] = true;
+							}else{
+								this.ifliked[i] = false;
+							}
+						})
+
+				}
+			});
+
 
 		this.postservice.countLikesDislikesComments(this.postid).subscribe(post =>{
 			if (post.comments != undefined) {				
@@ -66,10 +79,21 @@ export class Commentreply {
 			username: this.username,
 			postid: this.postid,
 			profileimage: this.profileimage,
-			data: this.commentdata
+			data: this.commentdata,
+			likes: 0
 		}
 		this.noofcomment += 1;
 		this.commentdata = '';
 		this.postservice.addchildComment(this.postid,this.parentid,comment,this.noofcomment);	
+	}
+	
+	commentreplyLike(i,commentid,likes){
+		if (!this.ifliked[i]) {	
+			this.ifliked[i] = true;		
+			likes += 1;
+			this.postservice.commentreplyLike(this.postid,this.parentid,commentid,likes);
+		}else{
+			alert("You already liked.");
+		}
 	}
 }

@@ -21,6 +21,7 @@ export class Postcomments implements OnInit {
 	lastcomment: any[] = [0];
 	lastcommenttime: any[]=[0];
 	childcomments: any[] = [0];
+	ifliked: boolean[] = [false];
 	commentservice: any;
 	lastchildservice: any;
 	noofcomment: any;
@@ -44,22 +45,33 @@ export class Postcomments implements OnInit {
 		this.commentservice = this.postservice.getparentComments(this.postid).subscribe(comments =>{
 			this.comments = comments;
 
-			for (let i = 0;i<= comments.length - 1; i++) {
+			for (let i = 0;i<= this.comments.length - 1; i++) {
 				if (this.comments[i]) {					
 					this.commenttime[i] = moment(this.comments[i].created_at).fromNow();
 				}
 			}
 
-			for (let i = 0;i <= comments.length - 1;i++) {
-				this.postservice.getlastchildComment(this.postid,comments[i].$key)
+			for (let i = 0;i <= this.comments.length - 1; i++) {
+				this.postservice.getparentcommentsLiked(this.postid,this.comments[i].$key)
+					.subscribe(liked =>{
+						if (liked.liked) {
+							this.ifliked[i] = true;
+						}else{
+							this.ifliked[i] = false;
+						}
+					})
+			}
+
+			for (let i = 0;i <= this.comments.length - 1;i++) {
+				this.postservice.getlastchildComment(this.postid,this.comments[i].$key)
 					.subscribe(comment =>{
 						if (comment[0]) {							
 							this.lastcomment[i] = comment[0];
 						}
 					})
 			}
-			for (let i = 0; i <= comments.length - 1; i++) {
-				this.postservice.getchildComments(this.postid,comments[i].$key).take(1)
+			for (let i = 0; i <= this.comments.length - 1; i++) {
+				this.postservice.getchildComments(this.postid,this.comments[i].$key).take(1)
 					.map(comments => comments.length).subscribe(length =>{
 						if (length > 0) {							
 							this.childcomments[i] = length;
@@ -89,7 +101,8 @@ export class Postcomments implements OnInit {
 			username: this.username,
 			profileimage: this.profileimage,
 			postid: this.postid,
-			data: this.commentdata
+			data: this.commentdata,
+			likes: 0
 		}
 		this.noofcomment += 1;
 		this.commentdata = '';
@@ -104,6 +117,16 @@ export class Postcomments implements OnInit {
 			postid: this.postid,
 			parentid: parentid
 		})
+	}
+
+	oncommentLike(i,commentid,likes){
+		if (!this.ifliked[i]) {	
+			this.ifliked[i] = true;		
+			likes += 1;
+			this.postservice.parentcommentLike(this.postid,commentid,likes);
+		}else{
+			alert("You already liked.");
+		}
 	}
 
 }

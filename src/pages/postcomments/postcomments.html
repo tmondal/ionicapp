@@ -30,11 +30,11 @@
 				<ion-row>
 					<ion-col class="likereplycol">
 						<ion-label class="commentitem">
-							<ion-icon color="yellow" name="thumbs-up"></ion-icon>&nbsp;100
+							<ion-icon color="yellow" name="thumbs-up"></ion-icon>&nbsp;{{comment.likes}}
 						</ion-label>
 					</ion-col>
 					<ion-col class="likereplycol">
-						<ion-label class="commentitem">
+						<ion-label class="commentitem" (click)="oncommentLike(i,comment.$key,comment.likes)">
 							Like
 						</ion-label>
 					</ion-col>

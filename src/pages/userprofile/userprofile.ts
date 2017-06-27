@@ -4,6 +4,7 @@ import { IonicPage,NavController, NavParams ,PopoverController} from 'ionic-angu
 import { AngularFire } from 'angularfire2';
 import { AuthService } from '../../providers/auth-service';
 import { PostService } from '../../providers/post-service';
+import * as moment from 'moment';
 
 
 
@@ -44,6 +45,7 @@ export class Userprofile implements OnInit{
 	myposts: any;
 	myleagues: any;
 	participate: any;
+	posttime: any[] = [];
 
 	constructor(
 		public navCtrl: NavController, 
@@ -92,6 +94,9 @@ export class Userprofile implements OnInit{
 		});
 		this.postservice.getFeedbyId(this.userId).subscribe(posts =>{
 			this.myposts = posts;
+			for (let i = 0; i <= this.myposts.length-1; i++) {
+        		this.posttime[i] = moment(this.myposts[i].created_at).fromNow();
+      		}
 		})
 	}
 	

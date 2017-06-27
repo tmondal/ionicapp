@@ -19,7 +19,7 @@
 <ion-content class="home">
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content
+        <ion-refresher-content style="background-color: #424242;color:white;border-radius: 50%"
           pullingIcon="arrow-dropdown"
           pullingText="Pull to refresh"
           refreshingSpinner="circles"
@@ -32,7 +32,7 @@
             <ion-row>
                 <ion-col col-2>
                     <ion-avatar item-left style="padding: 5px">
-                        <!-- <img [src]="profileimage" *ngIf="profileimage" style="height: 40px; width: 40px"> -->
+                        <img [src]="profileimage" *ngIf="profileimage" style="height: 40px; width: 40px">
                     </ion-avatar>                                                     
                 </ion-col>
                 <ion-col col-10 (click)="onCreatePostClick()"> 
@@ -51,38 +51,38 @@
     <ion-card style="height: 220px" color="background">
         <ion-card-header>
             <ion-row>
-            <ion-col style="color: yellow">
-                Clubs to follow
-            </ion-col>
-            <ion-col style="text-align: right;color: yellow" (click)="clubstoFollow()">
-                View all
-            </ion-col>
-        </ion-row>
+                <ion-col style="color: yellow">
+                    Clubs to follow
+                </ion-col>
+                <ion-col style="text-align: right;color: yellow" (click)="clubstoFollow()">
+                    View all
+                </ion-col>
+            </ion-row>
         </ion-card-header>
-        <ion-scroll scrollX="true" style="height: 170px;" >
+        <ion-scroll scrollX="true" style="height: 150px;" *ngIf="clubs.length > 0">
             <ion-card color="card" class="scroll-item" *ngFor="let club of clubs, let i = index" style="height: 100%; width: 100px">
-                <!-- <ion-label style="margin: 0px">
-                    <ion-icon name="more" style="float: right; padding-top: 5px; padding-right: 10px" (click)="onMoreClick($event)"></ion-icon>
-                </ion-label> -->
 
-                <ion-row style="height: 60px">
+                <ion-row style="height: 60px" *ngIf="i < 2">
                     <button ion-button full clear style="height: 100%">                        
                         <ion-avatar>
-                            <!-- <img style="width: 60px; height: 60px; border-radius: 30px " [src]="club.profileimage" *ngIf="club.profileimage"> -->
+                            <img style="width: 60px; height: 60px; border-radius: 30px " [src]="club.profileimage" *ngIf="club.profileimage">
                         </ion-avatar>
                     </button>  
                 </ion-row>
-                <ion-row>
+                <ion-row *ngIf="i < 2">
                     <button color="yellow" ion-button full clear>{{club.name}}</button>
                 </ion-row>
-                <ion-row>
-                    <button color="card" *ngIf="!iffollowing[i]" (click)="follow(i)" ion-button full clear style="font-size: 1.2rem;">                            
+                <ion-row *ngIf="i < 2">
+                    <button color="card" (click)="follow(i)" ion-button full clear style="font-size: 1.2rem;color: #FF5722">                            
                         <ion-icon color="deeporange" name="person-add"></ion-icon><span style="width: 5px"></span>
-                        <span color="deeporange">Follow</span>
+                        Follow
                     </button>
                 </ion-row>
             </ion-card>
         </ion-scroll>
+        <ion-card *ngIf="clubs.length == 0" style="height:100%;width:100%;background-color: inherit">
+            <div style="position: relative;top: 30%;left: 25%;color: gray">No clubs to follow</div>
+        </ion-card>
     </ion-card>
 
     <!-- User Feed -->
@@ -132,10 +132,10 @@
                     </button>
                 </ion-col>
                 <ion-col>
-                    <button color="yellow" ion-button icon-left full clear>
+                    <!-- <button color="yellow" ion-button icon-left full clear>
                         <ion-icon name="car"></ion-icon>
                         <div>1.4km</div>
-                    </button>
+                    </button> -->
                 </ion-col>
                 <ion-col center text-center>
                     <button color="yellow" ion-button block outline icon-right (click)="onRulesClick(post.rules,post.participating,post.$key,post.userId)">
@@ -144,7 +144,7 @@
                     </button>
                 </ion-col>
             </ion-row>
-            <button color="red" *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key)" ion-button block outline style="text-transform: none;margin-top: 20px;">See all participants</button>
+            <button color="blue" *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key)" ion-button block outline style="text-transform: none;margin-top: 20px;">See all participants</button>
         </ion-card>
 
         <ion-card *ngIf="post.posttype == 'hiring'" color="card">
@@ -189,19 +189,19 @@
                     </button>
                 </ion-col>
                 <ion-col col-4>
-                    <button color="yellow" ion-button icon-left clear small>
+                    <!-- <button color="yellow" ion-button icon-left clear small>
                         <ion-icon name="car"></ion-icon>
                         <div>1.4km</div>
-                    </button>
+                    </button> -->
                 </ion-col>
                 <ion-col center text-center col-4>
-                    <button colo="yellow" ion-button block outline icon-right (click)="onCriteriaClick(post.criteria,post.participating,post.$key,post.userId)">
+                    <button color="yellow" ion-button block outline icon-right (click)="onCriteriaClick(post.criteria,post.participating,post.$key,post.userId)">
                         Criteria
                         <ion-icon name="arrow-round-forward"></ion-icon>
                     </button>
                 </ion-col>
             </ion-row>
-            <button color="red" *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key)" ion-button block outline style="text-transform: none;margin-top: 20px">See all participants</button>
+            <button color="blue" *ngIf="post.userId == authuid" (click)="seeParticipants(post.$key)" ion-button block outline style="text-transform: none;margin-top: 20px">See all participants</button>
         </ion-card>
         
 

@@ -53,7 +53,13 @@ export class Signup {
 		}else{
 			this.authservice.signupUser(this.signupform.value.email, this.signupform.value.password,this.usertype).then(() =>{
 				this.loading.dismiss().then(()=>{
-					this.navCtrl.setRoot("Home");
+					this.authservice.getmyprofile().subscribe(me =>{
+						if (me.guideseen) {							
+							this.navCtrl.setRoot('Home');
+						}else{
+							this.navCtrl.setRoot('Guide');
+						}
+					})
 				});
 			},(error) =>{
 				this.loading.dismiss().then(()=>{

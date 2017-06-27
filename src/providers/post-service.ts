@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/count';
-import { File } from 'ionic-native';
 import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 import { ToastController} from 'ionic-angular';
 import { AuthService } from './auth-service';
@@ -172,10 +171,6 @@ export class PostService {
     toast.present();
   }
 
-  // getPost(id){
-  //   return this.af.database.object('/posts/' + id).take(1);
-  // }
-
   getFeed(){
     this.posts = this.af.database.list('/userwise-feed/' + this.authuid , {
       query: {
@@ -193,6 +188,10 @@ export class PostService {
       }
     }).take(1);
     return this.feed;
+  }
+
+  getpostfromFeedbyid(postid){
+    return this.af.database.object('/userwise-feed/' + this.authuid +"/"+ postid).take(1);
   }
 
   removePostfromFeedbyId(userid,postid){
@@ -312,11 +311,36 @@ export class PostService {
     return this.af.database.object('/postwise-ldc-count/'+postid);
   }
 
-  getpostfromFeedbyid(postid){
-    return this.af.database.object('/userwise-feed/' + this.authuid +"/"+ postid).take(1);
+  parentcommentLike(postid,commentid,likes){
+    this.af.database
+      .object("/postwise-parentcomments/"+postid+"/"+ commentid)
+        .update({likes:likes});
+    this.af.database
+      .object('/parentcomments-liked/'+postid+"/"+commentid+"/"+this.authuid)
+        .update({liked: true})
+  }
+  getparentcommentsLiked(postid,commentid){
+    return this.af.database
+      .object('/parentcomments-liked/'+postid+"/"+commentid+"/"+this.authuid)
+        .take(1);
   }
 
-  // league logic
+  commentreplyLike(postid,parentid,commentid,likes){
+    this.af.database
+      .object('/post-comment-structure/'+postid+"/"+parentid+'/'+commentid)
+        .update({likes:likes});
+    this.af.database
+      .object('/childcomments-liked/'+postid+"/"+parentid+"/"+commentid+"/"+this.authuid)
+        .update({liked: true});
+  }
+  getchildcommentsLiked(postid,parentid,commentid){
+    return this.af.database
+      .object('/childcomments-liked/'+postid+"/"+parentid+"/"+commentid+"/"+this.authuid)
+         .take(1);
+  }
+
+
+  // League logics
 
   createLeague(fixtures,leaguename,sporttype,teams){
     this.leaguenode = this.af.database.list(`/league-organized/${this.authuid}/`);
@@ -324,7 +348,7 @@ export class PostService {
     let updatedata = {};
 
     updatedata[`/league-organized/${this.authuid}/` + leagueid + '/sporttype'] = sporttype;
-    updatedata[`/league-organized/${this.authuid}/` + leagueid +'/leaguename'] =  leaguename;
+    updatedata[`/league-organized/${this.authuid}/` + leagueid +'/leaguename'] = leaguename;
     updatedata[`/league-organized/${this.authuid}/` + leagueid + '/teams'] = teams;
     updatedata[`/league-organized/${this.authuid}/` + leagueid + '/fixtures'] = fixtures;
 

@@ -10,6 +10,7 @@ import { Calendar } from '@ionic-native/calendar';
 @Component({
   selector: 'page-participating',
   templateUrl: 'participating.html',
+  providers: [Calendar]
 })
 export class Participating implements OnInit{
 

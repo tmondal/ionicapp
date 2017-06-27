@@ -14,25 +14,27 @@ export class MyApp {
 	@ViewChild(Nav) nav: Nav;
 	rootPage : any;
 	loggedIn: boolean = false;
-
-	pages: Array<{title: string,icon: string, component: any}>;
+	clubpages: Array<{title: string,icon: string, component: any}>;
+	playerpages: Array<{title: string,icon: string, component: any}>;
 	username: any;
 	profileimage: any;
+	usertype: any;
 
 	constructor(platform: Platform, public af: AngularFire,public authservice: AuthService) {
 
 		this.af.auth.subscribe(user =>{
 			this.loggedIn = true;
 			if(user) {
-				this.rootPage = "Home";
 
+				this.rootPage = 'Home';
 				this.authservice.getmyprofile().subscribe(user =>{
+					this.usertype = user.usertype;
 					this.username = user.name;
 					this.profileimage = user.profileimage;
 				});
 			}else{
 				this.loggedIn = false;
-				this.rootPage = "Login";
+				this.rootPage = 'Login';
 			}
 		});
 
@@ -40,17 +42,23 @@ export class MyApp {
 		  StatusBar.styleDefault();
 		  Splashscreen.hide();
 		});
-		this.pages = [
-	    	{ title: 'Home', icon: "home", component: "Home" },
-	    	{ title: 'Organizing', icon: "bulb",component: "Organizing" },
-	    	{ title: 'Participating', icon: "walk",component: "Participating" },
-	    	{ title: 'Create League', icon: "create", component: "Newleague" },
+		this.clubpages = [
+	    	{ title: 'Home', icon: "home", component: 'Home' },
+	    	{ title: 'Organizing', icon: "bulb",component: 'Organizing' },
+	    	{ title: 'Participating', icon: "walk",component: 'Participating' },
+	    	{ title: 'Create League', icon: "create", component: 'Newleague' },
 	    	{ title: 'Manage League', icon: "options",component: 'Manageleague'},
+	    	{ title: 'Need Guide ?', icon: "book", component: 'Guide' },
+	  	]
+	  	this.playerpages = [
+	  		{ title: 'Home', icon: "home", component: 'Home' },
+	    	{ title: 'Organizing', icon: "bulb",component: 'Organizing' },
+	    	{ title: 'Participating', icon: "walk",component: 'Participating' },
+	    	{ title: 'Need Guide ?', icon: "book", component: 'Guide' },	    	
 	  	]
 	}
 	openPage(page){
-		if (page.component == "Home") {
-			
+		if (page.component == 'Home') {
 			this.nav.setRoot(page.component);
 		}else {
 			this.nav.push(page.component);

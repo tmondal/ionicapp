@@ -72,7 +72,6 @@ export class Home implements OnInit{
 
   shownav: boolean = true;
   authuid: any;
-  authid: any;
   user: any;
   profileimage: any = null;
   currentuserId: any;
@@ -111,15 +110,15 @@ export class Home implements OnInit{
       public navCtrl: NavController,
       public modalCtrl: ModalController,
       public alertCtrl: AlertController,
-    public navParams: NavParams,
-    public myElement: ElementRef,
-    private postservice: PostService,
-    public authservice: AuthService,
-    private af: AngularFire
+      public navParams: NavParams,
+      public myElement: ElementRef,
+      private postservice: PostService,
+      public authservice: AuthService,
+      private af: AngularFire
   ) {
     af.auth.subscribe(user=>{
         if(user) {
-          this.authid = user.auth.uid;
+          this.authuid = user.auth.uid;
         }
     });
     this.showheader = true;
@@ -148,73 +147,18 @@ export class Home implements OnInit{
     });
 
 
-    this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
-      this.length = feed.length - 1;
-      feed.reverse();
-      this.posts = feed;
-
-      // Format created_at time 
-
-      for (let i = 0; i <= this.length; i++) {
-        this.posttime[i] = moment(this.posts[i].created_at).fromNow();
-      }
-
-      // Get liked disliked by current user
-
-      for (let i = 0; i <= this.length; i++) {
-        
-        this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
-          if(user.liked == undefined) {
-            this.liked[i] = false;
-          }else{
-            this.liked[i] = user.liked;
-          }
-          if(user.disliked == undefined) {
-            this.disliked[i] = false;
-          }
-          else{
-            this.disliked[i] = user.disliked;
-          }
-        });
-      }
-
-      // count no of likes,dislikes and comments of corresponding posts
-      for (let i = 0; i <= this.length; i++) {
-
-        this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1)
-          .subscribe(post =>{
-            if (post.likes != undefined) {            
-              this.nooflikes[i] = post.likes; 
-            }else{
-              this.nooflikes[i] = 0;
-            }
-            if (post.dislikes != undefined) {
-              this.noofdislikes[i] = post.dislikes;
-            }else{
-              this.noofdislikes[i] = 0;
-            }
-            if (post.comments != undefined) {
-              this.noofcomments[i] = post.comments;
-            }else{
-              this.noofcomments[i] = 0;
-            }
-        });
-      }
-    });
+    this.doRefresh(1);
 
     this.authservice.getClubstofollow().subscribe(clubs =>{
-      this.clubs = clubs;
       for (let i = 0; i <= clubs.length - 1; i++) {
         let temp = clubs[i].$key;
-        this.authservice.checkIffollowing(temp).subscribe(user =>{
-          if (user.following) {
-            this.clubs.splice(i,1);
-          }
-          if (this.authid == temp) {
-            this.clubs.splice(i,1);
-          }
-          this.iffollowing[i] = user.following;
-        });
+        if (this.authuid != temp) {
+          this.authservice.checkIffollowing(temp).subscribe(user =>{
+            if (!user.following) {
+              this.clubs.push(clubs[i]);
+            }
+          });
+        }
       }
     });
     // this.authservice.getPlayerstofollow().subscribe(players =>{
@@ -244,7 +188,7 @@ export class Home implements OnInit{
   }
   
   doRefresh(refresher) {
-    this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
+      this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
       this.length = feed.length - 1;
       feed.reverse();
       this.posts = feed;
@@ -297,23 +241,6 @@ export class Home implements OnInit{
       }
     });
 
-
-    this.authservice.getClubstofollow().subscribe(clubs =>{
-      this.clubs = clubs;
-      for (let i = 0; i <= clubs.length - 1; i++) {
-        let temp = clubs[i].$key;
-        this.authservice.checkIffollowing(temp).subscribe(user =>{
-          if (user.following) {
-            this.clubs.splice(i,1);
-          }
-          if (this.authid == temp) {
-            this.clubs.splice(i,1);
-          }
-          this.iffollowing[i] = user.following;
-        });
-      }
-    });
-
     if (refresher != 1) {
       
       setTimeout(() => {      
@@ -323,8 +250,8 @@ export class Home implements OnInit{
   }
 
   follow(i){
-    this.iffollowing[i] = true;
-    this.authservice.followuser(this.clubs[i].$key);
+   this.authservice.followuser(this.clubs[i].$key);
+   this.clubs.splice(i,1);
   }
   clubstoFollow(){
     this.navCtrl.push("Clubstofollow",{clubs: this.clubs});

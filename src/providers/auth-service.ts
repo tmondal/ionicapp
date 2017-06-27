@@ -42,7 +42,7 @@ export class AuthService {
       }).then(newuser =>{
         console.log(newuser.uid);
         this.af.database.object('/users/' + newuser.uid)
-          .set({email: email,usertype: usertype}); 
+          .set({email: email,usertype: usertype,guideseen: false}); 
       });
     }
     loginUser(email: string ,password: string) : firebase.Promise<any> {
@@ -198,6 +198,10 @@ export class AuthService {
       });
     }
     
+    updateguideSeen(){
+      this.af.database.object('/users/' + this.auth.uid).update({guideseen: true});
+    }
+
     followuser(targetuserId: any){
       let followuserdata = {};
 
@@ -206,14 +210,14 @@ export class AuthService {
       this.af.database.object('/').update(followuserdata);
     }
     unfollowuser(targetuserId: any){
-      const follower = this.af.database.object("/userwise-followers/" + targetuserId + "/" + this.auth.uid);
-      follower.remove();
-      const following = this.af.database.object("/userwise-following/" + this.auth.uid + "/" + targetuserId);
-      following.remove();
+      this.af.database
+        .object("/userwise-followers/" + targetuserId + "/" + this.auth.uid).remove();
+      this.af.database
+        .object("/userwise-following/" + this.auth.uid + "/" + targetuserId).remove();
     }
     checkIffollowing(targetuserId: any){
-      this.following = this.af.database.object("/userwise-following/" + this.auth.uid + "/" + targetuserId);
-      return this.following.take(1); // take function does unsubscribe at the end which is good
+      return this.af.database
+        .object("/userwise-following/" + this.auth.uid + "/" + targetuserId).take(1);
     }
     getFollowers(userid){
       return this.af.database.list('/userwise-followers/' + userid).take(1);

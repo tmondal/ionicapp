@@ -22,16 +22,14 @@ export class Clubstofollow implements OnInit{
 		this.clubs = this.navParams.get("clubs");
 	}
 
-	ngOnInit(){
-		if (this.clubs) {			
-			for (let i = 0,k=0; i <= this.clubs.length - 1;k++, i++) {
-		        this.authservice.checkIffollowing(this.clubs[i].$key).subscribe(user =>{
-		          this.following[i] = user.following;
-		        });
-	      	}
-		}
-	}
+	ngOnInit(){}
+	
 	onUsernameClick(userId){
-    this.navCtrl.push("Userprofile",{userId: userId});
-  }
+    	this.navCtrl.push("Userprofile",{userId: userId});
+  	}
+
+  	follow(i){
+	   this.authservice.followuser(this.clubs[i].$key);
+	   this.clubs.splice(i,1);
+	}
 }

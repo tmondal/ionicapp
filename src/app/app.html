@@ -8,8 +8,14 @@
         </ion-avatar>
         <h2> {{username || "Forgot to edit name"}} </h2>
       </ion-item>
-      <ion-list>
-        <ion-item menuClose *ngFor="let p of pages" class="menuitem">
+      <ion-list *ngIf="usertype == 'club'">
+        <ion-item menuClose *ngFor="let p of clubpages" class="menuitem">
+          <ion-icon class="menubutton" item-left name={{p.icon}}></ion-icon>
+          <button class="menubutton" ion-button full small clear (click)="openPage(p)">{{ p.title }}</button>
+        </ion-item>
+      </ion-list>
+      <ion-list *ngIf="usertype == 'player'">
+        <ion-item menuClose *ngFor="let p of playerpages" class="menuitem">
           <ion-icon class="menubutton" item-left name={{p.icon}}></ion-icon>
           <button class="menubutton" ion-button full small clear (click)="openPage(p)">{{ p.title }}</button>
         </ion-item>
