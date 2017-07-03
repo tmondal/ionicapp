@@ -61,7 +61,7 @@ export class PostService {
       this.showToast("Storage ref created..");
 
       let uploadTask = this.imageRef.putString(imagesrc,'base64');
-      this.showToast("putstring called..");
+      this.showToast("Putstring called..");
       uploadTask.on('state_changed',
 
         (snapshot) => {
@@ -166,71 +166,88 @@ export class PostService {
   showToast(message){
     let toast = this.toastCtrl.create({
       message: message,
-      duration: 3000
+      duration: 1000
     });
     toast.present();
   }
 
   getFeed(){
-    this.posts = this.af.database.list('/userwise-feed/' + this.authuid , {
+    return this.af.database.list('/userwise-feed/' + this.authuid , {
       query: {
         orderByChild: 'created_at',
         endAt: Date.now()
       }
     }).take(1);
-    return this.posts;
   }
   getFeedbyId(userid){
-    this.feed = this.af.database.list('/userwise-feed/' + userid , {
+    return this.af.database.list('/userwise-feed/' + userid , {
       query: {
         orderByChild: 'created_at',
         endAt: Date.now()
       }
     }).take(1);
-    return this.feed;
   }
 
   getpostfromFeedbyid(postid){
     return this.af.database.object('/userwise-feed/' + this.authuid +"/"+ postid).take(1);
   }
 
-  removePostfromFeedbyId(userid,postid){
-    if (userid != this.authuid) {      
-      this.af.database.object("/userwise-feed/"+this.authuid+"/"+postid).remove().then(
-        (success) => alert("The post is parmanently removed."),
+  // See again if all related data is deleted. I will come back later :)
+  removePostfromFeedbyId(post){
+    console.log(post.$key);
+    if (post.userId != this.authuid) {      
+      this.af.database.object("/userwise-feed/"+this.authuid+"/"+post.$key).remove().then(
+        (success) => alert("The post is parmanently removed from your feed"),
         (error) => alert("Could not remove. Try again!")
       )
     }else {
-      this.authservice.getFollowers(userid).subscribe(followers =>{
+      this.authservice.getFollowers(post.userId).subscribe(followers =>{
         for (let i = followers.length - 1; i >= 0; i--) {
-          this.af.database.object("/userwise-feed/"+ followers[i].$key +"/"+postid).remove();
-          this.af.database.object('/postwise-participator/' + postid).remove();
+          this.af.database.object("/userwise-feed/"+ followers[i].$key +"/"+post.$key).remove();
+          this.af.database.object('/postwise-participator/' + post.$key).remove();
         }
       });
-      this.af.database.object("/userwise-feed/"+userid+"/"+postid).remove().then(
-        (success) => alert("Post is parmanently removed from related feeds."),
+      this.af.database.object("/userwise-feed/"+post.userId+"/"+post.$key).remove().then(
+        (success) => {
+          alert("Post is parmanently removed from related feeds.");
+          if (post.imageurl) {            
+            this.storageimageRef.child(`/${post.$key}/main.jpg`).delete();
+          }
+          if (post.videourl) {            
+            this.storagevideoRef.child(`/${post.$key}/main.mp4`).delete();
+          }
+        },
         (error) => alert("Something wrong. Try again!")
-      )
+      );
     }
   }
 
   // participation logics
+
+  // called from 'post'
   getParticipated(postid: any){
     return this.af.database.object('/postwise-participator/' + postid + "/" + this.authuid);
   }
+
+  // called from 'post'
   updateParticipated(postid: any,participated: boolean){
-    this.af.database.object('/postwise-participator/' + postid + "/" + this.authuid)
-      .update({participated: participated});
+    let updatedata = {};
+    updatedata['/postwise-participator/'+postid+"/"+this.authuid+"/participated"] = participated 
+    updatedata['/userwise-participatedpost/'+this.authuid+"/"+postid+"/participated"] = participated;
+    this.af.database.object('/').update(updatedata);
   }
-  removeParticipated(postid: any,participated: boolean){
+  // called from 'post'
+  removeParticipated(postid: any){
     this.af.database.object('/postwise-participator/' + postid + "/" + this.authuid).remove();
+    this.af.database.object('/userwise-participatedpost/'+this.authuid+"/"+postid).remove();
   }
-  // getParticipating(postid: any){
-  //   return this.af.database.object('/postwise-countparticipator/' + postid); 
-  // }
+  getparticipatedPost(){
+    return this.af.database.list('/userwise-participatedpost/'+this.authuid).take(1);
+  }
+
+  // called from 'post'
   updateParticipating(postid: any,participating: number){
     let updatedata = {};
-    updatedata['/postwise-countparticipator/' + postid + '/participating'] = participating;
     updatedata['/userwise-feed/' + this.authuid + "/" + postid + '/participating'] = participating;
     this.af.database.object('/').update(updatedata);
   }
@@ -359,8 +376,8 @@ export class PostService {
       
     }
     this.af.database.object('/').update(updatedata).then(
-      (success) => this.showToast("League successfully created."),
-      (error) => this.showToast("Error while creating ! try again !!")
+      (success) => alert("League successfully created."),
+      (error) => alert("Error while creating ! try again !!")
     );
   }
 
@@ -382,8 +399,8 @@ export class PostService {
       updatedata[`/league-participated/${teams[i].id}/` + leagueid +'/leaguename'] = leaguename;
     }
     this.af.database.object('/').update(updatedata).then(
-      (success) => this.showToast("League successfully updated."),
-      (error) => this.showToast("Error while updating ! try again !!")
+      (success) => alert("League successfully updated."),
+      (error) => alert("Error while updating ! try again !!")
     );
   }
 
@@ -401,5 +418,16 @@ export class PostService {
   getmyFixtures(leagueid,leagueadminid){
     return this.af.database
       .list("/league-organized/" + leagueadminid +"/"+ leagueid +"/fixtures").take(1);
+  }
+
+  // update league result
+  updateleaguematchScore(leagueid,fixtures){
+    this.af.database
+      .object(`/league-organized/${this.authuid}/` + leagueid)
+        .update({fixtures: fixtures})
+          .then(
+            (success)=> alert("Scores updated"),
+            (error) => alert("Error!Try again")
+          );
   }
 }

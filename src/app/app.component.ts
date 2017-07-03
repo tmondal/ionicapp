@@ -54,7 +54,7 @@ export class MyApp {
 	  		{ title: 'Home', icon: "home", component: 'Home' },
 	    	{ title: 'Organizing', icon: "bulb",component: 'Organizing' },
 	    	{ title: 'Participating', icon: "walk",component: 'Participating' },
-	    	{ title: 'Need Guide ?', icon: "book", component: 'Guide' },	    	
+	    	{ title: 'How to use ?', icon: "book", component: 'Guide' },	    	
 	  	]
 	}
 	openPage(page){

@@ -165,8 +165,8 @@ export class AuthService {
     updateLocation(lat,lng){
       this.af.database.object('/users/' + this.auth.uid).update({lattitude: lat,longitude: lng})
         .then(
-          success => this.showToast("Success: Location updated."),
-          error => this.showToast("Failed to update location.")
+          (success) => this.showToast("Success: Location updated."),
+          (error) => this.showToast("Failed to update location.")
          );
     }
     updateName(name){

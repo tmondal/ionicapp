@@ -13,12 +13,12 @@
 
 
 <ion-content class="result">
-	<ion-card>
+	<div>
 		<ion-item color="card">
 			<span class="leaguename">{{leaguename}}</span>
 			<span class="sporttype"> a {{sporttype}} league</span>
 		</ion-item>
-	</ion-card>
+	</div>
 	<ion-list *ngIf="uppertype == 'FOOTBALL'">
 		<ion-list-header color="card">
 			<ion-row>
@@ -38,12 +38,20 @@
 				<ion-col>
 					<div>
 						<ion-label>{{fixture.teamone}} scored:</ion-label>
-						<ion-input class="datainput" [(ngModel)]="teamonescore" value="teamonescore" placeholder="put score of {{fixture.teamone}}"></ion-input>
+						<ion-input class="datainput" [(ngModel)]="teamonescore[i]" value="teamonescore[i]" placeholder="{{fixture.teamonescore}}"></ion-input>
 					</div>
 					<div>
 						<ion-label>{{fixture.teamtwo}} scored:</ion-label>
-						<ion-input class="datainput" [(ngModel)]="teamtwoscore" value="teamtwoscore" placeholder="put score of {{fixture.teamtwo}}"></ion-input>
+						<ion-input class="datainput" [(ngModel)]="teamtwoscore[i]" value="teamtwoscore[i]" placeholder="{{fixture.teamtwoscore}}"></ion-input>
 					</div>
+				</ion-col>
+			</ion-row>
+			<ion-row *ngIf="teamonescore[i] && teamtwoscore[i] && !scoresaved[i]">
+				<ion-col>
+					<button ion-button full (click)="updatematchResult(i)">Save Score</button>
+				</ion-col>
+				<ion-col>
+					<button ion-button block outline color="red" (click)="cancel(i)" >Cancel</button>
 				</ion-col>
 			</ion-row>
 		</div>

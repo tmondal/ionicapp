@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { Postoptions } from './postoptions';
+import { Newuserguide } from './newuserguide';
 
 @NgModule({
   declarations: [
-    Postoptions,
+    Newuserguide,
   ],
   imports: [
-    IonicPageModule.forChild(Postoptions),
+    IonicPageModule.forChild(Newuserguide),
   ],
   exports: [
-    Postoptions
+    Newuserguide
   ]
 })
-export class PostoptionsModule {}
+export class NewuserguideModule {}

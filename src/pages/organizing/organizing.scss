@@ -3,4 +3,45 @@ page-organizing {
 	.organizing {
 		background-color: #212121;
 	}
+	.col {
+		padding: 1px;
+	}
+	.participateheader{
+		background-color: #424242;
+		color: yellow;
+	}
+	.participateitem {
+		background-color: #424242;
+		color: yellow;
+	}
+	.participatecard{
+		background-color: #212121;
+	}
+	.cardcontent {
+		background-color:  #424242;
+	}
+	.carditem {
+		background-color: black;
+		color: yellow;
+	}
+	.participateicon {
+		font-size: 1.5em;
+		margin: 13px 0px 13px 0px;
+	}
+	.iconcol {
+		text-align: center;
+	}
+	.label {
+		margin: 2px;
+		margin-right: 0px;
+		padding: 13px 0px 13px 5px;
+	}
+	.contentlabel {
+		color: white;
+		background-color: #212121;
+	}
+	.gobutton {
+		padding: 0px;
+		font-size: 1.0em;
+	}
 }

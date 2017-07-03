@@ -26,7 +26,7 @@
     "@ionic-native/camera": "^3.4.4",
     "@ionic-native/core": "3.10.2",
     "@ionic-native/date-picker": "^3.4.4",
-    "@ionic-native/file": "^3.4.4",
+    "@ionic-native/file": "^3.12.1",
     "@ionic-native/file-chooser": "^3.4.4",
     "@ionic-native/file-path": "^3.4.4",
     "@ionic-native/geolocation": "^3.5.0",

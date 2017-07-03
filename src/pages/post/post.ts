@@ -12,6 +12,7 @@ import { AuthService } from '../../providers/auth-service';
 })
 export class Post implements OnInit {
 
+	post: any;
 	rules: any;
 	criteria: any;
 	userservice: any;
@@ -93,7 +94,7 @@ export class Post implements OnInit {
 		this.participating -= 1;
 		this.participated = false;
 		if (this.participating >= 0) {			
-			this.postservice.removeParticipated(this.postid,this.participated);
+			this.postservice.removeParticipated(this.postid);
 			this.postservice.updateParticipating(this.postid,this.participating);
 		}
 	}

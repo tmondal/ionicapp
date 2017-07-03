@@ -15,7 +15,7 @@
 	</div>
  	<ion-card color="card">
 	 	<ion-row>
-	      <ion-col>
+	      <ion-col style="text-align: center">
 	        <button *ngIf="participating > 1" ion-button icon-left clear small>
 	          <ion-icon name="people"></ion-icon>
 	          <div style="text-transform: none">{{participating}} Teams Participating</div>
@@ -78,48 +78,56 @@
  	</ion-card>
  	
  	<div *ngIf="posttype != 'hiring'">
- 		<ion-card style="margin-top: 30px" *ngIf="!participated"> 		
-		 	<button ion-button color="primary" full style="text-transform: none" (click)="onAccept()" >
-		 		Accept challenge <span style="width: 5px" ></span>
-		 		<ion-icon name="happy"></ion-icon>
-		 	</button>
-	 	</ion-card>
-	 	<ion-card style="margin-top: 30px" *ngIf="participated">
-		 	<button ion-button color="danger" full style="text-transform: none" (click)="onDecline()" >
-		 		Reject challenge <span style="width: 5px"></span>
-		 		<ion-icon name="sad"></ion-icon>
-		 	</button>
-	 	</ion-card>
-	 	<ion-card *ngIf="!participated" style="margin-top: 10px"  >
-		 	<button ion-button color="danger" block style="text-transform: none" (click)="onCancel()" >
-		 		I am afried
-		 	</button>
-	 	</ion-card>
-	 	<ion-card *ngIf="participated" style="margin-top: 10px" >
-			<button ion-button block style="text-transform: none" (click)="onCancel()">
-				I am fine
-			</button>
-		</ion-card>
+ 		<ion-row style="margin-top: 30px" padding>
+ 			<ion-col>
+		 		<ion-card *ngIf="!participated"> 		
+				 	<button ion-button color="primary" full style="text-transform: none" (click)="onAccept()" >
+				 		Accept challenge
+				 	</button>
+			 	</ion-card>
+			 	<ion-card *ngIf="participated">
+				 	<button ion-button color="danger" full style="text-transform: none" (click)="onDecline()" >
+				 		Reject challenge
+				 	</button>
+			 	</ion-card>
+ 			</ion-col>
+ 			<ion-col>
+			 	<ion-card *ngIf="!participated">
+				 	<button ion-button color="danger" full clear style="text-transform: none" (click)="onCancel()" >
+				 		Not interested
+				 	</button>
+			 	</ion-card>
+			 	<ion-card *ngIf="participated">
+					<button ion-button full clear style="text-transform: none;" (click)="onCancel()">
+						Let's go and try
+					</button>
+				</ion-card>
+ 			</ion-col>
+ 		</ion-row>
  	</div>
  	<div *ngIf="posttype == 'hiring'">
- 		<ion-card style="margin-top: 30px" *ngIf="!participated">
-	 		<button ion-button color="primary" full style="text-transform: none" (click)="onAccept()" >
-		 		Participating <span style="width: 5px" ></span>
-		 		<ion-icon name="happy"></ion-icon>
-		 	</button>
-	 	</ion-card>
-	 	<ion-card style="margin-top: 30px" *ngIf="participated">
-		 	<button ion-button color="danger" full style="text-transform: none" (click)="onDecline()">
-		 		Withdrawing <span style="width: 5px"></span>
-		 		<ion-icon name="sad"></ion-icon>
-		 	</button>
-	 	</ion-card>
-	 	<ion-card style="margin-top: 10px" *ngIf="!participated">
-	 		<button ion-button color="danger" block (click)="onCancel()" style="text-transform: none" >Not qualified</button>
-	 	</ion-card>
-	 	<ion-card style="margin-top: 10px" *ngIf="participated">
-			<button ion-button block style="text-transform: none" (click)="onCancel()">I am qualified</button>
-		</ion-card>
+ 		<ion-row style="margin-top: 30px" padding>
+ 			<ion-col>
+		 		<ion-card *ngIf="!participated">
+			 		<button ion-button color="primary" full style="text-transform: none" (click)="onAccept()" >
+				 		Participating
+				 	</button>
+			 	</ion-card>
+			 	<ion-card *ngIf="participated">
+				 	<button ion-button color="danger" full style="text-transform: none" (click)="onDecline()">
+				 		Withdrawing
+				 	</button>
+			 	</ion-card>
+ 			</ion-col>
+ 			<ion-col>
+			 	<ion-card *ngIf="!participated">
+			 		<button ion-button color="danger" full clear (click)="onCancel()" style="text-transform: none" >Not for me</button>
+			 	</ion-card>
+			 	<ion-card *ngIf="participated">
+					<button ion-button full clear style="text-transform: none" (click)="onCancel()">Let's take chance</button>
+				</ion-card>
+ 			</ion-col>
+ 		</ion-row>
  	</div>
 
 </ion-content>

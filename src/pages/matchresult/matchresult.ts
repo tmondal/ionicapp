@@ -20,8 +20,9 @@ export class Matchresult implements OnInit{
 	leaguename: any;
 	sporttype: any;
 	uppertype: any;
-	teamonescore: any = 0;
-	teamtwoscore: any = 0;
+	teamonescore: any[] = [];
+	teamtwoscore: any[] = [];
+	scoresaved: boolean[] = [false];
 
 	constructor(
 		public navCtrl: NavController, 
@@ -42,5 +43,14 @@ export class Matchresult implements OnInit{
 	ngOnInit(){}
 	ngOnDestroy(){}
 
+	updatematchResult(i){
+		this.scoresaved[i] = true;
+		this.fixtures[i].teamonescore = this.teamonescore[i];
+		this.fixtures[i].teamtwoscore = this.teamtwoscore[i];
+		this.postservice.updateleaguematchScore(this.league.$key,this.fixtures);
+	}
 
+	cancel(i) {
+		this.scoresaved[i] = false;
+	}
 }

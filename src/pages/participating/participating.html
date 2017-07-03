@@ -12,10 +12,10 @@
 
 <ion-content class="participate">
 
-	<ion-list>
+	<ion-list *ngIf="usertype == 'club'">
 		<ion-list-header class="participateheader"> Your Participated Leagues </ion-list-header>
 		<ion-item class="participateitem" *ngFor="let league of leagues,let i = index">
-			{{ league.leaguename }}
+			<span style="color: #2196F3">{{ league.leaguename }}</span>
 			<ion-card class="participatecard">
 				<ion-card-header class="participateheader">Your Fixtures</ion-card-header>
 				<ion-card-content *ngIf="fixtures[i]" class="cardcontent">
@@ -36,5 +36,96 @@
 			</ion-card>
 		</ion-item>
 	</ion-list>
+
+    <div color="card">
+        <ion-label color="yellow"> Your participated events</ion-label>
+    </div>
+    <ion-list *ngFor="let post of participating,let i = index">
+        <ion-card *ngIf="post.posttype == 'tournament'" color="card">
+            
+            <ion-item class="participateitem">
+                <ion-avatar item-left>
+                    <img [src]="post.userimage" *ngIf="post.userimage">
+                </ion-avatar>     
+                <h2 style="color: yellow">{{post.username || "Forgot to edit name"}}</h2>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span color="red">{{posttime[i]}}</span>
+                </p>
+            </ion-item>
+
+            <ion-card-content color="white" style="opacity: 0.6px">
+                Organising a <b>{{post.sporttype}}</b> tournament on <b>{{post.eventdate}}</b> at {{post.eventvenue || "our club ground"}}
+            </ion-card-content>
+            <object data="../../assets/img/404.png" type="image/jpg" style="width: 100%;">
+                <img [src]="post.imageurl" *ngIf="post.imageurl" style="height: 100%; width: 100%;">
+                <div *ngIf="!post.imageurl" style="height: 200px;width: 100%;"></div>
+            </object>
+            <ion-card-content color="white" *ngIf="post.centuarea">
+                {{post.centuarea}}
+            </ion-card-content>
+            <ion-card-content color="white" *ngIf="!post.centuarea">
+               We are extreamly happy to organize this event in our club. We wish it will be a great tournament with your participation :)
+            </ion-card-content>    
+            
+            <ion-row style="padding: 5px 0px">
+                <ion-col col-4>
+                    <button color="yellow" ion-button icon-left full clear class="gobutton">
+                        <ion-icon name="person"></ion-icon>
+                        {{post.participating}} Going
+                    </button>
+                </ion-col>
+
+                <ion-col center text-center>
+                    <button color="yellow" ion-button block outline icon-right class="gobutton">
+                       You can't see rules now
+                        <ion-icon name="happy"></ion-icon>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="post.posttype == 'hiring'" color="card">
+            <ion-item class="participateitem">
+                <ion-avatar item-left>
+                    <img [src]="post.userimage" *ngIf="post.userimage">
+                </ion-avatar>
+                <h2 style="color: yellow">{{post.username || "Forgot to edit name"}}</h2>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span>{{posttime[i]}}</span>
+                </p>
+            </ion-item>
+            <ion-card-content color="white">
+                Organising a <b>{{post.sporttype}}</b> event for <b>Hiring Players</b> on <b>{{post.eventdate}}</b><br>
+                Interested plyers are requested to reach at {{post.eventvenue || "our club ground"}} 
+            </ion-card-content>
+            <object data="../../assets/img/404.png" type="image/jpg" style="width: 100%;">
+                <img [src]="post.imageurl" *ngIf="post.imageurl" style="height: 100%; width: 100%;">
+                <div *ngIf="!post.imageurl" style="height: 200px;width: 100%;"></div>
+            </object>
+            <ion-card-content color="white" *ngIf="post.honestarea">
+                {{post.honestarea}}
+            </ion-card-content>
+            <ion-card-content color="white" *ngIf="!post.honestarea">
+                The trial will be taken on <b>First come first</b> basis if many players wish to participate. So hurry up !!
+            </ion-card-content>
+            <ion-row>
+                <ion-col col-4>
+                    <button color="yellow" ion-button icon-left clear small class="gobutton">
+                        <ion-icon name="person"></ion-icon>
+                        <div>{{post.participating}} Going</div>
+                    </button>
+                </ion-col>
+
+                <ion-col center text-center>
+                    <button color="yellow" ion-button block outline icon-right class="gobutton">
+                        You can't see criteria now
+                        <ion-icon name="happy"></ion-icon>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+    </ion-list>
 
 </ion-content>

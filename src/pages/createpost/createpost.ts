@@ -68,6 +68,15 @@ export class Createpost implements OnInit{
 	youtubetitle: any;
 	newstr: any;
 	
+	// result variables
+	tpone: any;
+	tponescore: any;
+	tponewicket: any;
+	tptwo: any;
+	tptwoscore: any;
+	tptwowicket: any;
+	extratalk: any;
+
 
 	constructor(
 		public navCtrl: NavController,

@@ -146,7 +146,6 @@ export class Home implements OnInit{
       this.slideHeaderPrevious = this.scrollcontent.scrollTop;
     });
 
-
     this.doRefresh(1);
 
     this.authservice.getClubstofollow().subscribe(clubs =>{
@@ -296,7 +295,7 @@ export class Home implements OnInit{
     this.postmoreclicked[i] = !this.postmoreclicked[i];
   }
 
-  removepost(userid,postid,i){
+  removepost(i,post){
     let confirm = this.alertCtrl.create({
     title: 'Confirming',
     message: 'The post will be parmanently removed. Are you sure ?',
@@ -308,7 +307,7 @@ export class Home implements OnInit{
       {
         text: 'Sure',
         handler: () => {
-          this.postservice.removePostfromFeedbyId(userid,postid);
+          this.postservice.removePostfromFeedbyId(post);
           this.postmoreclicked[i] = false;
           setTimeout(()=>{            
             this.doRefresh(1);
@@ -354,7 +353,6 @@ export class Home implements OnInit{
             this.nooflikes[i] += 1;
             this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
             this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-            this.doRefresh(1);
           }else if(!this.liked[i] && this.disliked[i]){
             this.liked[i] = true;
             this.disliked[i] = false;
@@ -362,7 +360,6 @@ export class Home implements OnInit{
             this.noofdislikes[i] -= 1;
             this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
             this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-            this.doRefresh(1);
           }else if (this.liked[i]) {
             alert("Don't press multiple times it hurts server :)");
           }
@@ -406,7 +403,6 @@ export class Home implements OnInit{
             this.noofdislikes[i] += 1;
             this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
             this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-            this.doRefresh(1);
           }
           else if(!this.disliked[i] && this.liked[i] ) {
             this.liked[i] = false;
@@ -415,7 +411,6 @@ export class Home implements OnInit{
             this.noofdislikes[i] +=1;
             this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
             this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-            this.doRefresh(1);
           }else if (this.disliked[i]) {
             alert("No matter how much you hate \n You can press only one time :)");
           }        

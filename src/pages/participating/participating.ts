@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage,NavController, NavParams } from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
+import { AuthService } from '../../providers/auth-service';
 import { AngularFire } from 'angularfire2';
 import { Calendar } from '@ionic-native/calendar';
+import * as moment from 'moment';
 
 
 
@@ -17,14 +19,18 @@ export class Participating implements OnInit{
 
 	leagues: any;
 	userid: any;
+	usertype: any;
 	tempfixture: any[] = [];
 	fixtures: any[] = [];
 	clicked: boolean[] = [false];
 	userservice: any;
+	participating: any[] = [];
+	posttime: any[] = [];
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
 		public postservice: PostService,
+		public authservice: AuthService,
 		public af: AngularFire,
 		public calendar: Calendar
 	) {
@@ -34,6 +40,10 @@ export class Participating implements OnInit{
 	}
 
 	ngOnInit(){
+		this.authservice.getmyprofile().subscribe(me =>{
+			this.usertype = me.usertype;
+		});
+
 		this.postservice.getParticipatingLeagues(this.userid).subscribe(leagues =>{
 			this.leagues = leagues;
 			for (let i = 0; i < leagues.length; i++) {
@@ -50,6 +60,15 @@ export class Participating implements OnInit{
 				);
 			}
 		});
+
+		this.postservice.getparticipatedPost().subscribe(posts=>{
+			for (let i = 0;i <= posts.length - 1; i++) {
+				this.postservice.getpostfromFeedbyid(posts[i].$key).subscribe(post=>{
+					this.participating.push(post);
+					this.posttime[i] = moment(post.created_at).fromNow();
+				})
+			}
+		})
 	}
 
 	ngOnDestroy(){

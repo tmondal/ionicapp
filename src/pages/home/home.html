@@ -62,17 +62,17 @@
         <ion-scroll scrollX="true" style="height: 150px;" *ngIf="clubs.length > 0">
             <ion-card color="card" class="scroll-item" *ngFor="let club of clubs, let i = index" style="height: 100%; width: 100px">
 
-                <ion-row style="height: 60px" *ngIf="i < 2">
+                <ion-row style="height: 60px" *ngIf="i < 4">
                     <button ion-button full clear style="height: 100%">                        
                         <ion-avatar>
                             <img style="width: 60px; height: 60px; border-radius: 30px " [src]="club.profileimage" *ngIf="club.profileimage">
                         </ion-avatar>
                     </button>  
                 </ion-row>
-                <ion-row *ngIf="i < 2">
+                <ion-row *ngIf="i < 4">
                     <button color="yellow" ion-button full clear>{{club.name}}</button>
                 </ion-row>
-                <ion-row *ngIf="i < 2">
+                <ion-row *ngIf="i < 4">
                     <button color="card" (click)="follow(i)" ion-button full clear style="font-size: 1.2rem;color: #FF5722">                            
                         <ion-icon color="deeporange" name="person-add"></ion-icon><span style="width: 5px"></span>
                         Follow
@@ -90,7 +90,7 @@
 
         <ion-card *ngIf="post.posttype == 'tournament'" color="card">
             <div *ngIf="postmoreclicked[i]" class="morediv">
-                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                <ion-item (click)="removepost(i,post)" class="moreitem">
                     <ion-icon name="close-circle"></ion-icon>
                     Remove it
                 </ion-item>
@@ -113,10 +113,10 @@
             <ion-card-content color="white" style="opacity: 0.6px">
                 Organising a <b>{{post.sporttype}}</b> tournament on <b>{{post.eventdate}}</b> at {{post.eventvenue || "our club ground"}}
             </ion-card-content>
-            <ion-row>
+            <object data="../../assets/img/404.png" type="image/jpg" style="width: 100%;">
                 <img [src]="post.imageurl" *ngIf="post.imageurl" style="height: 100%; width: 100%;">
                 <div *ngIf="!post.imageurl" style="height: 200px;width: 100%;"></div>
-            </ion-row>
+            </object>
             <ion-card-content color="white" *ngIf="post.centuarea">
                 {{post.centuarea}}
             </ion-card-content>
@@ -150,7 +150,7 @@
         <ion-card *ngIf="post.posttype == 'hiring'" color="card">
 
             <div *ngIf="postmoreclicked[i]" class="morediv">
-                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                <ion-item (click)="removepost(i,post)" class="moreitem">
                     <ion-icon name="close-circle"></ion-icon>
                     Remove it from feed
                 </ion-item>
@@ -168,13 +168,13 @@
                 </p>
             </ion-item>
             <ion-card-content color="white">
-                Organising a <b>{{post.sporttype}} Trial for Hiring</b> Players on <b>{{post.eventdate}}</b><br>
-                Be present at {{post.eventvenue || "our club ground"}}
+                Organising a <b>{{post.sporttype}}</b> event for <b>Hiring Players</b> on <b>{{post.eventdate}}</b><br>
+                Interested plyers are requested to reach at {{post.eventvenue || "our club ground"}} 
             </ion-card-content>
-            <ion-row>          
+            <object data="../../assets/img/404.png" type="image/jpg" style="width: 100%;">
                 <img [src]="post.imageurl" *ngIf="post.imageurl" style="height: 100%; width: 100%;">
                 <div *ngIf="!post.imageurl" style="height: 200px;width: 100%;"></div>
-            </ion-row>
+            </object>
             <ion-card-content color="white" *ngIf="post.honestarea">
                 {{post.honestarea}}
             </ion-card-content>
@@ -208,7 +208,7 @@
         <ion-card *ngIf="post.posttype == 'image'" color="card">
 
             <div *ngIf="postmoreclicked[i]" class="morediv">
-                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                <ion-item (click)="removepost(i,post)" class="moreitem">
                     <ion-icon name="close-circle"></ion-icon>
                     Remove it
                 </ion-item>
@@ -228,12 +228,13 @@
             <ion-card-content color="white">
                 {{post.title}}
             </ion-card-content>
-            <ion-row>                
-                <img [src] ="post.imageurl" *ngIf="post.imageurl" style="height: 100%; width: 100%">
-                <video width="100%" height="200px" autoplay *ngIf="post.videourl" controls>
-                    <!-- <source [src]="post.videourl" type="video/mp4"> -->
+            <object data="../../assets/img/404.png" type="image/jpg" style="width: 100%;">
+                <img [src]="post.imageurl" *ngIf="post.imageurl" style="height: 100%; width: 100%;">
+                <div *ngIf="!post.imageurl" style="height: 200px;width: 100%;"></div>
+                <video width="100%" height="100%px" *ngIf="post.videourl" controls>
+                    <source [src]="post.videourl" type="video/mp4">
                 </video>
-            </ion-row>
+            </object>
             
             <ion-row style="height: 25px;margin: inherit;text-align: center;margin-top:35px">
                 <ion-col col-1 style="padding: 4px; height: 100%">
@@ -290,7 +291,7 @@
         <ion-card *ngIf="post.posttype == 'youtube'" color="card">
 
             <div *ngIf="postmoreclicked[i]" class="morediv">
-                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                <ion-item (click)="removepost(i,post)" class="moreitem">
                     <ion-icon name="close-circle"></ion-icon>
                     Remove it
                 </ion-item>
@@ -369,7 +370,7 @@
         <ion-card *ngIf="post.posttype == 'score' && post.sporttype == 'cricket' && post.crickettype == 'odi'" color="card">
 
             <div *ngIf="postmoreclicked[i]" class="morediv">
-                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                <ion-item (click)="removepost(i,post)" class="moreitem">
                     <ion-icon name="close-circle"></ion-icon>
                     Remove it
                 </ion-item>
@@ -488,7 +489,7 @@
         <ion-card *ngIf="post.posttype == 'score' && post.sporttype == 'cricket' && post.crickettype == 'test'" color="card">
 
             <div *ngIf="postmoreclicked[i]" class="morediv">
-                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                <ion-item (click)="removepost(i,post)" class="moreitem">
                     <ion-icon name="close-circle"></ion-icon>
                     Remove it
                 </ion-item>
@@ -582,7 +583,7 @@
         <ion-card *ngIf="post.posttype == 'score' && post.sporttype == 'football'" color="card">
 
             <div *ngIf="postmoreclicked[i]" class="morediv">
-                <ion-item (click)="removepost(post.userId,post.$key,i)" class="moreitem">
+                <ion-item (click)="removepost(i,post)" class="moreitem">
                     <ion-icon name="close-circle"></ion-icon>
                     Remove it
                 </ion-item>
