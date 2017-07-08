@@ -134,4 +134,37 @@ page-home {
     font-size:1.2rem;font-weight:500;
     }
 
+    .likecol{
+        text-align: center;
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+    .likeitem {
+        margin-right: 0px;
+    }
+    .likecol5 {
+        margin: auto;
+        text-align: left;
+    }
+    .iconclass {
+        border:2px solid yellow;
+        border-radius: 50%;
+        background-color: #FF9800;
+        color:white;
+        font-size: .9em;
+        padding: 2px;
+    }
+
+    .resultcard {
+        background-color: #424242;
+        color: yellow;
+    }
+    .extratalk {
+        height: 80px;
+        font-weight: 400;
+        text-align: center;
+        text-transform: capitalize;
+        padding-top: 50px;
+        font-size: 1.3em;
+    }
 }

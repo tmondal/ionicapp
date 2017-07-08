@@ -7,10 +7,10 @@ import { AngularFire } from 'angularfire2';
 
 @IonicPage()
 @Component({
-  selector: 'page-matchresult',
-  templateUrl: 'matchresult.html',
+  selector: 'page-editresult',
+  templateUrl: 'editresult.html',
 })
-export class Matchresult implements OnInit{
+export class Editresult implements OnInit{
 
 	league: any;
 	userid: any;

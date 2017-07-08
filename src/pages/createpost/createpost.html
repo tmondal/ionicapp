@@ -24,6 +24,10 @@
 			    </ion-select>
 			</ion-item>
 		</ion-card>
+		<ion-item style="color:#2196F3" *ngIf="posttype == 'result'">
+			For now you have to write a sentence about the result<br><br>
+			In later update we will make it interactive :)
+		</ion-item>
 		<ion-card color="card" *ngIf = "(posttype != 'image') && (posttype != 'youtube') ">
 			<ion-item>
 				<ion-label> Sport Type: </ion-label>
@@ -37,7 +41,7 @@
 			    </ion-select>
 			</ion-item>
 		</ion-card>
-		<ion-card color="card" *ngIf="posttype == 'score' && sporttype == 'cricket'">
+		<ion-card color="card" *ngIf="(posttype == 'score' || posttype == 'result') && sporttype == 'cricket'">
 			<ion-item>
 				<ion-label>Cricket Type: </ion-label>
 				<ion-select [(ngModel)]="cricket">
@@ -81,25 +85,7 @@
 						</ion-row>
 					</ion-item>
 				</ion-card>
-
-				<ion-card color="card">					
-					<ion-row>
-						<ion-col col-4 class="colfour">
-							<ion-label class="postlabel">Entry Fee:</ion-label>
-						</ion-col>
-						<ion-col>
-							<ion-input class="datainput" [(ngModel)]="entryfee" placeholder="Default : 0"></ion-input>
-						</ion-col>
-					</ion-row>					
-					<ion-row>
-						<ion-col col-4 class="colfour">
-							<ion-label class="postlabel">1st Prize:</ion-label>
-						</ion-col>
-						<ion-col>
-							<ion-input class="datainput" [(ngModel)]="prize" placeholder="Default : 0"></ion-input>
-						</ion-col>
-					</ion-row>
-				</ion-card>
+				
 				<ion-card color="card">
 					<ion-card-header color="yellow">How happy for the event</ion-card-header>
 					<ion-card-content>
@@ -336,62 +322,12 @@
 
 			<!-- Match result post starts -->
 			<div *ngSwitchCase = "'result'">			
-
 				<div [ngSwitch] = "sporttype">
-
 					<div *ngSwitchCase = "'football'">
-						<ion-card color="card">
+						<!-- <ion-card color="card">
 							<ion-row>
 								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team/Player one name</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tpone" placeholder="Enter name of team/player one"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
-						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team/Player one score</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tponescore" placeholder="Enter score of team/player one"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
-						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team/Player two name</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tptwo" placeholder="Enter name of team/player two"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
-						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team/Player two score</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tptwoscore" placeholder="Enter name of team/player two"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
-						<ion-card color="card">
-							<ion-card-header>About the result</ion-card-header>
-							<ion-card-content>
-								<ion-input class="datainput" [(ngModel)]="extratalk" placeholder="Important moments of the match"></ion-input>
-							</ion-card-content>
-						</ion-card>
-					</div>
-					<div *ngSwitchCase = "'cricket'">
-						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team1 name</ion-label>
+									<ion-label class="postlabel">Team one name</ion-label>
 								</ion-col>
 								<ion-col>
 									<ion-input class="datainput" [(ngModel)]="tpone" placeholder="Enter name of team one"></ion-input>
@@ -401,7 +337,7 @@
 						<ion-card color="card">
 							<ion-row>
 								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team1 run scored</ion-label>
+									<ion-label class="postlabel">Team one scored</ion-label>
 								</ion-col>
 								<ion-col>
 									<ion-input class="datainput" [(ngModel)]="tponescore" placeholder="Enter score of team one"></ion-input>
@@ -411,17 +347,7 @@
 						<ion-card color="card">
 							<ion-row>
 								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team1 wicket lost</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tponewicket" placeholder="Team one wicket lost"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
-						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team2 name</ion-label>
+									<ion-label class="postlabel">Team two name</ion-label>
 								</ion-col>
 								<ion-col>
 									<ion-input class="datainput" [(ngModel)]="tptwo" placeholder="Enter name of team two"></ion-input>
@@ -431,98 +357,121 @@
 						<ion-card color="card">
 							<ion-row>
 								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team2 run scored</ion-label>
+									<ion-label class="postlabel">Team two scored</ion-label>
 								</ion-col>
 								<ion-col>
 									<ion-input class="datainput" [(ngModel)]="tptwoscore" placeholder="Enter name of team two"></ion-input>
 								</ion-col>
 							</ion-row>
-						</ion-card>
+						</ion-card> -->
+						
 						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team2 wicket lost</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tptwowicket" placeholder="Team two wicket lost"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
-						<ion-card color="card">
-							<ion-card-header >About the result</ion-card-header>
+							<ion-card-header>Football result</ion-card-header>
 							<ion-card-content>
-								<ion-input class="datainput" [(ngModel)]="extratalk" placeholder="Important moments of the match"></ion-input>
+								<ion-textarea class="datainput" [(ngModel)]="extratalk" placeholder="Example: Team 1 wins over Team 2 by 4:3 goals"></ion-textarea>
 							</ion-card-content>
+						</ion-card>
+						<ion-card color="card">
+							<button class="post-button" (click)="matchresultSubmit()" ion-button full>Post</button>
+						</ion-card>
+						<ion-card color="card">
+							<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
 						</ion-card>
 					</div>
+					<div *ngSwitchCase = "'cricket'">
+						<div [ngSwitch]="cricket">
+							<!-- Get ODI result information -->
+							<div *ngSwitchCase ="'odi'" >								
+								<ion-card color="card">
+									<ion-card-header >ODI result</ion-card-header>
+									<ion-card-content>
+										<ion-textarea class="datainput" [(ngModel)]="extratalk" placeholder="Example: Team 1 thrashed Team 2 by 7 wickets"></ion-textarea>
+									</ion-card-content>
+								</ion-card>
+								<ion-card color="card">
+									<button class="post-button" (click)="matchresultSubmit()" ion-button full>Post</button>
+								</ion-card>
+								<ion-card color="card">
+									<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
+								</ion-card>
+							</div>
+							<!-- Get TEST result information -->
+							<div *ngSwitchCase = "'test'">
+								<ion-card color="card">
+									<ion-card-header >Test result</ion-card-header>
+									<ion-card-content>
+										<ion-textarea class="datainput" [(ngModel)]="extratalk" placeholder="Example: Team 1 wins by an Innings and 100 runs"></ion-textarea>
+									</ion-card-content>
+								</ion-card>
+								<ion-card color="card">
+									<button class="post-button" (click)="matchresultSubmit()" ion-button full>Post</button>
+								</ion-card>
+								<ion-card color="card">
+									<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
+								</ion-card>
+							</div>							
+						</div>
+					</div>
 					<div *ngSwitchCase = "'hokey'">
-						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team1 name</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tpone" placeholder="Enter name of team one"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
-						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team1 score</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tponescore" placeholder="Enter score of team one"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
-						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team2 name</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tptwo" placeholder="Enter name of team two"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
-						<ion-card color="card">
-							<ion-row>
-								<ion-col col-4 class="colfour">
-									<ion-label class="postlabel">Team2 score</ion-label>
-								</ion-col>
-								<ion-col>
-									<ion-input class="datainput" [(ngModel)]="tptwoscore" placeholder="Enter score of team two"></ion-input>
-								</ion-col>
-							</ion-row>
-						</ion-card>
+						
 						<ion-card color="card">					
-							<ion-card-header>About the result</ion-card-header>
+							<ion-card-header>Hokey result</ion-card-header>
 							<ion-card-content>
-								<ion-input class="datainput" [(ngModel)]="extratalk" placeholder="Important moments of the match"></ion-input>
+								<ion-textarea class="datainput" [(ngModel)]="extratalk" placeholder="Example: Team 1 beats Team 2 by 4 : 2 goals"></ion-textarea>
 							</ion-card-content>
+						</ion-card>
+						<ion-card color="card">
+							<button class="post-button" (click)="matchresultSubmit()" ion-button full>Post</button>
+						</ion-card>
+						<ion-card color="card">
+							<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
 						</ion-card>
 					</div>
 					<div *ngSwitchCase = "'badminton'">
-
+						<ion-card color="card">					
+							<ion-card-header>Badminton result</ion-card-header>
+							<ion-card-content>
+								<ion-textarea class="datainput" [(ngModel)]="extratalk" placeholder="Example: Player 1 beats Player 2 by stright sets"></ion-textarea>
+							</ion-card-content>
+						</ion-card>
+						<ion-card color="card">
+							<button class="post-button" (click)="matchresultSubmit()" ion-button full>Post</button>
+						</ion-card>
+						<ion-card color="card">
+							<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
+						</ion-card>
 					</div>
-					<div *ngSwitchCase = "'tenis'">					
+					<div *ngSwitchCase = "'tenis'">
+						<ion-card color="card">					
+							<ion-card-header>Tenis result</ion-card-header>
+							<ion-card-content>
+								<ion-textarea class="datainput" [(ngModel)]="extratalk" placeholder="Example: Player1 beats Player2 after 1 hour 20 min play"></ion-textarea>
+							</ion-card-content>
+						</ion-card>
+						<ion-card color="card">
+							<button class="post-button" (click)="matchresultSubmit()" ion-button full>Post</button>
+						</ion-card>
+						<ion-card color="card">
+							<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
+						</ion-card>					
 					</div>
-					<div *ngSwitchCase = "'tabletenis'">					
+					<div *ngSwitchCase = "'tabletenis'">
+						<ion-card color="card">					
+							<ion-card-header>Table Tenis result</ion-card-header>
+							<ion-card-content>
+								<ion-textarea class="datainput" [(ngModel)]="extratalk" placeholder="Example: Player 1 beats Player 2 with ease"></ion-textarea>
+							</ion-card-content>
+						</ion-card>
+						<ion-card color="card">
+							<button class="post-button" (click)="matchresultSubmit()" ion-button full>Post</button>
+						</ion-card>
+						<ion-card color="card">
+							<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
+						</ion-card>					
 					</div>
 				</div>
-
-
-
-				<ion-card color="card">
-					<button class="post-button" (click)="resultSubmit()" ion-button full>Post</button>
-				</ion-card>
-				<ion-card color="card">
-					<button ion-button color="danger" full clear (click)="onDismiss()">Cancel</button>
-				</ion-card>
 			</div>
-			<!-- Match result post ends -->
-			
+			<!-- Match result post ends -->			
 		</div>
 	</ion-list>
 </ion-content>

@@ -36,8 +36,6 @@ export class Createpost implements OnInit{
 	eventdate: any;
 	eventvenue: any = null;
 	participating: Number = 0;
-	entryfee: any;
-	prize: any;
 	centuarea: any;
 	rules: String[] = [];
 	rule: String;
@@ -69,12 +67,6 @@ export class Createpost implements OnInit{
 	newstr: any;
 	
 	// result variables
-	tpone: any;
-	tponescore: any;
-	tponewicket: any;
-	tptwo: any;
-	tptwoscore: any;
-	tptwowicket: any;
 	extratalk: any;
 
 
@@ -99,7 +91,11 @@ export class Createpost implements OnInit{
 			this.currentuserId = user.$key;
 			this.userimage = user.profileimage;
 			this.username = user.name;
+			if (!this.userimage || !this.username) {
+				alert("You must update profile before writing any Post");
+			}
 		});
+
 	}
 
 	onDismiss(){
@@ -228,63 +224,32 @@ export class Createpost implements OnInit{
 		let post = {
 			created_at: Date.now(),
 			userId: this.currentuserId,
-			userimage: this.userimage,
-			username: this.username,
 			posttype: this.posttype,
 			sporttype: this.sporttype,
 			eventdate: evtdate,
 			eventvenue: this.eventvenue,
-			entryfee: this.entryfee | 0,
-			prize: this.prize | 0,
 			participating: this.participating,
 			centuarea: this.centuarea | 0,
 			rules: this.rules
 		}
-		if(this.posttype && this.sporttype && this.eventdate && this.userimage &&this.username && this.rules) {
-			this.viewCtrl.dismiss();
-			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.cameraimagedata);
-			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.galleryimagedata);
-			}else{
-				this.postservice.cameraimagePost(post,null);
+		if (this.userimage && this.username) {
+			
+			if(this.posttype && this.sporttype && this.eventdate && this.rules) {
+				this.viewCtrl.dismiss();
+				if (this.imagetaken && !this.galleryimage) {
+					this.postservice.cameraimagePost(post,this.cameraimagedata);
+				}else if (this.galleryimage && !this.imagetaken) {
+					this.postservice.cameraimagePost(post,this.galleryimagedata);
+				}else{
+					this.postservice.cameraimagePost(post,null);
+				}
 			}
-		}
-		else if(this.posttype && this.sporttype && this.eventdate && !this.userimage &&this.username && this.rules){
-			alert("Please edit profile picture before next post.");
-			this.viewCtrl.dismiss();
-			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.cameraimagedata);
-			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.galleryimagedata);
-			}else{
-				this.postservice.cameraimagePost(post,null);
-			}
-		}
-		else if(this.posttype && this.sporttype && this.eventdate && this.userimage && !this.username && this.rules) {
-			alert("Please edit your name before next post.");
-			this.viewCtrl.dismiss();
-			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.cameraimagedata);
-			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.galleryimagedata);
-			}else{
-				this.postservice.cameraimagePost(post,null);
-			}
-		}
-		else if(this.posttype && this.sporttype && this.eventdate && !this.userimage && !this.username && this.rules) {
-			alert("Please edit your name and profile pic before next post.");
-			this.viewCtrl.dismiss();
-			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.cameraimagedata);
-			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.galleryimagedata);
-			}else{
-				this.postservice.cameraimagePost(post,null);
+			else{
+				alert("Please give all fields.\nYou may skip rules");
 			}
 		}
 		else{
-			alert("Please give all fields.");
+			alert("You must edit profile before doing anything\nSee top right corner of Home and follow icons");
 		}
 	}
 
@@ -295,8 +260,6 @@ export class Createpost implements OnInit{
 		let post = {
 			created_at: Date.now(),
 			userId: this.currentuserId,
-			userimage: this.userimage,
-			username: this.username,
 			posttype: this.posttype,
 			sporttype: this.sporttype,
 			eventdate: evtdate,
@@ -305,50 +268,25 @@ export class Createpost implements OnInit{
 			criteria: this.criteria,
 			participating: this.participating
 		}
-		if(this.posttype && this.sporttype && this.eventdate && this.userimage && this.username && this.criteria) {
-			this.viewCtrl.dismiss();
-			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.cameraimagedata);
-			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.galleryimagedata);
-			}else{
-				this.postservice.cameraimagePost(post,null);
+
+		if (this.userimage && this.username) {
+			
+			if(this.posttype && this.sporttype && this.eventdate && this.criteria) {
+				this.viewCtrl.dismiss();
+				if (this.imagetaken && !this.galleryimage) {
+					this.postservice.cameraimagePost(post,this.cameraimagedata);
+				}else if (this.galleryimage && !this.imagetaken) {
+					this.postservice.cameraimagePost(post,this.galleryimagedata);
+				}else{
+					this.postservice.cameraimagePost(post,null);
+				}
 			}
-		}else if (this.posttype && this.sporttype && this.eventdate && !this.userimage && this.username && this.criteria) {
-			alert("Please edit profile picture before next post.");
-			this.viewCtrl.dismiss();
-			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.cameraimagedata);
-			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.galleryimagedata);
-			}else{
-				this.postservice.cameraimagePost(post,null);
-			}
-		}
-		else if (this.posttype && this.sporttype && this.eventdate && this.userimage && !this.username && this.criteria) {
-			alert("Please edit your name before next post.");
-			this.viewCtrl.dismiss();
-			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.cameraimagedata);
-			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.galleryimagedata);
-			}else{
-				this.postservice.cameraimagePost(post,null);
-			}
-		}
-		else if (this.posttype && this.sporttype && this.eventdate && !this.userimage && !this.username && this.criteria) {
-			alert("Please edit your name and profile pic before next post.");
-			this.viewCtrl.dismiss();
-			if (this.imagetaken && !this.galleryimage) {
-				this.postservice.cameraimagePost(post,this.cameraimagedata);
-			}else if (this.galleryimage && !this.imagetaken) {
-				this.postservice.cameraimagePost(post,this.galleryimagedata);
-			}else{
-				this.postservice.cameraimagePost(post,null);
+			else{
+				alert("Please supply all fields");
 			}
 		}
 		else{
-			alert("Please supply all fields");
+			alert("You must edit profile before doing anything\nSee top right corner of Home and follow icons");
 		}
 	}
 
@@ -358,29 +296,29 @@ export class Createpost implements OnInit{
 		let post = {
 			created_at: Date.now(),
 			userId: this.currentuserId,
-			userimage: this.userimage,
-			username: this.username,
 			posttype: this.posttype,
 			title: this.imagetitle,
-			likes: this.likes,
-			dislikes: this.dislikes,
-			comments: this.comments
 		}
-		if (this.imagetaken && !this.galleryimage && !this.galleryvideo) {
-			alert("You captured an image using camera.");
-			this.viewCtrl.dismiss();
-			this.postservice.cameraimagePost(post,this.cameraimagedata);
-		}else if (this.galleryimage && !this.imagetaken && !this.galleryvideo) {
-			alert("You selected an image from gallery.");
-			this.viewCtrl.dismiss();
-			this.postservice.cameraimagePost(post,this.galleryimagedata);
-		}else if (this.galleryvideo && !this.imagetaken && !this.galleryimage) {
-			alert("You selected a video from gallery.");
-			this.viewCtrl.dismiss();
-			this.postservice.galleryvideoPost(post,this.galleryvideodata);
+		if (this.userimage && this.username) {			
+			if (this.imagetaken && !this.galleryimage && !this.galleryvideo) {
+				alert("You captured an image using camera.");
+				this.viewCtrl.dismiss();
+				this.postservice.cameraimagePost(post,this.cameraimagedata);
+			}else if (this.galleryimage && !this.imagetaken && !this.galleryvideo) {
+				alert("You selected an image from gallery.");
+				this.viewCtrl.dismiss();
+				this.postservice.cameraimagePost(post,this.galleryimagedata);
+			}else if (this.galleryvideo && !this.imagetaken && !this.galleryimage) {
+				alert("You selected a video from gallery.");
+				this.viewCtrl.dismiss();
+				this.postservice.galleryvideoPost(post,this.galleryvideodata);
+			}
+			else{
+				alert("You must select one option among all options..");
+			}
 		}
 		else{
-			alert("You must select one option among all options..");
+			alert("You must edit profile before doing anything\nSee top right corner of Home and follow icons");
 		}
 	}
 
@@ -390,26 +328,26 @@ export class Createpost implements OnInit{
 		let post = {
 			created_at: Date.now(),
 			userId: this.currentuserId,
-			userimage: this.userimage,
-			username: this.username,
 			posttype: this.posttype,
 			youtubelink: this.youtubelink,
 			title: this.youtubetitle,
-			likes: this.likes,
-			dislikes: this.dislikes,
-			comments: this.comments
 		}
-		if (this.youtubelink && this.youtubetitle) {
-			this.postservice.simplePost(post);
-			this.viewCtrl.dismiss();
-		}else if (this.youtubelink && !this.youtubetitle) {
-			alert("Proper title attract users to see the video.");
-			this.postservice.simplePost(post);
-			this.viewCtrl.dismiss();
-		}else if (!this.youtubelink && this.youtubetitle) {
-			alert("You must give a appropriate youtube link. ");
-		}else{
-			alert("Please provide all fields.");
+		if (this.userimage && this.username) {			
+			if (this.youtubelink && this.youtubetitle) {
+				this.postservice.simplePost(post);
+				this.viewCtrl.dismiss();
+			}else if (this.youtubelink && !this.youtubetitle) {
+				alert("Proper title attract users to see the video.");
+				this.postservice.simplePost(post);
+				this.viewCtrl.dismiss();
+			}else if (!this.youtubelink && this.youtubetitle) {
+				alert("You must give a appropriate youtube link. ");
+			}else{
+				alert("Please provide all fields.");
+			}
+		}
+		else{
+			alert("You must edit profile before doing anything\nSee top right corner of Home and follow icons");
 		}
 
 	}
@@ -426,4 +364,31 @@ export class Createpost implements OnInit{
 	    	this.youtubelink = 'https://www.youtube.com/embed' + this.newstr;
 		}
   	}
+
+  	matchresultSubmit(){
+  		
+		let post = {
+			created_at: Date.now(),
+			userId: this.currentuserId,
+			posttype: this.posttype,
+			sporttype: this.sporttype,
+			extratalk: this.extratalk,
+		}
+		
+		if (this.userimage && this.username) {
+			if (this.extratalk) {				
+				this.postservice.simplePost(post);
+				this.viewCtrl.dismiss();
+			}
+			else{
+				alert("Please write about the match result");
+			}
+		}
+		else{
+			alert("You must edit profile before doing anything\nSee top right corner of Home and follow icons");
+		}
+		
+  	}
+
+
 }

@@ -54,10 +54,10 @@ export class Signup {
 			this.authservice.signupUser(this.signupform.value.email, this.signupform.value.password,this.usertype).then(() =>{
 				this.loading.dismiss().then(()=>{
 					this.authservice.getmyprofile().subscribe(me =>{
-						if (me.guideseen) {							
-							this.navCtrl.setRoot('Home');
-						}else{
+						if (!me.guideseen) {							
 							this.navCtrl.setRoot('Guide');
+						}else{
+							this.navCtrl.setRoot('Home');
 						}
 					})
 				});

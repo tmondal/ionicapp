@@ -56,7 +56,10 @@ export class Userprofile implements OnInit{
 		public postservice: PostService,
 		public elementRef: ElementRef,
 		public renderer: Renderer
-	) {}
+	) {
+
+		this.userId = this.navParams.get("userId");
+	}
 	
 	ngOnInit(){
 		this.af.auth.subscribe(user=>{
@@ -64,7 +67,6 @@ export class Userprofile implements OnInit{
 				this.authuid = user.auth.uid;				
 			}
 		});
-		this.userId = this.navParams.get("userId");
 
 		this.getfollowers = this.authservice.getFollowers(this.userId).subscribe(users=>{
 			this.countfollowers = users.length;
@@ -94,10 +96,21 @@ export class Userprofile implements OnInit{
 		});
 		this.postservice.getFeedbyId(this.userId).subscribe(posts =>{
 			this.myposts = posts;
-			for (let i = 0; i <= this.myposts.length-1; i++) {
+			this.myposts.reverse();
+			let length = this.myposts.length - 1;
+			for (let i = 0; i <= length; i++) {
         		this.posttime[i] = moment(this.myposts[i].created_at).fromNow();
       		}
-		})
+      		// get username and profileimage for each post
+			for (let i = 0; i <= length; i++) {
+				this.authservice.getuserbyId(this.myposts[i].userId).subscribe(user=>{
+				  if (user) {            
+				    this.myposts[i].username = user.name;
+				    this.myposts[i].userimage = user.profileimage;
+				  }
+				});
+			}
+		});
 	}
 	
 	ngOnDestroy(){

@@ -39,6 +39,6 @@ export class Manageleague implements OnInit{
 		this.navCtrl.push("Editleague",{league: this.leagues[i]});
 	}
 	editResults(i){
-		this.navCtrl.push("Matchresult",{league: this.leagues[i]});
+		this.navCtrl.push("Editresult",{league: this.leagues[i]});
 	}
 }

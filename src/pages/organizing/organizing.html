@@ -19,9 +19,9 @@
 		</ion-card-content>
 	</ion-card>
 
-    <div color="card">
-        <ion-label color="primary"> Your organized events</ion-label>
-    </div>
+    <ion-item color="card">
+        <ion-label color="yellow"> Your organized events</ion-label>
+    </ion-item>
 	<ion-list *ngFor="let post of organizing,let i = index">
 		<ion-card *ngIf="post.posttype == 'tournament'" color="card">
             
@@ -32,7 +32,7 @@
                 <h2>{{post.username || "Forgot to edit name"}}</h2>
                 <p>
                     <ion-icon name="time" color="#d2d2d2"></ion-icon>
-                    <!-- <span color="red">{{posttime[i]}}</span> -->
+                    <span>{{post.created_at}}</span>
                 </p>
             </ion-item>
 
@@ -60,7 +60,7 @@
 
                 <ion-col center text-center>
                     <button color="yellow" ion-button block outline icon-right class="gobutton">
-                        You can't see rules now
+                        You can't see rules here
                         <ion-icon name="happy"></ion-icon>
                     </button>
                 </ion-col>
@@ -75,7 +75,7 @@
                 <h2>{{post.username || "Forgot to edit name"}}</h2>
                 <p>
                     <ion-icon name="time" color="#d2d2d2"></ion-icon>
-                    <!-- <span>{{posttime[i]}}</span> -->
+                    <span>{{posttime[i]}}</span>
                 </p>
             </ion-item>
             <ion-card-content color="white">
@@ -102,7 +102,7 @@
 
                 <ion-col center text-center>
                     <button color="yellow" ion-button block outline icon-right class="gobutton">
-                        You can't see rules now
+                        You can't see rules here
                         <ion-icon name="happy"></ion-icon>
                     </button>
                 </ion-col>

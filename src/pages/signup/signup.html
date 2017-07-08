@@ -11,14 +11,19 @@
 <ion-content padding class="signup">
 	<ion-card color="card">
 	    <ion-item>
-			<ion-label color="yellow"> SignUp As: </ion-label>
+			<ion-label color="yellow"> Signup as a </ion-label>
 			<ion-select [(ngModel)]="usertype">
 		      <ion-option value="club">Club</ion-option>
 		      <ion-option value="player">Player</ion-option>
 		    </ion-select>
 		</ion-item>
 	</ion-card>
-	
+	<ion-row *ngIf="usertype == 'player'">
+		<ion-item style="color:#2196F3">
+			We recommend : <b>Signup as a Club</b><br><br>
+			A club can do many things than a player :)
+		</ion-item>
+	</ion-row>
 	<form [formGroup]="signupform" (ngSubmit)="oncreateUser()" novalidate>		
 		<ion-card *ngIf="usertype == 'player'" color="card">
 		    <ion-item>

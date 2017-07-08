@@ -13,6 +13,8 @@ import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
 import { AngularFire } from 'angularfire2';
 import * as moment from 'moment';
+import { Geolocation } from '@ionic-native/geolocation';
+
 import {
   trigger,
   state,
@@ -35,7 +37,7 @@ import {
         transform: 'scale(1)'
       })),
       state('ltrue',style({
-        color: '#e040fb',
+        color: '#2196F3',
         transform: 'scale(1)'
       })),
       transition('lfalse <=> ltrue',animate('1000ms ease-in',keyframes([
@@ -80,6 +82,7 @@ export class Home implements OnInit{
   usertype: any;
   lattitude: any = null;
   longitude: any = null;
+  guideseen: boolean;
 
   posts: any[] = [];
   posttime: any[] = [];
@@ -96,6 +99,7 @@ export class Home implements OnInit{
   likedislikeservice: any;
   feedsubscription: any;
   noofcommentservice:any;
+  distance: any[] = [];
   
   start = 0;
   threshold = 100;
@@ -114,18 +118,26 @@ export class Home implements OnInit{
       public myElement: ElementRef,
       private postservice: PostService,
       public authservice: AuthService,
-      private af: AngularFire
+      private af: AngularFire,
+      public geolocation: Geolocation,
   ) {
-    af.auth.subscribe(user=>{
-        if(user) {
-          this.authuid = user.auth.uid;
-        }
-    });
     this.showheader = true;
     this.hideheader = false;
   }
 
   ngOnInit(){
+
+    this.af.auth.subscribe(user=>{
+        if(user) {
+          this.authuid = user.auth.uid;
+        }
+    });
+    this.geolocation.getCurrentPosition().then((pos)=>{
+      this.af.database.object('/users/'+this.authuid).update({
+        lattitude: pos.coords.latitude,
+        longitude: pos.coords.longitude
+      });
+    });
 
     // Ionic scroll element
     this.scrollcontent = this.myElement.nativeElement.getElementsByClassName('scroll-content')[0];
@@ -171,7 +183,7 @@ export class Home implements OnInit{
       this.profileimage = user.profileimage;
       this.lattitude = user.lattitude;
       this.longitude = user.longitude;
-
+      this.guideseen = user.guideseen;
     });
 
   }
@@ -189,9 +201,23 @@ export class Home implements OnInit{
   doRefresh(refresher) {
       this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
       this.length = feed.length - 1;
+      
+      if (this.length <= -1 && this.guideseen) {
+        alert("Looks like you are new here\nNo problem. First follow some club\nThen create new post\n");
+      }
+      
       feed.reverse();
       this.posts = feed;
 
+      // get username and profileimage for each post
+      for (let i = 0; i <= this.posts.length - 1; i++) {
+        this.authservice.getuserbyId(this.posts[i].userId).subscribe(user=>{
+          if (user) {            
+            this.posts[i].username = user.name;
+            this.posts[i].userimage = user.profileimage;
+          }
+        })
+      }
       // Format created_at time 
 
       for (let i = 0; i <= this.length; i++) {
@@ -201,7 +227,7 @@ export class Home implements OnInit{
       // Get liked disliked by current user
 
       for (let i = 0; i <= this.length; i++) {
-        this.postservice.getLikedDisliked(this.posts[i].$key).take(1).subscribe(user=>{
+        this.postservice.getLikedDisliked(this.posts[i].$key).subscribe(user=>{
           if(user.liked == undefined) {
             this.liked[i] = false;
           }else{
@@ -219,7 +245,7 @@ export class Home implements OnInit{
       // count no of likes,dislikes and comments of corresponding posts
       for (let i = 0; i <= this.length; i++) {
 
-        this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1)
+        this.postservice.countLikesDislikesComments(this.posts[i].$key)
           .subscribe(post =>{
             if (post.likes != undefined) {            
               this.nooflikes[i] = post.likes; 
@@ -238,6 +264,22 @@ export class Home implements OnInit{
             }
         });
       }
+
+      // calculate distance 
+      for (let i = 0; i <= this.posts.length - 1; i++) {
+        this.distance[i] = 0;
+        if (this.posts[i].posttype == 'tournament' || this.posts[i].posttype == 'hiring') {
+          this.authservice.getuserbyId(this.posts[i].userId).subscribe(user=>{
+            let lat = user.lattitude;
+            let lng = user.longitude;
+            if (lat && lng && this.lattitude && this.longitude) {              
+              let dist = this.calculateDistance(lat,lng);
+              this.distance[i] = dist.toFixed(2);
+            }
+          })
+        }
+      }
+
     });
 
     if (refresher != 1) {
@@ -246,6 +288,21 @@ export class Home implements OnInit{
         refresher.complete();
       }, 500);
     }
+  }
+
+  calculateDistance(lat: any, lng: any){
+    let radlat1 = Math.PI * this.lattitude/180;
+    let radlat2 = Math.PI * lat/180;
+    let theta = this.longitude-lng;
+    let radtheta = Math.PI * theta/180;
+    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    dist = Math.acos(dist);
+    dist = dist * 180/Math.PI;
+    dist = dist * 60 * 1.1515;
+
+    // convert to km
+    dist = dist * 1.609344; 
+    return dist
   }
 
   follow(i){
@@ -311,7 +368,7 @@ export class Home implements OnInit{
           this.postmoreclicked[i] = false;
           setTimeout(()=>{            
             this.doRefresh(1);
-          },3000)
+          },2000)
         }
       }
     ]
@@ -323,111 +380,127 @@ export class Home implements OnInit{
   likePost(postid,i){
     // First see if previously liked or disliked .As every post does not have this
     // function we get explicitly by postid
-
-    this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
-      if(user.liked === undefined) {
-        this.liked[i] = false;
-      }else{
-        this.liked[i] = user.liked;
-      }
-      if(user.disliked === undefined) {
-        this.disliked[i] = false;
-      }else{
-        this.disliked[i] = user.disliked;
-      }
-
-      this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1).subscribe(post =>{
-          if (post.likes != undefined) {
-            this.nooflikes[i] = post.likes;
-          }else{
-            this.nooflikes[i] = 0;
-          }
-          if (post.dislikes != undefined) {
-            this.noofdislikes[i] = post.dislikes;
-          }else{
-            this.noofdislikes[i] = 0;
-          }
-
-          if(!this.liked[i] && !this.disliked[i]) {
-            this.liked[i] = true;
-            this.nooflikes[i] += 1;
-            this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-            this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-          }else if(!this.liked[i] && this.disliked[i]){
-            this.liked[i] = true;
-            this.disliked[i] = false;
-            this.nooflikes[i] += 1;
-            this.noofdislikes[i] -= 1;
-            this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-            this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-          }else if (this.liked[i]) {
-            alert("Don't press multiple times it hurts server :)");
-          }
-          else{
-            alert("Bad engineer. Can't handle all cases :(");
-          }
-      });
+    if (this.profileimage && this.username) {
       
-    });
+      this.postservice.getLikedDisliked(postid).subscribe(user=>{
+        if(user.liked === undefined) {
+          this.liked[i] = false;
+        }else{
+          this.liked[i] = user.liked;
+        }
+        if(user.disliked === undefined) {
+          this.disliked[i] = false;
+        }else{
+          this.disliked[i] = user.disliked;
+        }
+
+        this.postservice.countLikesDislikesComments(this.posts[i].$key).subscribe(post =>{
+            if (post.likes != undefined) {
+              this.nooflikes[i] = post.likes;
+            }else{
+              this.nooflikes[i] = 0;
+            }
+            if (post.dislikes != undefined) {
+              this.noofdislikes[i] = post.dislikes;
+            }else{
+              this.noofdislikes[i] = 0;
+            }
+
+            if(!this.liked[i] && !this.disliked[i]) {
+              this.liked[i] = true;
+              this.nooflikes[i] += 1;
+              this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
+              this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+            }else if(!this.liked[i] && this.disliked[i]){
+              this.liked[i] = true;
+              this.disliked[i] = false;
+              this.nooflikes[i] += 1;
+              this.noofdislikes[i] -= 1;
+              this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
+              this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+            }else if (this.liked[i]) {
+              alert("Don't press multiple times it hurts server :)");
+            }
+            else{
+              alert("Bad engineer. Can't handle all cases :(");
+            }
+        });
+        
+      });
+    }
+    else{
+      alert("You must edit atleast name and image before liking\nSee top right corner and follow icons");
+    }
   }
 
   dislikePost(postid,i){
-    this.postservice.getLikedDisliked(postid).take(1).subscribe(user=>{
+    if (this.profileimage && this.username) {
       
-      if(user.liked === undefined) {
-        this.liked[i] = false;
-      }else{        
-        this.liked[i] = user.liked;
-      }
-      if(user.disliked === undefined) {
-        this.disliked[i] = false;
-      }else{        
-        this.disliked[i] = user.disliked;
-      }
+      this.postservice.getLikedDisliked(postid).subscribe(user=>{
         
-      this.postservice.countLikesDislikesComments(this.posts[i].$key).take(1).subscribe(post =>{
-          if (post.likes != undefined) {
-            this.nooflikes[i] = post.likes;
-          }else{
-            this.nooflikes[i] = 0;
-          }
-          if (post.dislikes != undefined) {
-            this.noofdislikes[i] = post.dislikes;
-          }else{
-            this.noofdislikes[i] = 0;
-          }
+        if(user.liked === undefined) {
+          this.liked[i] = false;
+        }else{        
+          this.liked[i] = user.liked;
+        }
+        if(user.disliked === undefined) {
+          this.disliked[i] = false;
+        }else{        
+          this.disliked[i] = user.disliked;
+        }
+          
+        this.postservice.countLikesDislikesComments(this.posts[i].$key).subscribe(post =>{
+            if (post.likes != undefined) {
+              this.nooflikes[i] = post.likes;
+            }else{
+              this.nooflikes[i] = 0;
+            }
+            if (post.dislikes != undefined) {
+              this.noofdislikes[i] = post.dislikes;
+            }else{
+              this.noofdislikes[i] = 0;
+            }
 
-          if(!this.disliked[i] && !this.liked[i]) {
-            this.liked[i] = false;
-            this.disliked[i] = true;
-            this.noofdislikes[i] += 1;
-            this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-            this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-          }
-          else if(!this.disliked[i] && this.liked[i] ) {
-            this.liked[i] = false;
-            this.disliked[i] = true;
-            this.nooflikes[i] -=1;
-            this.noofdislikes[i] +=1;
-            this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
-            this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
-          }else if (this.disliked[i]) {
-            alert("No matter how much you hate \n You can press only one time :)");
-          }        
-          else{
-            alert("You seeing this because \n The worst programmer designed it :)");
-          }
+            if(!this.disliked[i] && !this.liked[i]) {
+              this.liked[i] = false;
+              this.disliked[i] = true;
+              this.noofdislikes[i] += 1;
+              this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
+              this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+            }
+            else if(!this.disliked[i] && this.liked[i] ) {
+              this.liked[i] = false;
+              this.disliked[i] = true;
+              this.nooflikes[i] -=1;
+              this.noofdislikes[i] +=1;
+              this.postservice.likeDislikePost(postid,this.liked[i],this.disliked[i]);
+              this.postservice.updateLikesDislikes(postid,this.nooflikes[i],this.noofdislikes[i]);
+            }else if (this.disliked[i]) {
+              alert("No matter how much you hate \n You can press only one time :)");
+            }        
+            else{
+              alert("You seeing this because \n The worst programmer designed it :)");
+            }
+        });
+        
       });
-      
-    });
+    }
+    else{
+      alert("You must edit atleast name and image before disliking\nDon't worry post creator can't see you :)\nSee top right corner and follow icons");
+    }
   }
   commentPost(postid){
-    this.navCtrl.push("Postcomments",{
-      postid: postid,
-      userid: this.authuid,
-      username: this.username,
-      profileimage: this.profileimage
-    });
+    if (this.profileimage && this.username) {      
+      this.navCtrl.push("Postcomments",{
+        postid: postid,
+        userid: this.authuid,
+        username: this.username,
+        profileimage: this.profileimage
+      });
+    }
+    else{
+      alert("You must edit atleast name and image before commenting\nWe show your name and image in the comment\nSee top right corner and follow icons");
+    }
   }
   seeParticipants(postid){
     this.navCtrl.push("Mypost",{

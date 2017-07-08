@@ -79,9 +79,9 @@ export class Postcomments implements OnInit {
 					})
 			}
 			// count all comments
-			this.postservice.countLikesDislikesComments(this.postid).take(1)
+			this.postservice.countLikesDislikesComments(this.postid)
 				.subscribe(post=>{
-					if (post.comments != undefined) {						
+					if (post.comments >= 0) {						
 						this.noofcomment = post.comments;
 					}else{
 						this.noofcomment = 0;

@@ -30,6 +30,7 @@ export class Editprofile implements OnInit{
 	cameraimagedata: any;
 	imagetaken: boolean = false;
 	galleryimage: boolean = false;
+	
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,

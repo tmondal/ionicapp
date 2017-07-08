@@ -56,13 +56,16 @@
 			<button color="yellow" item-right ion-button small (click)="addUsertoTeam(user,i)">Add</button>
 		</ion-item>
 	</ion-list>
+	<ion-item *ngIf="datasearched && !found" style="background: inherit;color: white">
+		No teams name found. Case sensitive :(
+	</ion-item>
 	<ion-card color="card">
 		<ion-card-header color="yellow">Create Fixtures</ion-card-header>
 	</ion-card>
-	<ion-card color="card">
-		<ion-item color="yellow" *ngFor="let fixture of fixtures,let i = index" style="border-bottom: 1px black dotted">
-			<ion-label color="background">{{fixture.teamone}} vs {{fixture.teamtwo}} on {{fixture.eventdate}}</ion-label>
-			<ion-icon item-right color="background" name="trash" (click)="removeFixture(i)" ></ion-icon>
+	<ion-card color="card" *ngIf="fixtures[0]">
+		<ion-item *ngFor="let fixture of fixtures,let i = index" style="border-bottom: 1px black dotted;color: #2196F3;background: inherit">
+			<ion-label *ngIf="fixture.teamone && fixture.teamtwo">{{fixture.teamone}} vs {{fixture.teamtwo}} on {{fixture.eventdate}}</ion-label>
+			<ion-icon item-right name="trash" (click)="removeFixture(i)" *ngIf="fixture.teamone && fixture.teamtwo"></ion-icon>
 		</ion-item>
 	</ion-card>
 	<ion-card color="card">

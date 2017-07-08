@@ -19,7 +19,10 @@ export class Editleague {
 	teams: any[] = [];
 	removedteams: any[] = [];
 	users: any[] = [];
+	datasearched: boolean = false;
+	found: boolean = false;
 	fixtures: any[] = [];
+	removeindices: any[] = [];
 	teamone: any;
 	teamtwo: any;
 	venue: any;
@@ -41,20 +44,24 @@ export class Editleague {
 	}
 
 	removeTeam(i){
+		this.removedteams.push(this.teams[i].id);
+		this.removeFixturebyname(this.teams[i].name); 
 		this.teams.splice(i,1);
-		this.removedteams.push(this.teams[i].id); 
 	}
 	onInput(ev:any){
 		let data = ev.target.value;
 		if (data && data.trim() != '') {
+			this.datasearched = true;
 			this.authservice.getuserbyName(data).subscribe(users =>{
-				if (users) {					
+				if (users.length) {
+					this.found = true;					
 					this.users = users;
 				}else{
-					console.log("No record found");
+					this.found = false;
 				}
 			})
 		}else{
+			this.datasearched = false;
 			this.users = [];
 		}
 	}
@@ -90,13 +97,25 @@ export class Editleague {
 			}
 			this.fixtures.push(fixture);
 		}else{
-			alert('Don\'t be lazy! Just a joke :) \n Please enter all fields.');
+			alert('Don\'t be lazy :) \n Please enter all fields.');
 		}
 	}
 	removeFixture(i){
 		this.fixtures.splice(i,1);
 	}
-
+	removeFixturebyname(name: any){
+		let length = this.fixtures.length;
+		for (let i = 0; i < length; i++) {
+			if (this.fixtures[i].teamone == name || this.fixtures[i].teamtwo == name) {
+				this.fixtures[i] = 0;
+			}
+		}
+		for (let i = 0; i < length; i++) {
+			if (this.fixtures[i] == 0) {				
+				this.fixtures.splice(i,1);
+			}
+		}
+	}
 	updateLeague(){
 		if (!this.leaguename) {
 			alert("League name can't be emppty.");

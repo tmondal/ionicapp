@@ -46,15 +46,15 @@ export class MyApp {
 	    	{ title: 'Home', icon: "home", component: 'Home' },
 	    	{ title: 'Organizing', icon: "bulb",component: 'Organizing' },
 	    	{ title: 'Participating', icon: "walk",component: 'Participating' },
-	    	{ title: 'Create League', icon: "create", component: 'Newleague' },
+	    	{ title: 'Create League', icon: "create", component: 'Createleague' },
 	    	{ title: 'Manage League', icon: "options",component: 'Manageleague'},
-	    	{ title: 'Need Guide ?', icon: "book", component: 'Guide' },
+	    	{ title: 'How to use the app?', icon: "book", component: 'Guide' },
 	  	]
 	  	this.playerpages = [
 	  		{ title: 'Home', icon: "home", component: 'Home' },
 	    	{ title: 'Organizing', icon: "bulb",component: 'Organizing' },
 	    	{ title: 'Participating', icon: "walk",component: 'Participating' },
-	    	{ title: 'How to use ?', icon: "book", component: 'Guide' },	    	
+	    	{ title: 'How to use the app?', icon: "book", component: 'Guide' },	    	
 	  	]
 	}
 	openPage(page){

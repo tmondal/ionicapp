@@ -42,7 +42,6 @@ export class Post implements OnInit {
 	) {
 		this.rules = navParams.get("rules");
 		this.criteria = navParams.get("criteria");
-		this.participating = navParams.get("participating");
 		this.postid = navParams.get("postid");
 		this.userId = navParams.get("userId");
 		this.currentusername = navParams.get("username");
@@ -54,7 +53,10 @@ export class Post implements OnInit {
 		if (!this.currentusername) {
 			alert("Please update profile before accepting challenge so that challenger can contact you :)");
 		}
-		this.participateservice = this.postservice.getParticipated(this.postid).subscribe(user=>{
+		this.postservice.getTotalparticipation(this.postid).subscribe(users=>{
+			this.participating = users.length;
+		})
+		this.participateservice = this.postservice.checkifParticipated(this.postid).subscribe(user=>{
 			this.participated = user.participated;
 		});
 		this.userservice = this.authservice.getuserbyId(this.userId).subscribe((user)=>{
@@ -86,7 +88,7 @@ export class Post implements OnInit {
 		this.participating += 1;
 		if (this.participating > 0) {			
 			this.postservice.updateParticipated(this.postid,this.participated);
-			this.postservice.updateParticipating(this.postid,this.participating);
+			this.postservice.updateParticipating(this.postid,this.userId,this.participating);
 		}
 		this.viewCtrl.dismiss();
 	}
@@ -95,7 +97,7 @@ export class Post implements OnInit {
 		this.participated = false;
 		if (this.participating >= 0) {			
 			this.postservice.removeParticipated(this.postid);
-			this.postservice.updateParticipating(this.postid,this.participating);
+			this.postservice.updateParticipating(this.postid,this.userId,this.participating);
 		}
 	}
 }

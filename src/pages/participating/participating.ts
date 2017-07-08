@@ -62,10 +62,18 @@ export class Participating implements OnInit{
 		});
 
 		this.postservice.getparticipatedPost().subscribe(posts=>{
+			posts.reverse();
 			for (let i = 0;i <= posts.length - 1; i++) {
 				this.postservice.getpostfromFeedbyid(posts[i].$key).subscribe(post=>{
-					this.participating.push(post);
-					this.posttime[i] = moment(post.created_at).fromNow();
+
+					this.authservice.getuserbyId(post.userId).subscribe(user=>{
+						if (user) {
+							post.userimage = user.profileimage;
+							post.username = user.name;
+						}
+						this.participating.push(post);
+						this.posttime[i] = moment(post.created_at).fromNow();
+					})
 				})
 			}
 		})

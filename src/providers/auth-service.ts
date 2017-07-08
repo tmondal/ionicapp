@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import { AngularFire } from 'angularfire2';
 import * as firebase from 'firebase';
-
+import { Geolocation } from '@ionic-native/geolocation';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +23,7 @@ export class AuthService {
       public af: AngularFire,
       public toastCtrl: ToastController,
       public loadingCtrl: LoadingController,
+      public geolocation: Geolocation,
     ) {
 
       af.auth.subscribe(user=>{
@@ -40,9 +41,13 @@ export class AuthService {
         email: email,
         password: password
       }).then(newuser =>{
-        console.log(newuser.uid);
+          
         this.af.database.object('/users/' + newuser.uid)
-          .set({email: email,usertype: usertype,guideseen: false}); 
+          .set({
+            email: email,
+            usertype: usertype,
+            guideseen: false,
+          }); 
       });
     }
     loginUser(email: string ,password: string) : firebase.Promise<any> {
@@ -55,8 +60,7 @@ export class AuthService {
       return this.af.auth.logout();
     }
     getuserbyId(userId){
-      this.profile =  this.af.database.object('/users/' + userId); 
-      return this.profile.take(1);
+      return this.af.database.object('/users/' + userId).take(1); 
     }
     getuserbyName(name){
       return this.af.database.list('/users/',{

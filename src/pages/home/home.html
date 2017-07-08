@@ -101,8 +101,8 @@
                 </ion-avatar>
                 <ion-icon  (click)="onmoreClick(i)" color="yellow" name="more" item-right></ion-icon>
 
-                <h2 (click)="onUsernameClick(post.userId)">
-                    {{post.username || "Forgot to edit name"}}
+                <h2 (click)="onUsernameClick(post.userId)" *ngIf="post.username">
+                    {{post.username}}
                 </h2>
                 <p>
                     <ion-icon name="time" color="#d2d2d2"></ion-icon>
@@ -125,19 +125,19 @@
             </ion-card-content>    
             
             <ion-row *ngIf="post.userId != authuid" style="padding: 5px 0px">
-                <ion-col>
+                <ion-col style="padding-left: 5px">
                     <button color="yellow" ion-button icon-left full clear>
                         <ion-icon name="person"></ion-icon>
                         {{post.participating}} Going
                     </button>
                 </ion-col>
                 <ion-col>
-                    <!-- <button color="yellow" ion-button icon-left full clear>
+                    <button *ngIf="distance[i] != 0" color="yellow" ion-button icon-left full clear>
                         <ion-icon name="car"></ion-icon>
-                        <div>1.4km</div>
-                    </button> -->
+                        <div>{{distance[i]}}&nbsp;Km</div>
+                    </button>
                 </ion-col>
-                <ion-col center text-center>
+                <ion-col center text-center style="padding: 1px">
                     <button color="yellow" ion-button block outline icon-right (click)="onRulesClick(post.rules,post.participating,post.$key,post.userId)">
                         Rules
                         <ion-icon name="arrow-round-forward"></ion-icon>
@@ -160,7 +160,8 @@
                     <img [src]="post.userimage" *ngIf="post.userimage">
                 </ion-avatar>
                 <ion-icon color="yellow" name="more" item-right (click)="onmoreClick(i)"></ion-icon>
-                <h2 (click)="onUsernameClick(post.userId)">{{post.username || "Forgot to edit name"}}</h2>
+                <h2 (click)="onUsernameClick(post.userId)" *ngIf="post.username">
+                {{post.username}}</h2>
 
                 <p>
                     <ion-icon name="time" color="#d2d2d2"></ion-icon>
@@ -182,19 +183,19 @@
                 The trial will be taken on <b>First come first</b> basis if many players wish to participate. So hurry up !!
             </ion-card-content>
             <ion-row *ngIf="post.userId != authuid">
-                <ion-col col-4>
+                <ion-col style="padding-left: 5px">
                     <button color="yellow" ion-button icon-left clear small>
                         <ion-icon name="person"></ion-icon>
                         <div>{{post.participating}} Going</div>
                     </button>
                 </ion-col>
-                <ion-col col-4>
-                    <!-- <button color="yellow" ion-button icon-left clear small>
+                <ion-col >
+                    <button *ngIf="distance[i] != 0" color="yellow" ion-button icon-left clear small>
                         <ion-icon name="car"></ion-icon>
-                        <div>1.4km</div>
-                    </button> -->
+                        <div>{{distance[i]}}&nbsp;Km</div>
+                    </button>
                 </ion-col>
-                <ion-col center text-center col-4>
+                <ion-col center text-center style="padding: 1px">
                     <button color="yellow" ion-button block outline icon-right (click)="onCriteriaClick(post.criteria,post.participating,post.$key,post.userId)">
                         Criteria
                         <ion-icon name="arrow-round-forward"></ion-icon>
@@ -236,32 +237,33 @@
                 </video>
             </object>
             
-            <ion-row style="height: 25px;margin: inherit;text-align: center;margin-top:35px">
-                <ion-col col-1 style="padding: 4px; height: 100%">
-                    <div style="border-radius: 20px;background-color:#ff5722;width: 100%;height: 100%">             
-                        <ion-icon style="padding-bottom: 2px;font-size: .8em" name="thumbs-up" color="white"></ion-icon>
-                    </div>
+            <ion-row style="margin-top: 35px;">
+                <ion-col col-1 class="likecol">
+                    <ion-label class="likeitem">
+                        <ion-icon name="thumbs-up" class="iconclass"></ion-icon>
+                    </ion-label>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> You and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> You liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you liked</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem">1&nbsp;other liked</ion-note>
                 </ion-col>
                 <ion-col col-5 *ngIf="nooflikes[i] == 0 && !liked[i]"></ion-col>
 
-                <ion-col style="text-align: right;padding-top: 2px">
-                    <ion-note color="red" *ngIf="noofdislikes[i] != 0">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
-                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0">{{noofcomments[i]}}&nbsp;Comments</ion-note>
+                <ion-col style="text-align: right;margin: auto">
+                    <ion-note color="red" *ngIf="noofdislikes[i] != 0" class="likeitem">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
+                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0" class="likeitem">{{noofcomments[i]}}&nbsp;Comments</ion-note>
                 </ion-col>
             </ion-row>
+
             <ion-row style="border: 1px solid #3a3a3a; margin: inherit">
                 <ion-col>
                     <div>
-                        <button (click)="likePost(post.$key,i)" style="color:#e040fb" ion-button icon-center full clear class="scorebutton">
+                        <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
                             <ion-icon [@like]="liked[i] == true ? 'ltrue':'lfalse'" style="font-size: 1.3em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
                             &nbsp;
                             <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
@@ -314,32 +316,34 @@
             <div>                
                 <iframe width="100%" height="250" [src]="post.youtubelink | youtube" frameborder="0" allowfullscreen></iframe>
             </div>
-            <ion-row style="height: 23px;margin: inherit;text-align: center;margin-top:35px">
-                <ion-col col-1 style="padding: 3px;height: 100%">
-                <div style="border-radius: 20px;background-color:#ff5722;width: 100%;height: 100%">             
-                    <ion-icon style="padding-bottom: 2px;font-size: .9em" name="thumbs-up" color="white"></ion-icon>
-                </div>
+
+            <ion-row style="margin-top: 35px;">
+                <ion-col col-1 class="likecol">
+                    <ion-label class="likeitem">
+                        <ion-icon name="thumbs-up" class="iconclass"></ion-icon>
+                    </ion-label>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> you liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you liked</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem">1&nbsp;other liked</ion-note>
                 </ion-col>
                 <ion-col col-5 *ngIf="nooflikes[i] == 0 && !liked[i]"></ion-col>
 
-                <ion-col style="text-align: right;padding-top: 2px">
-                    <ion-note color="red" *ngIf="noofdislikes[i] != 0">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
-                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0">{{noofcomments[i]}}&nbsp;Comments</ion-note>
+                <ion-col style="text-align: right;margin: auto">
+                    <ion-note color="red" *ngIf="noofdislikes[i] != 0" class="likeitem">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
+                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0" class="likeitem">{{noofcomments[i]}}&nbsp;Comments</ion-note>
                 </ion-col>
             </ion-row>
+
             <ion-row style="border: 1px solid #3a3a3a; margin: inherit">
                 <ion-col>
                     <div>
-                        <button (click)="likePost(post.$key,i)" style="color:#e040fb" ion-button icon-center full clear class="scorebutton">
+                        <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
                             <ion-icon [@like]="liked[i] == true ? 'ltrue':'lfalse'" style="font-size: 1.3em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
                             &nbsp;
                             <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
@@ -433,32 +437,34 @@
                 <ion-col col-3><ion-item color="white">{{post.overs}}</ion-item></ion-col>
                 <ion-col col-1></ion-col>
             </ion-row>
-            <ion-row style="height: 23px;margin: inherit;text-align: center;margin-top:35px">
-                <ion-col col-1 style="padding: 3px;height: 100%">
-                <div style="border-radius: 20px;background-color:#ff5722;width: 100%;height: 100%">             
-                    <ion-icon style="padding-bottom: 2px;font-size: .9em" name="thumbs-up" color="white"></ion-icon>
-                </div>
+
+            <ion-row style="margin-top: 35px;">
+                <ion-col col-1 class="likecol">
+                    <ion-label class="likeitem">
+                        <ion-icon name="thumbs-up" class="iconclass"></ion-icon>
+                    </ion-label>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> you liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you liked</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem">1&nbsp;other liked</ion-note>
                 </ion-col>
                 <ion-col col-5 *ngIf="nooflikes[i] == 0 && !liked[i]"></ion-col>
 
-                <ion-col style="text-align: right;padding-top: 2px">
-                    <ion-note color="red" *ngIf="noofdislikes[i] != 0">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
-                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0">{{noofcomments[i]}}&nbsp;Comments</ion-note>
+                <ion-col style="text-align: right;margin: auto;">
+                    <ion-note color="red" *ngIf="noofdislikes[i] != 0" class="likeitem">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
+                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0" class="likeitem">{{noofcomments[i]}}&nbsp;Comments</ion-note>
                 </ion-col>
             </ion-row>
+
             <ion-row style="border: 1px solid #3a3a3a; margin: inherit">
                 <ion-col>
                     <div>
-                        <button (click)="likePost(post.$key,i)" style="color:#e040fb" ion-button icon-center full clear class="scorebutton">
+                        <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
                             <ion-icon [@like]="liked[i] == true ? 'ltrue':'lfalse'" style="font-size: 1.3em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
                             &nbsp;
                             <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
@@ -528,32 +534,34 @@
                 <ion-col col-3><ion-item color="white">{{post.wickets}}</ion-item></ion-col>
                 <ion-col col-1></ion-col>
             </ion-row>
-            <ion-row style="height: 23px;margin: inherit;text-align: center;margin-top:35px">
-                <ion-col col-1 style="padding: 3px;height: 100%">
-                <div style="border-radius: 20px;background-color:#ff5722;width: 100%;height: 100%">             
-                    <ion-icon style="padding-bottom: 2px;font-size: .9em" name="thumbs-up" color="white"></ion-icon>
-                </div>
+
+            <ion-row style="margin-top: 35px;">
+                <ion-col col-1 class="likecol">
+                    <ion-label class="likeitem">
+                        <ion-icon name="thumbs-up" class="iconclass"></ion-icon>
+                    </ion-label>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> you liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you liked</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem">1&nbsp;other liked</ion-note>
                 </ion-col>
                 <ion-col col-5 *ngIf="nooflikes[i] == 0 && !liked[i]"></ion-col>
 
-                <ion-col style="text-align: right;padding-top: 2px">
-                    <ion-note color="red" *ngIf="noofdislikes[i] != 0">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
-                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0">{{noofcomments[i]}}&nbsp;Comments</ion-note>
+                <ion-col style="text-align: right;margin: auto">
+                    <ion-note color="red" *ngIf="noofdislikes[i] != 0" class="likeitem">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
+                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0" class="likeitem">{{noofcomments[i]}}&nbsp;Comments</ion-note>
                 </ion-col>
             </ion-row>
+
             <ion-row style="border: 1px solid #3a3a3a; margin: inherit">
                 <ion-col>
                     <div>                        
-                        <button (click)="likePost(post.$key,i)" style="color:#e040fb" ion-button icon-center full clear class="scorebutton">
+                        <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
                             <ion-icon [@like]="liked[i] == true ? 'ltrue':'lfalse'" style="font-size: 1.3em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
                             &nbsp;
                             <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
@@ -653,32 +661,111 @@
                 </div>
             </div>
 
-            <ion-row style="height: 23px;margin: inherit;text-align: center;margin-top:35px">
-                <ion-col col-1 style="padding: 3px;height: 100%">
-                <div style="border-radius: 20px;background-color:#ff5722;width: 100%;height: 100%">             
-                    <ion-icon style="padding-bottom: 2px;font-size: .9em" name="thumbs-up" color="white"></ion-icon>
-                </div>
+            <ion-row style="margin-top: 35px;">
+                <ion-col col-1 class="likecol">
+                    <ion-label class="likeitem">
+                        <ion-icon name="thumbs-up" class="iconclass"></ion-icon>
+                    </ion-label>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green"> you liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you liked</ion-note>
                 </ion-col>
-                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" style="text-align: left;padding-top: 2px">
-                    <ion-note color="green">1&nbsp;other liked</ion-note>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem">1&nbsp;other liked</ion-note>
                 </ion-col>
                 <ion-col col-5 *ngIf="nooflikes[i] == 0 && !liked[i]"></ion-col>
 
-                <ion-col style="text-align: right;padding-top: 2px">
-                    <ion-note color="red" *ngIf="noofdislikes[i] != 0">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
-                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0">{{noofcomments[i]}}&nbsp;Comments</ion-note>
+                <ion-col style="text-align: right;margin: auto">
+                    <ion-note color="red" *ngIf="noofdislikes[i] != 0" class="likeitem">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
+                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0" class="likeitem">{{noofcomments[i]}}&nbsp;Comments</ion-note>
                 </ion-col>
             </ion-row>
+            
             <ion-row style="border: 1px solid #3a3a3a; margin: inherit">
                 <ion-col>
                     <div>
-                    <button (click)="likePost(post.$key,i)" style="color:#e040fb" ion-button icon-center full clear class="scorebutton">
+                    <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
+                        <ion-icon [@like]="liked[i] == true ? 'ltrue':'lfalse'" style="font-size: 1.3em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
+                        &nbsp;
+                        <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>
+                    </button>
+                    </div>
+                </ion-col>
+                <ion-col>
+                    <div>                        
+                        <button (click)="dislikePost(post.$key,i)" color="red" ion-button icon-center full clear class="scorebutton">
+                            <ion-icon [@dislike]="disliked[i] == true ? 'dtrue':'dfalse'" style="font-size: 1.3em;padding-top:3px" name="thumbs-down" [class.gray-color]="disliked[i] == false" ></ion-icon>
+                            &nbsp;
+                            <div [class.gray-color]="disliked[i] == false" style="font-size: 1.2rem;font-weight:500">Dislike</div>
+                        </button>
+                    </div>
+                </ion-col>
+                <ion-col>
+                    <div>                        
+                        <button (click)="commentPost(post.$key)" ion-button color="yellow" icon-center full clear class="scorebutton">
+                            <ion-icon style="font-size: 1.4em" name="chatboxes"></ion-icon>
+                            &nbsp;
+                            <div style="font-size: 1.2rem;font-weight:500">Comment</div>
+                        </button>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="post.posttype == 'result'" class="resultcard">
+
+            <div *ngIf="postmoreclicked[i]" class="morediv">
+                <ion-item (click)="removepost(i,post)" class="moreitem">
+                    <ion-icon name="close-circle"></ion-icon>
+                    Remove it
+                </ion-item>
+            </div>
+            <ion-item>
+                <ion-avatar item-left>
+                   <img [src]="post.userimage" *ngIf="post.userimage">
+                </ion-avatar>
+                <ion-icon color="yellow" name="more" item-right (click)="onmoreClick(i)"></ion-icon>
+                <h2 (click)="onUsernameClick(post.userId)">{{post.username}}</h2>
+                <p>
+                    <ion-icon name="time" color="#d2d2d2"></ion-icon>
+                    <span color="red">{{posttime[i]}}</span>
+                </p>
+            </ion-item>
+            <ion-row>
+                <ion-col class="extratalk">                    
+                {{post.extratalk}}
+                </ion-col>
+            </ion-row>
+            <ion-row style="margin-top: 35px;">
+                <ion-col col-1 class="likecol">
+                    <ion-label class="likeitem">
+                        <ion-icon name="thumbs-up" class="iconclass"></ion-icon>
+                    </ion-label>
+                </ion-col>
+                <ion-col col-5 *ngIf="nooflikes[i] > 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you and {{nooflikes[i] - 1}}&nbsp;others</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem"> you liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="nooflikes[i] == 1 && !liked[i]" class="likecol5">
+                    <ion-note color="primary" class="likeitem">1&nbsp;other liked</ion-note>
+                </ion-col>
+                <ion-col col-5 *ngIf="nooflikes[i] == 0 && !liked[i]"></ion-col>
+
+                <ion-col style="text-align: right;margin: auto">
+                    <ion-note color="red" *ngIf="noofdislikes[i] != 0" class="likeitem">{{noofdislikes[i]}}&nbsp;Dislikes</ion-note>
+                    <ion-note color="yellow" *ngIf="noofcomments[i] != 0" class="likeitem">{{noofcomments[i]}}&nbsp;Comments</ion-note>
+                </ion-col>
+            </ion-row>
+            
+            <ion-row style="border: 1px solid #3a3a3a; margin: inherit">
+                <ion-col>
+                    <div>
+                    <button (click)="likePost(post.$key,i)" ion-button icon-center full clear class="scorebutton">
                         <ion-icon [@like]="liked[i] == true ? 'ltrue':'lfalse'" style="font-size: 1.3em;padding-bottom:3px" name="thumbs-up" [class.gray-color]="liked[i] == false" ></ion-icon>
                         &nbsp;
                         <div [class.gray-color]="liked[i] == false" style="font-size:1.2rem;font-weight:500">Like</div>

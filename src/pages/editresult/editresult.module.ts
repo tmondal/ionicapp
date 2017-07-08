@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { Matchresult } from './matchresult';
+import { Editresult } from './editresult';
 
 @NgModule({
   declarations: [
-    Matchresult,
+    Editresult,
   ],
   imports: [
-    IonicPageModule.forChild(Matchresult),
+    IonicPageModule.forChild(Editresult),
   ],
   exports: [
-    Matchresult
+    Editresult
   ]
 })
-export class MatchresultModule {}
+export class EditresultModule {}

@@ -13,7 +13,7 @@
 <ion-content class="participate">
 
 	<ion-list *ngIf="usertype == 'club'">
-		<ion-list-header class="participateheader"> Your Participated Leagues </ion-list-header>
+		<ion-item class="participateheader"> Your Participated Leagues </ion-item>
 		<ion-item class="participateitem" *ngFor="let league of leagues,let i = index">
 			<span style="color: #2196F3">{{ league.leaguename }}</span>
 			<ion-card class="participatecard">
@@ -37,9 +37,9 @@
 		</ion-item>
 	</ion-list>
 
-    <div color="card">
+    <ion-item color="card">
         <ion-label color="yellow"> Your participated events</ion-label>
-    </div>
+    </ion-item>
     <ion-list *ngFor="let post of participating,let i = index">
         <ion-card *ngIf="post.posttype == 'tournament'" color="card">
             
@@ -78,7 +78,7 @@
 
                 <ion-col center text-center>
                     <button color="yellow" ion-button block outline icon-right class="gobutton">
-                       You can't see rules now
+                       You can't see rules here
                         <ion-icon name="happy"></ion-icon>
                     </button>
                 </ion-col>
@@ -120,7 +120,7 @@
 
                 <ion-col center text-center>
                     <button color="yellow" ion-button block outline icon-right class="gobutton">
-                        You can't see criteria now
+                        You can't see criteria here
                         <ion-icon name="happy"></ion-icon>
                     </button>
                 </ion-col>

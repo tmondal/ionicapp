@@ -40,7 +40,7 @@
 			<ion-item *ngFor="let team of teams,let i = index" color="card" class="league">
 				<p><b>{{team.name}}</b></p>
 				<p>{{team.email}}</p>
-				<ion-icon color="yellow" item-right (click)="removeTeam(i)" name="trash"></ion-icon>
+				<ion-icon color="yellow" item-right (click)="removeTeam(i,team.email)" name="trash"></ion-icon>
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
@@ -56,18 +56,21 @@
 			<button color="yellow" item-right ion-button small (click)="addUsertoTeam(user,i)">Add</button>
 		</ion-item>
 	</ion-list>
+	<ion-item *ngIf="datasearched && !found" style="background: inherit;color: white">
+		No teams name found. Remember search is Case sensitive.
+	</ion-item>
 	<ion-card color="card">
 		<ion-card-header color="yellow">Create Fixtures</ion-card-header>
 	</ion-card>
-	<ion-card color="card">
-		<ion-item color="yellow" *ngFor="let fixture of fixtures,let i = index" style="border-bottom: 1px black dotted">
-			<ion-label color="background">{{fixture.teamone}} vs {{fixture.teamtwo}} on {{fixture.eventdate}}</ion-label>
-			<ion-icon item-right color="background" name="trash" (click)="removeFixture(i)" ></ion-icon>
+	<ion-card color="card" *ngIf="fixtures[0]">
+		<ion-item *ngFor="let fixture of fixtures,let i = index" style="color:#2196F3;background: inherit;border-bottom: 1px black dotted">
+			<ion-label *ngIf="fixture.teamone && fixture.teamtwo">{{fixture.teamone}} vs {{fixture.teamtwo}} on {{fixture.eventdate}}</ion-label>
+			<ion-icon item-right name="trash" (click)="removeFixture(i)" *ngIf="fixture.teamone && fixture.teamtwo"></ion-icon>
 		</ion-item>
 	</ion-card>
 	<ion-card color="card">
 		<ion-card-content>
-			<ion-item class="league">
+			<ion-item class="league" *ngIf="teams[0]">
 				<ion-label color="yellow">Team One</ion-label>
 				<ion-select [(ngModel)]="teamoneid" >
 					<ion-option *ngFor="let team of teams,let i = index" value = {{i}}>
@@ -75,7 +78,7 @@
 					</ion-option>
 				</ion-select>
 			</ion-item>
-			<ion-item class="league">
+			<ion-item class="league" *ngIf="teams[0]">
 				<ion-label color="yellow">Team Two</ion-label>
 				<ion-select [(ngModel)]="teamtwoid" >
 					<ion-option *ngFor="let team of teams,let j = index" value = {{j}}>
@@ -83,9 +86,9 @@
 					</ion-option>
 				</ion-select>
 			</ion-item>
-			<ion-item class="league" color="white">
+			<ion-item class="league" color="white" *ngIf="teamoneid && teamtwoid">
 				<ion-label color="yellow">Venue</ion-label>
-				<ion-input [(ngModel)]="venue" value="venue" placeholder="e.g. Field of {{teamone}}"></ion-input>
+				<ion-input [(ngModel)]="venue" value="venue" placeholder="Whose ground ?" style="background-color: black"></ion-input>
 			</ion-item>
 			<ion-item class="league">
 	  			<ion-label color="yellow">Date</ion-label>

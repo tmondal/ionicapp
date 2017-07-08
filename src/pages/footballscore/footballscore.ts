@@ -30,10 +30,6 @@ export class Footballscore implements OnInit{
 	redcardtwo: any = 0;
 	goalscorertwo: any = null;
 
-	likes: any = 0;
-	dislikes: any = 0;
-	comments: any = 0;
-
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
 		public viewCtrl: ViewController,
@@ -58,8 +54,6 @@ export class Footballscore implements OnInit{
 		let post = {
 			created_at: Date.now(),
 			userId: this.currentuserId,
-			username: this.username,
-			userimage: this.userimage,
 			posttype: this.posttype,
 			sporttype: this.sporttype,
 			teamone: this.teamone,
@@ -72,9 +66,6 @@ export class Footballscore implements OnInit{
 			yellocardtwo: this.yellowcardtwo,
 			redcardtwo: this.redcardtwo,
 			goalscorertwo: this.goalscorertwo,
-			likes: this.likes,
-			dislikes: this.dislikes,
-			comments: this.comments,
 		}
 		if (!this.teamone && !this.teamtwo) {
 			alert("Teams name can't be empty..");

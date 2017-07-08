@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component ,OnInit} from '@angular/core';
 import { IonicPage,NavController, NavParams } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 
@@ -14,16 +14,20 @@ import {
 } from '@ionic-native/google-maps';
 
 
-
+declare var google;
 
 @IonicPage()
 @Component({
   selector: 'page-updatelocation',
   templateUrl: 'updatelocation.html',
+  providers: [Geolocation],
 })
-export class Updatelocation {
+export class Updatelocation implements OnInit{
 
+	map: GoogleMap;
 	pos: LatLng;
+	lat: any;
+	lng: any;
 	newlat: number;
 	newlng: number;
 	constructor(
@@ -34,7 +38,7 @@ export class Updatelocation {
 		public authservice: AuthService
 	) {}
 
-	ionViewDidLoad() {
+	ngOnInit() {
 		this.loadMap();
 	}
 
@@ -42,42 +46,42 @@ export class Updatelocation {
 
 		let element: HTMLElement = document.getElementById('map');
 
-		let map: GoogleMap = this.googleMaps.create(element);
+		this.map = this.googleMaps.create(element);
 
 		// listen to MAP_READY event
 		// You must wait for this event to fire before adding something to the map or modifying it in anyway
-		map.one(GoogleMapsEvent.MAP_READY).then(() => {
+		this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
 
 			
 			this.geolocation.getCurrentPosition().then((resp) => {
 
-				// this.newlat = resp.coords.latitude;
-				// this.newlng = resp.coords.longitude;
+				this.lat = resp.coords.latitude;
+				this.lng = resp.coords.longitude;
 				this.pos = new LatLng(resp.coords.latitude,resp.coords.longitude);
 
 				// create CameraPosition
 				let position: CameraPosition = {
 					target: this.pos,
 					zoom: 18,
-					tilt: 30
+					tilt: 30,
 				};
 
 				// move the map's camera to position
-				map.moveCamera(position);
+				this.map.moveCamera(position);
 
 				// create new marker
 				let markerOptions: MarkerOptions = {
 					position: this.pos,
-					title: this.pos.toUrlValue(),
+					title: this.pos.toString(),
 					draggable: true,
 					animation: 'BOUNCE'
 				};
 
-				map.addMarker(markerOptions).then((marker: Marker) => {
+				this.map.addMarker(markerOptions).then((marker: Marker) => {
 
 					marker.addEventListener(GoogleMapsEvent.MARKER_DRAG_END).subscribe((obs)=>{
 						marker.getPosition().then(latlng =>{
-							marker.setTitle(latlng.toUrlValue());
+							marker.setTitle(latlng.toString());
 							this.newlat = latlng.lat;
 							this.newlng = latlng.lng;
 							marker.showInfoWindow();
@@ -88,11 +92,21 @@ export class Updatelocation {
 			  alert("Error getting location.");
 			});
 		});
+		
 	}
 
 	updateLocation(){
-		this.navCtrl.pop();
-		this.authservice.updateLocation(this.newlat,this.newlng);
+		alert("pos: " +this.newlat+"/" + this.newlng);
+		if (!this.newlat && !this.newlng) {
+			this.authservice.updateLocation(this.lat,this.lng);
+			this.map.remove();
+			this.navCtrl.pop();
+		}else{			
+			this.authservice.updateLocation(this.newlat,this.newlng);
+			this.map.remove();
+			this.navCtrl.pop();
+		}
+
 	}
 	oncancel(){
 		this.navCtrl.pop();

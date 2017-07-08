@@ -36,6 +36,14 @@ page-postcomments {
 	.commentitem {
 		color: yellow;
 	}
+	.iconclass {
+		border:2px solid #FFEB3B;
+		border-radius: 50%;
+		background-color: orange;
+		color:white;
+		font-size: .9em;
+		padding: 2px;
+	}
 	.replies {
 		color: orange;
 		text-decoration: underline;

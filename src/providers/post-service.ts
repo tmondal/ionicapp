@@ -74,10 +74,13 @@ export class PostService {
         },(success) =>{
           post.imageurl = uploadTask.snapshot.downloadURL;
           this.showToast('Success: image sent to the server and got url:)');
-          updatedpostdata["userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
+
+          updatedpostdata["/userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
           this.authservice.getFollowers(this.authuid).subscribe(followers =>{
-            for (let i = followers.length - 1; i >= 0; i--) {
-              updatedpostdata["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
+            if (followers.length > 0) {              
+              for (let i = 0; i <= followers.length - 1; i++) {
+                updatedpostdata["/userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
+              }
             }
             this.af.database.object('/').update(updatedpostdata);
             alert("Post added to related feeds.\n Please refress again.");
@@ -87,15 +90,15 @@ export class PostService {
     }
     else{
 
-      updatedpostdata["userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
+      updatedpostdata["/userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
       this.authservice.getFollowers(this.authuid).subscribe(followers =>{
-        for (let i = followers.length - 1; i >= 0; i--) {
-          updatedpostdata["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
+        if (followers.length > 0) {          
+          for (let i = followers.length - 1; i >= 0; i--) {
+            updatedpostdata["/userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
+          }
         }
         this.af.database.object('/').update(updatedpostdata);
-        this.loading.dismiss().then(()=>{
-          alert("Post added without image.\n But post with image looks good :)");
-        });
+        alert("Post added without image.\n But post with image looks good :)");
       });
     }
   }
@@ -154,10 +157,12 @@ export class PostService {
     let updatedPostData = {};
     let newpostkey = this.feednode.push().key;
 
-    updatedPostData["userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
+    updatedPostData["/userwise-feed/" + this.authuid +"/"+ newpostkey] = post;
     this.authservice.getFollowers(this.authuid).subscribe(followers =>{
-      for (let i = followers.length - 1; i >= 0; i--) {
-        updatedPostData["userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
+      if (followers.length > 0) {        
+        for (let i = followers.length - 1; i >= 0; i--) {
+          updatedPostData["/userwise-feed/" + followers[i].$key +"/" + newpostkey] = post;
+        }
       }
       this.af.database.object('/').update(updatedPostData);
     });
@@ -194,19 +199,25 @@ export class PostService {
 
   // See again if all related data is deleted. I will come back later :)
   removePostfromFeedbyId(post){
-    console.log(post.$key);
     if (post.userId != this.authuid) {      
       this.af.database.object("/userwise-feed/"+this.authuid+"/"+post.$key).remove().then(
         (success) => alert("The post is parmanently removed from your feed"),
         (error) => alert("Could not remove. Try again!")
       )
     }else {
+     
+      if (post.posttype == 'tournament' || post.posttype == 'hiring') {
+        this.af.database.object('/postwise-participator/' + post.$key).remove();
+        this.af.database.object('/userwise-participatedpost/'+this.authuid+"/"+post.$key).remove();
+      }
+
+      // delete from followers feed
       this.authservice.getFollowers(post.userId).subscribe(followers =>{
         for (let i = followers.length - 1; i >= 0; i--) {
-          this.af.database.object("/userwise-feed/"+ followers[i].$key +"/"+post.$key).remove();
-          this.af.database.object('/postwise-participator/' + post.$key).remove();
+          this.af.database.object("/userwise-feed/"+ followers[i].$key +"/"+post.$key).remove();          
         }
       });
+      // delete from own feed
       this.af.database.object("/userwise-feed/"+post.userId+"/"+post.$key).remove().then(
         (success) => {
           alert("Post is parmanently removed from related feeds.");
@@ -225,8 +236,8 @@ export class PostService {
   // participation logics
 
   // called from 'post'
-  getParticipated(postid: any){
-    return this.af.database.object('/postwise-participator/' + postid + "/" + this.authuid);
+  checkifParticipated(postid: any){
+    return this.af.database.object('/postwise-participator/' + postid + "/" + this.authuid).take(1);
   }
 
   // called from 'post'
@@ -246,18 +257,25 @@ export class PostService {
   }
 
   // called from 'post'
-  updateParticipating(postid: any,participating: number){
+  updateParticipating(postid: any,userid: any, participating: number){
     let updatedata = {};
-    updatedata['/userwise-feed/' + this.authuid + "/" + postid + '/participating'] = participating;
+    updatedata['/userwise-feed/' + userid + "/" + postid + '/participating'] = participating;
+    this.authservice.getFollowers(userid).subscribe(followers =>{
+      for (let i = 0;i <= followers.length - 1; i++) {
+        this.af.database.object('/userwise-feed/' + followers[i].$key + "/" + postid)
+          .update({participating: participating});
+      }
+    });
     this.af.database.object('/').update(updatedata);
   }
+  
   getTotalparticipation(postid){
-    return this.af.database.list('/postwise-participator/' + postid);
+    return this.af.database.list('/postwise-participator/' + postid).take(1);
   }
 
   // Like Dislike logics
   getLikedDisliked(postid){
-    return this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.authuid);
+    return this.af.database.object('/postwise-liked-disliked/' + postid + "/" + this.authuid).take(1);
   }
 
   likeDislikePost(postid,liked,disliked){
@@ -325,7 +343,7 @@ export class PostService {
   }
 
   countLikesDislikesComments(postid){
-    return this.af.database.object('/postwise-ldc-count/'+postid);
+    return this.af.database.object('/postwise-ldc-count/'+postid).take(1);
   }
 
   parentcommentLike(postid,commentid,likes){

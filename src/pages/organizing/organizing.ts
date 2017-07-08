@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
 import { AuthService } from '../../providers/auth-service';
 import { AngularFire } from 'angularfire2';
+import * as moment from 'moment';
 
 
 
@@ -17,6 +18,9 @@ export class Organizing implements OnInit{
 	usertype: any;
 	organizing: any[] = [];
 	leagues: any[] = [];
+	userservice: any;
+	posttime: any[] = [];
+
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -24,12 +28,12 @@ export class Organizing implements OnInit{
 		public authservice: AuthService,
 		public af: AngularFire) {
 
-		this.af.auth.subscribe(user =>{
-			this.userid = user.uid;
-		})
 	}
 
 	ngOnInit(){
+		this.userservice = this.af.auth.subscribe(user =>{
+			this.userid = user.uid;
+		})
 
 		this.authservice.getmyprofile().subscribe(me =>{
 			this.usertype = me.usertype;
@@ -40,15 +44,26 @@ export class Organizing implements OnInit{
 		});
 
 		this.postservice.getFeed().subscribe(posts =>{
+			posts.reverse();
 			for (let i = 0; i <= posts.length - 1; i++) {
 				if (posts[i].posttype == 'tournament' || posts[i].posttype == 'hiring') {
 					if (posts[i].userId == this.userid) {
-						this.organizing.push(posts[i]);
+						posts[i].created_at = moment(posts[i].created_at).fromNow();
+
+						this.authservice.getuserbyId(posts[i].userId).subscribe(user=>{
+							if (user) {
+								posts[i].username = user.name;
+								posts[i].userimage = user.profileimage;
+							}
+							this.organizing.push(posts[i]);
+						});
 					}
 				}
 			}
 		})
 	}
 
-	ngOnDestroy(){}
+	ngOnDestroy(){
+		this.userservice.unsubscribe();
+	}
 }

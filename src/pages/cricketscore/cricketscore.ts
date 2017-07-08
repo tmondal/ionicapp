@@ -32,9 +32,6 @@ export class Cricketscore implements OnInit{
 	testno: any;
 	battingteam: any;
 	inningsno: any;
-	likes: any = 0;
-	dislikes: any = 0;
-	comments: any = 0;
 	authsubscription: any;
 
 	constructor(public navCtrl: NavController, 
@@ -62,8 +59,6 @@ export class Cricketscore implements OnInit{
 		let post = {
 			created_at: Date.now(),
 			userId: this.currentuserId,
-			username: this.username,
-			userimage: this.userimage,
 			posttype: this.posttype,
 			sporttype: this.sporttype,
 			crickettype: this.crickettype,
@@ -74,9 +69,6 @@ export class Cricketscore implements OnInit{
 			overs: this.overs,
 			tosswon: this.tosswon,
 			elected: this.elected,
-			likes: this.likes,
-			dislikes: this.dislikes,
-			comments: this.comments,
 		}
 		
 		if (!this.teamone && !this.teamtwo ) {
@@ -97,8 +89,6 @@ export class Cricketscore implements OnInit{
 		let post = {
 			created_at: Date.now(),
 			userId: this.currentuserId,
-			username: this.username,
-			userimage: this.userimage,
 			posttype: this.posttype,
 			sporttype: this.sporttype,
 			crickettype: this.crickettype,
@@ -109,9 +99,6 @@ export class Cricketscore implements OnInit{
 			battingteam: this.battingteam,
 			runsscored: this.runsscored,
 			wickets: this.wickets,
-			likes: this.likes,
-			dislikes: this.dislikes,
-			comments: this.comments
 		}
 
 		if (!this.teamone && !this.teamtwo ) {
@@ -121,7 +108,7 @@ export class Cricketscore implements OnInit{
 		}else if (!this.username) {
 			alert("Please edit your name..");
 		}else if (this.runsscored == 0 && this.wickets == 0 && this.overs == 0) {
-			alert("Let the game start ..\n Better select text/image post type..");
+			alert("Let the game start ..\nBetter select text/image post type..");
 		}else{			
 			this.viewCtrl.dismiss();
 			this.postservice.simplePost(post);
