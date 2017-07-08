@@ -2,7 +2,7 @@
 <ion-split-pane>
   <ion-menu [content]="content" *ngIf="loggedIn">
     <ion-content style="background-color: #212121">
-      <ion-item color="card" class="menutop">
+      <ion-item color="card" class="menutop" (click)="onuserClick()" >
         <ion-avatar item-left>
           <img style="height: 60px; width: 60px" [src]="profileimage" *ngIf= "profileimage">
         </ion-avatar>

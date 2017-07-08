@@ -51,9 +51,10 @@ export class Editprofile implements OnInit{
 				this.authuid = user.auth.uid;				
 			}
 		});
-		this.doRefresh(1);
+		this.doRefresh();
 	}
-	doRefresh(refresher: any){
+	doRefresh(){
+
 		this.authservice.getuserbyId(this.authuid).subscribe((user)=>{
 			if (user.name) {				
 				this.myname = user.name;
@@ -75,10 +76,6 @@ export class Editprofile implements OnInit{
 			}
 			this.usertype = user.usertype;
 		});
-
-		if (refresher != 1) {      
-	      setTimeout(() => { }, 500);
-	    }
 	}
 	// chooseCoverFile(){
 	// 	this.fileChooser.open().then((uri) =>{
@@ -227,11 +224,15 @@ export class Editprofile implements OnInit{
 		if(this.galleryimage && !this.imagetaken) {
 			alert("You have selected an image.");			
 			this.authservice.updateCoverphoto(this.selectimagedata);
-			this.doRefresh(2);
+			setTimeout(()=>{
+				this.doRefresh();
+			},5000);
 		}else if (this.imagetaken && !this.galleryimage) {
 			alert("You have captured an image.");			
 			this.authservice.updateCoverphoto(this.cameraimagedata);
-			this.doRefresh(2);
+			setTimeout(()=>{
+				this.doRefresh();
+			},5000);
 		}
 		else{
 			this.showToast("Please capture or select an image.");
@@ -245,11 +246,15 @@ export class Editprofile implements OnInit{
 		if(this.galleryimage && !this.imagetaken) {
 			alert("You have selected an image.");
 			this.authservice.updateProfilephoto(this.selectimagedata);
-			this.doRefresh(2);
+			setTimeout(()=>{
+				this.doRefresh();
+			},5000);
 		}else if (this.imagetaken && !this.galleryimage) {
 			alert("You have captured an image.");			
 			this.authservice.updateProfilephoto(this.cameraimagedata);
-			this.doRefresh(2);
+			setTimeout(()=>{
+				this.doRefresh();
+			},5000);
 		}
 		else{
 			this.showToast("Please capture or select an image.");
@@ -265,7 +270,10 @@ export class Editprofile implements OnInit{
 	onnameSubmit(){
 		if(this.name) {			
 			this.authservice.updateName(this.name);
-			this.doRefresh(2);
+			this.name = '';
+			setTimeout(()=>{
+				this.doRefresh();
+			},500);
 		}else{
 			this.showToast("Please enter your name");
 		}
@@ -277,7 +285,10 @@ export class Editprofile implements OnInit{
 	oncontactSubmit(){
 		if(this.contactno) {			
 			this.authservice.updateContactno(this.contactno);
-			this.doRefresh(2);
+			this.contactno = '';
+			setTimeout(()=>{
+				this.doRefresh();
+			},500);
 		}else{
 			this.showToast("Kindly enter contact no.");
 		}
@@ -289,7 +300,10 @@ export class Editprofile implements OnInit{
 	onclubSubmit(){
 		if(this.currentclub) {			
 			this.authservice.updateCurrentClub(this.currentclub);
-			this.doRefresh(2);
+			this.currentclub = '';
+			setTimeout(()=>{
+				this.doRefresh();
+			},500);
 		}else{
 			this.showToast("Please give new club.");
 		}
@@ -301,7 +315,10 @@ export class Editprofile implements OnInit{
 	onsportNamesubmit(){
 		if(this.sportname) {			
 			this.authservice.updateSportName(this.sportname);
-			this.doRefresh(2);
+			this.sportname = '';
+			setTimeout(()=>{
+				this.doRefresh();
+			},500);
 		}else{
 			this.showToast("Please enter sportname.");
 		}

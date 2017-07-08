@@ -13,11 +13,11 @@
 		<ion-row>
 			<ion-col col-2>
 				<ion-avatar>
-					<img width="40px" height="40px" [src]="comment.profileimage" *ngIf="comment.profileimage">
+					<img width="40px" height="40px" [src]="childcommentimage[i]" *ngIf="childcommentimage[i]">
 				</ion-avatar>
 			</ion-col>
 			<ion-col id="grid">
-				<h5>{{comment.username}}</h5>
+				<h5 *ngIf="childcommentname[i]">{{childcommentname[i]}}</h5>
 				<p class="commentdata">{{comment.data}}</p>
 				<ion-row>
 					<ion-col col-5 class="likereplycol">

@@ -13,13 +13,13 @@
 		<ion-row>
 			<ion-col col-2>				
 				<ion-avatar>
-					<img style="height: 40px;width: 40px" [src]="comment.profileimage" *ngIf="comment.profileimage">
+					<img style="height:40px;width:40px" [src]="parentcommentimage[i]" *ngIf="parentcommentimage[i]">
 				</ion-avatar>
 			</ion-col>
 			<ion-col id="grid">
 				<ion-row>
 					<ion-col>
-					<h5>{{comment.username}}</h5>
+					<h5>{{parentcommentname[i]}}</h5>
 					</ion-col>
 					<ion-col style="text-align: right;color: yellow">
 						<ion-icon class="smallicon" name="time"></ion-icon>
@@ -52,10 +52,10 @@
 
 				<ion-item (click)="gotocommentReplies(comment.$key)" color="card" *ngIf="lastcomment[i]" style="padding: 0px">
 					<ion-avatar item-left class="replyavatar">
-						<img class="replyimg" [src]="lastcomment[i].profileimage" *ngIf="lastcomment[i].profileimage" >
+						<img class="replyimg" [src]="lastuserimage[i]" *ngIf="lastuserimage[i]" >
 					</ion-avatar>
 					<p class="lastdata">
-						<span><b>{{lastcomment[i].username}}</b></span>&nbsp;
+						<span *ngIf="lastusername[i]"><b>{{lastusername[i]}}</b></span>&nbsp;
 						<span>{{lastcomment[i].data}}</span>
 					</p>
 				</ion-item>

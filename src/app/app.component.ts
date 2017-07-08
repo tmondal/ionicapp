@@ -64,4 +64,10 @@ export class MyApp {
 			this.nav.push(page.component);
 		}
 	}
+	onuserClick(){
+		this.authservice.getmyprofile().subscribe(me =>{
+			this.username = me.name;
+			this.profileimage = me.profileimage;
+		});
+	}
 }

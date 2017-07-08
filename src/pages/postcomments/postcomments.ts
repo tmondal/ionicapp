@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage,NavController, NavParams } from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
+import { AuthService } from '../../providers/auth-service';
 import * as moment from 'moment';
 
 
@@ -11,17 +12,22 @@ import * as moment from 'moment';
 })
 export class Postcomments implements OnInit {
 
+	length: any;
 	postid: any;
 	userid: any;
 	username: any;
 	profileimage: any;
-	comments: any[];
+	comments: any[] = [];
+	parentcommentimage: any[] = [];
+	parentcommentname: any[] = [];
 	commenttime: any[]=[0];
 	commentdata: any = null;
 	lastcomment: any[] = [0];
 	lastcommenttime: any[]=[0];
 	childcomments: any[] = [0];
 	ifliked: boolean[] = [false];
+	lastuserimage: any[] = [];
+	lastusername: any[] = [];
 	commentservice: any;
 	lastchildservice: any;
 	noofcomment: any;
@@ -30,7 +36,8 @@ export class Postcomments implements OnInit {
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
-		public postservice: PostService
+		public postservice: PostService,
+		public authservice: AuthService
 	) {
 		this.postid = this.navParams.get("postid");
 		this.userid = this.navParams.get("userid");
@@ -42,13 +49,30 @@ export class Postcomments implements OnInit {
 		this.doRefresh();
 	}
 	doRefresh(){
-		this.commentservice = this.postservice.getparentComments(this.postid).subscribe(comments =>{
+		this.postservice.getparentComments(this.postid).take(1).subscribe(comments =>{
 			this.comments = comments;
 
-			for (let i = 0;i<= this.comments.length - 1; i++) {
+			this.length = this.comments.length;
+			for (let i = 0; i < this.length; i++) {
 				if (this.comments[i]) {					
 					this.commenttime[i] = moment(this.comments[i].created_at).fromNow();
 				}
+			}
+
+			// get user profileimage of all parent comments
+			for (let i = 0; i < this.length; i++) {
+				this.authservice.getuserbyId(this.comments[i].userid).subscribe(user=>{
+					if (user.profileimage) {
+						this.parentcommentimage.push(user.profileimage);
+					}else{
+						this.parentcommentimage.push(0);
+					}
+					if (user.name) {
+						this.parentcommentname.push(user.name);
+					}else{
+						this.parentcommentname.push(0);
+					}
+				})
 			}
 
 			for (let i = 0;i <= this.comments.length - 1; i++) {
@@ -67,8 +91,20 @@ export class Postcomments implements OnInit {
 					.subscribe(comment =>{
 						if (comment[0]) {							
 							this.lastcomment[i] = comment[0];
+							this.authservice.getuserbyId(comment[0].userid).subscribe(user=>{
+								if (user.profileimage) {									
+									this.lastuserimage.push(user.profileimage);
+								}else{
+									this.lastuserimage.push(0);
+								}
+								if (user.name) {									
+									this.lastusername.push(user.name);
+								}else{
+									this.lastusername.push(0);
+								}
+							});
 						}
-					})
+					});
 			}
 			for (let i = 0; i <= this.comments.length - 1; i++) {
 				this.postservice.getchildComments(this.postid,this.comments[i].$key).take(1)
@@ -76,7 +112,7 @@ export class Postcomments implements OnInit {
 						if (length > 0) {							
 							this.childcomments[i] = length;
 						}
-					})
+					});
 			}
 			// count all comments
 			this.postservice.countLikesDislikesComments(this.postid)
@@ -86,20 +122,18 @@ export class Postcomments implements OnInit {
 					}else{
 						this.noofcomment = 0;
 					}
-				})			
+				});			
 
 		})
 	}
 	ngOnDestroy(){
-		this.commentservice.unsubscribe();
+		// this.commentservice.unsubscribe();
 	}
 	addparentComment(){
 
 		let comment = {
 			created_at: Date.now(),
 			userid: this.userid,
-			username: this.username,
-			profileimage: this.profileimage,
 			postid: this.postid,
 			data: this.commentdata,
 			likes: 0
@@ -107,6 +141,9 @@ export class Postcomments implements OnInit {
 		this.noofcomment += 1;
 		this.commentdata = '';
 		this.postservice.addparentComment(this.postid,comment,this.noofcomment);
+		setTimeout(()=>{
+			this.doRefresh();
+		},1000);
 	}
 	gotocommentReplies(parentid){
 		this.doRefresh();
@@ -124,6 +161,9 @@ export class Postcomments implements OnInit {
 			this.ifliked[i] = true;		
 			likes += 1;
 			this.postservice.parentcommentLike(this.postid,commentid,likes);
+			setTimeout(()=>{
+				this.doRefresh();
+			},500);
 		}else{
 			alert("You already liked.");
 		}

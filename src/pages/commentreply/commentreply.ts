@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PostService } from '../../providers/post-service';
+import { AuthService } from '../../providers/auth-service';
 import * as moment from 'moment';
 
 
@@ -12,6 +13,7 @@ import * as moment from 'moment';
 })
 export class Commentreply {
 
+	length: any;
 	postid: any;
 	userid: any;
 	username: any;
@@ -19,6 +21,8 @@ export class Commentreply {
 	parentid: any;
 	commentdata: any;
 	comments: any[] = [];
+	childcommentname: any[] = [];
+	childcommentimage: any[] = [];
 	replytime: any[] = [];
 	ifliked: boolean[] = [false];
 	commentservice: any;
@@ -27,7 +31,8 @@ export class Commentreply {
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
-		public postservice: PostService
+		public postservice: PostService,
+		public authservice: AuthService
 	) {
 
 		this.postid = this.navParams.get("postid");
@@ -38,13 +43,36 @@ export class Commentreply {
 	}
 
 	ngOnInit(){
-		this.commentservice = this.postservice.getchildComments(this.postid,this.parentid)
+		this.doRefresh();
+	}
+
+	doRefresh(){
+		this.postservice.getchildComments(this.postid,this.parentid).take(1)
 			.subscribe(comments =>{
 				this.comments = comments;
-				for (let i = 0; i <= comments.length - 1; i++) {
+				this.length = this.comments.length;
+
+				for (let i = 0; i < this.length; i++) {
 					this.replytime[i] = moment(this.comments[i].created_at).fromNow();
 				}
-				for (let i = 0;i <= this.comments.length - 1;i++) {
+
+				// get child comment userimage
+				for (let i = 0; i < this.length; i++) {
+					this.authservice.getuserbyId(this.comments[i].userid).subscribe(user=>{
+						if (user.profileimage) {
+							this.childcommentimage.push(user.profileimage);
+						}else{
+							this.childcommentimage.push(0);
+						}
+						if (user.name) {
+							this.childcommentname.push(user.name);
+						}else{
+							this.childcommentname.push(0);
+						}
+					})
+				}
+
+				for (let i = 0;i < this.length;i++) {
 					this.postservice.getchildcommentsLiked(this.postid,this.parentid,this.comments[i].$key)
 						.subscribe(liked =>{
 							if (liked.liked) {
@@ -68,22 +96,22 @@ export class Commentreply {
 	}
 
 	ngOnDestroy(){
-		this.commentservice.unsubscribe();
 	}
 
 	addchildComment(){
 		let comment = {
 			created_at: Date.now(),
 			userid: this.userid,
-			username: this.username,
 			postid: this.postid,
-			profileimage: this.profileimage,
 			data: this.commentdata,
 			likes: 0
 		}
 		this.noofcomment += 1;
 		this.commentdata = '';
-		this.postservice.addchildComment(this.postid,this.parentid,comment,this.noofcomment);	
+		this.postservice.addchildComment(this.postid,this.parentid,comment,this.noofcomment);
+		setTimeout(()=>{
+			this.doRefresh();
+		},1000);	
 	}
 	
 	commentreplyLike(i,commentid,likes){
@@ -91,6 +119,9 @@ export class Commentreply {
 			this.ifliked[i] = true;		
 			likes += 1;
 			this.postservice.commentreplyLike(this.postid,this.parentid,commentid,likes);
+			setTimeout(()=>{
+				this.doRefresh();
+			},1000);
 		}else{
 			alert("You already liked.");
 		}
