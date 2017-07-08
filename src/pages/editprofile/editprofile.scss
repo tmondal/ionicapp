@@ -22,6 +22,40 @@ page-editprofile {
 	}
 	.datainput {
 		background-color: black;
+		color: #2196F3;
 	}
 
+	.parallaxheader {
+		width: 100%;
+		height: 150px;
+		text-align: center;
+	}
+	.coverimage {
+		height: 155px;
+		width: 100%;
+		filter:blur(1px);
+	}
+	.parallaxcontent {
+		width: 100%;
+		background-color: #212121;
+	}
+	.profileimage {
+		border-radius: 50%;
+		border: 2px white solid;
+		height: 80px;
+		width: 80px;
+		z-index: 10;
+		position: relative;
+		left: 50%;
+		transform: translate(-50%,-100%);
+		text-align: center;
+	}
+	.card-title {
+		font-size: 1.5em;
+		text-align: center;
+		color: yellow;
+		position: relative;
+		left: 50%;
+		transform: translate(-50%, -350%);
+	}
 }

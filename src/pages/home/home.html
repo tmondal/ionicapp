@@ -54,27 +54,27 @@
                 <ion-col style="color: yellow">
                     Clubs to follow
                 </ion-col>
-                <ion-col style="text-align: right;color: yellow" (click)="clubstoFollow()">
+                <ion-col style="text-align:right;color: yellow" (click)="clubstoFollow()">
                     View all
                 </ion-col>
             </ion-row>
         </ion-card-header>
-        <ion-scroll scrollX="true" style="height: 150px;" *ngIf="clubs.length > 0">
-            <ion-card color="card" class="scroll-item" *ngFor="let club of clubs, let i = index" style="height: 100%; width: 100px">
+        <ion-scroll scrollX="true" style="height: 165px;" *ngIf="clubs.length > 0">
+            <ion-card class="scroll-item" *ngFor="let club of clubs, let i = index" style="height: 100%; width: 100px;background: black;border: 2px #424242 solid;border-bottom: none">
 
-                <ion-row style="height: 60px" *ngIf="i < 4">
-                    <button ion-button full clear style="height: 100%">                        
+                <ion-row style="height: 60px">
+                    <button ion-button full clear style="height: 100%;margin-top: 10px;">                        
                         <ion-avatar>
-                            <img style="width: 60px; height: 60px; border-radius: 30px " [src]="club.profileimage" *ngIf="club.profileimage">
+                            <img style="width: 60px; height: 60px; border-radius: 30px;border: 5px #424242 solid " [src]="club.profileimage" *ngIf="club.profileimage">
                         </ion-avatar>
                     </button>  
                 </ion-row>
-                <ion-row *ngIf="i < 4">
+                <ion-row style="margin-top: 8px">
                     <button color="yellow" ion-button full clear>{{club.name}}</button>
                 </ion-row>
-                <ion-row *ngIf="i < 4">
-                    <button color="card" (click)="follow(i)" ion-button full clear style="font-size: 1.2rem;color: #FF5722">                            
-                        <ion-icon color="deeporange" name="person-add"></ion-icon><span style="width: 5px"></span>
+                <ion-row>
+                    <button (click)="follow(i)" ion-button full clear style="font-size: 1.2rem;background:#424242;color:#FF5722">                            
+                        <ion-icon name="person-add"></ion-icon>&nbsp;&nbsp;
                         Follow
                     </button>
                 </ion-row>

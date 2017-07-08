@@ -74,7 +74,7 @@ export class AuthService {
     getmyprofile(){
       return this.af.database.object('/users/' + this.auth.uid).take(1);
     }
-    getClubstofollow(){
+    getClubstoFollow(){
       return this.af.database.list('/users/',{
         query: {
           orderByChild: 'usertype',

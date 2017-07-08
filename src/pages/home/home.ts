@@ -160,32 +160,6 @@ export class Home implements OnInit{
 
     this.doRefresh(1);
 
-    this.authservice.getClubstofollow().subscribe(clubs =>{
-      for (let i = 0; i <= clubs.length - 1; i++) {
-        let temp = clubs[i].$key;
-        if (this.authuid != temp) {
-          this.authservice.checkIffollowing(temp).subscribe(user =>{
-            if (!user.following) {
-              this.clubs.push(clubs[i]);
-            }
-          });
-        }
-      }
-    });
-    // this.authservice.getPlayerstofollow().subscribe(players =>{
-    //   this.players = players;
-    // });
-   
-    this.authservice.getmyprofile().subscribe(user=>{
-      this.authuid = user.$key;
-      this.usertype = user.usertype;
-      this.username = user.name;
-      this.profileimage = user.profileimage;
-      this.lattitude = user.lattitude;
-      this.longitude = user.longitude;
-      this.guideseen = user.guideseen;
-    });
-
   }
   ngOnDestroy(){
     /*Took a day to figure it out . when i logout firebase showing permission denied at '/post'
@@ -199,34 +173,35 @@ export class Home implements OnInit{
   }
   
   doRefresh(refresher) {
-      this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
-      this.length = feed.length - 1;
+    this.feedsubscription = this.postservice.getFeed().subscribe(feed =>{
       
-      if (this.length <= -1 && this.guideseen) {
-        alert("Looks like you are new here\nNo problem. First follow some club\nThen create new post\n");
-      }
+      // my profile
+      this.authservice.getmyprofile().subscribe(user=>{
+        this.authuid = user.$key;
+        this.usertype = user.usertype;
+        this.username = user.name;
+        this.profileimage = user.profileimage;
+        this.lattitude = user.lattitude;
+        this.longitude = user.longitude;
+        this.guideseen = user.guideseen;
+      });
       
       feed.reverse();
       this.posts = feed;
+      this.length = this.posts.length;
 
-      // get username and profileimage for each post
-      for (let i = 0; i <= this.posts.length - 1; i++) {
-        this.authservice.getuserbyId(this.posts[i].userId).subscribe(user=>{
-          if (user) {            
-            this.posts[i].username = user.name;
-            this.posts[i].userimage = user.profileimage;
-          }
-        })
+      if (this.length <= 0 && this.guideseen) {
+        alert("Looks like you are new here\nNo problem. First follow some club\nThen create new post\n");
       }
-      // Format created_at time 
+      
 
-      for (let i = 0; i <= this.length; i++) {
+      // Format created_at time 
+      for (let i = 0; i < this.length; i++) {
         this.posttime[i] = moment(this.posts[i].created_at).fromNow();
       }
 
       // Get liked disliked by current user
-
-      for (let i = 0; i <= this.length; i++) {
+      for (let i = 0; i < this.length; i++) {
         this.postservice.getLikedDisliked(this.posts[i].$key).subscribe(user=>{
           if(user.liked == undefined) {
             this.liked[i] = false;
@@ -241,32 +216,22 @@ export class Home implements OnInit{
           }
         });
       }
-
-      // count no of likes,dislikes and comments of corresponding posts
-      for (let i = 0; i <= this.length; i++) {
-
-        this.postservice.countLikesDislikesComments(this.posts[i].$key)
-          .subscribe(post =>{
-            if (post.likes != undefined) {            
-              this.nooflikes[i] = post.likes; 
-            }else{
-              this.nooflikes[i] = 0;
-            }
-            if (post.dislikes != undefined) {
-              this.noofdislikes[i] = post.dislikes;
-            }else{
-              this.noofdislikes[i] = 0;
-            }
-            if (post.comments != undefined) {
-              this.noofcomments[i] = post.comments;
-            }else{
-              this.noofcomments[i] = 0;
-            }
-        });
+      
+      // get username and profileimage for each post
+      for (let i = 0; i < this.posts.length; i++) {
+        this.authservice.getuserbyId(this.posts[i].userId).subscribe(user=>{
+          if (user) {            
+            this.posts[i].username = user.name;
+            this.posts[i].userimage = user.profileimage;
+          }
+        })
       }
 
+      this.countlikedislikeComments();
+      this.getclubstoFollow();
+     
       // calculate distance 
-      for (let i = 0; i <= this.posts.length - 1; i++) {
+      for (let i = 0; i < this.length; i++) {
         this.distance[i] = 0;
         if (this.posts[i].posttype == 'tournament' || this.posts[i].posttype == 'hiring') {
           this.authservice.getuserbyId(this.posts[i].userId).subscribe(user=>{
@@ -288,6 +253,47 @@ export class Home implements OnInit{
         refresher.complete();
       }, 500);
     }
+  }
+
+  countlikedislikeComments(){
+    // count no of likes,dislikes and comments of corresponding posts
+    for (let i = 0; i < this.length; i++) {
+
+      this.postservice.countLikesDislikesComments(this.posts[i].$key)
+        .subscribe(post =>{
+          if (post.likes != undefined) {            
+            this.nooflikes[i] = post.likes; 
+          }else{
+            this.nooflikes[i] = 0;
+          }
+          if (post.dislikes != undefined) {
+            this.noofdislikes[i] = post.dislikes;
+          }else{
+            this.noofdislikes[i] = 0;
+          }
+          if (post.comments != undefined) {
+            this.noofcomments[i] = post.comments;
+          }else{
+            this.noofcomments[i] = 0;
+          }
+      });
+    }
+  }
+
+  getclubstoFollow(){
+    this.clubs = [];
+    this.authservice.getClubstoFollow().subscribe(clubs =>{
+      for (let i = 0; i < clubs.length; i++) {
+        let temp = clubs[i].$key;
+        if (this.authuid != temp) {
+          this.authservice.checkIffollowing(temp).subscribe(user =>{
+            if (!user.following) {
+              this.clubs.push(clubs[i]);
+            }
+          });
+        }
+      }
+    });
   }
 
   calculateDistance(lat: any, lng: any){
@@ -490,6 +496,7 @@ export class Home implements OnInit{
     }
   }
   commentPost(postid){
+    this.countlikedislikeComments();
     if (this.profileimage && this.username) {      
       this.navCtrl.push("Postcomments",{
         postid: postid,

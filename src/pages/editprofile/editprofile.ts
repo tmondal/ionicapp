@@ -14,18 +14,22 @@ import { AuthService } from '../../providers/auth-service';
 export class Editprofile implements OnInit{
 
 	authuid: any;
-	usertype: any = null;
-	name: any = null;
-	contactno: any = null;
-	currentclub: any = null;
+	user: any;
+	usertype: any;
+
+	myname: any = '';
+	mycontactno: any = '';
+	mycurrentclub: any = '';
+	mysportname: any = '';
+	myprofile: any;
+	mycover: any;
+	name: any;
+	contactno: any;
+	currentclub: any;
 	sportname: any;
-	authsubscription: any;
+
 	coverselected: boolean = false;
 	profileselected: boolean = false;
-	nameselected: boolean = false;
-	contactselected: boolean = false;
-	clubselected: boolean = false;
-	sportnameselected: boolean = false;
 	selectimagedata: any;
 	cameraimagedata: any;
 	imagetaken: boolean = false;
@@ -47,13 +51,34 @@ export class Editprofile implements OnInit{
 				this.authuid = user.auth.uid;				
 			}
 		});
-		this.authsubscription = this.authservice.getuserbyId(this.authuid).subscribe((user)=>{
+		this.doRefresh(1);
+	}
+	doRefresh(refresher: any){
+		this.authservice.getuserbyId(this.authuid).subscribe((user)=>{
+			if (user.name) {				
+				this.myname = user.name;
+			}
+			if (user.contactno) {
+				this.mycontactno = user.contactno;
+			}
+			if (user.currentclub) {
+				this.currentclub = user.currentclub;
+			}
+			if (user.sportname) {
+				this.mysportname = user.sportname;
+			}
+			if (user.profileimage) {
+				this.myprofile = user.profileimage;
+			}
+			if (user.coverimage) {
+				this.mycover = user.coverimage;
+			}
 			this.usertype = user.usertype;
-			this.name = user.name;
-			this.contactno = user.contactno;
-			this.currentclub = user.currentclub;
-			this.sportname = user.sportname;
 		});
+
+		if (refresher != 1) {      
+	      setTimeout(() => { }, 500);
+	    }
 	}
 	// chooseCoverFile(){
 	// 	this.fileChooser.open().then((uri) =>{
@@ -202,9 +227,11 @@ export class Editprofile implements OnInit{
 		if(this.galleryimage && !this.imagetaken) {
 			alert("You have selected an image.");			
 			this.authservice.updateCoverphoto(this.selectimagedata);
+			this.doRefresh(2);
 		}else if (this.imagetaken && !this.galleryimage) {
 			alert("You have captured an image.");			
 			this.authservice.updateCoverphoto(this.cameraimagedata);
+			this.doRefresh(2);
 		}
 		else{
 			this.showToast("Please capture or select an image.");
@@ -218,9 +245,11 @@ export class Editprofile implements OnInit{
 		if(this.galleryimage && !this.imagetaken) {
 			alert("You have selected an image.");
 			this.authservice.updateProfilephoto(this.selectimagedata);
+			this.doRefresh(2);
 		}else if (this.imagetaken && !this.galleryimage) {
 			alert("You have captured an image.");			
 			this.authservice.updateProfilephoto(this.cameraimagedata);
+			this.doRefresh(2);
 		}
 		else{
 			this.showToast("Please capture or select an image.");
@@ -232,69 +261,57 @@ export class Editprofile implements OnInit{
 	onmapClick(){
 		this.navCtrl.push("Updatelocation");
 	}
-	nameTouched(){
-		this.nameselected = true;
-	}
+
 	onnameSubmit(){
-		this.nameselected = false;
 		if(this.name) {			
 			this.authservice.updateName(this.name);
+			this.doRefresh(2);
 		}else{
-			this.showToast("Please enter your name (-_-)");
+			this.showToast("Please enter your name");
 		}
 	}
 	onnameCancel(){
-		this.nameselected = false;
+		this.name = '';
 	}
-	contactTouched(){
-		this.contactselected = true;
-	}
+
 	oncontactSubmit(){
-		this.contactselected = false;
 		if(this.contactno) {			
 			this.authservice.updateContactno(this.contactno);
+			this.doRefresh(2);
 		}else{
 			this.showToast("Kindly enter contact no.");
 		}
 	}
 	oncontactCancel(){
-		this.contactselected = false;
+		this.contactno = '';
 	}
 
-	clubTouched(){
-		this.clubselected = true;
-	}
 	onclubSubmit(){
-		this.clubselected = false;
 		if(this.currentclub) {			
 			this.authservice.updateCurrentClub(this.currentclub);
+			this.doRefresh(2);
 		}else{
 			this.showToast("Please give new club.");
 		}
 	}
 	onclubCancel(){
-		this.clubselected = false;
+		this.currentclub = '';
 	}
 
-	sportnameTouched(){
-		this.sportnameselected = true;
-	}
 	onsportNamesubmit(){
-		this.sportnameselected = false;
 		if(this.sportname) {			
 			this.authservice.updateSportName(this.sportname);
+			this.doRefresh(2);
 		}else{
 			this.showToast("Please enter sportname.");
 		}
 	}
 	onsportnameCancel(){
-		this.sportnameselected = false;
+		this.sportname = '';
 	}
 
+	ngOnDestroy(){}
 
-	ngOnDestroy(){
-		this.authsubscription.unsubscribe();
-	}
 	onCancel(){
 		this.navCtrl.pop();
 	}

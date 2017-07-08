@@ -51,6 +51,8 @@ export class Editresult implements OnInit{
 	}
 
 	cancel(i) {
+		this.teamonescore[i] = '';
+		this.teamtwoscore[i] = '';
 		this.scoresaved[i] = false;
 	}
 }
